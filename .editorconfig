@@ -1,0 +1,13 @@
+root = true
+
+; Unix-style newlines by default
+[*]
+end_of_line = LF
+indent_style = space
+indent_size = 2
+
+; 2-column space
+[*.cmd]
+indent_style = space
+indent_size = 2
+end_of_line = CRLF
