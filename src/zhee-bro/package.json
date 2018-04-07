@@ -1,5 +1,19 @@
 {
   "name": "zhee-bro",
-  "description": "Zhee Browser Package", 
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "main": "zhee-bro",
+  "description": "Zhee Browser Client Package", 
+  "license": "MIT",
+  "contributors":[{
+    "name":  "Dmitriy Khmaladze aka ITAdapter",
+    "email": "dmitriy@itadapter.com",
+    "url":   "http://nfxlib.com"
+  }],
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/itadapter/zhee.git"
+  },
+  "dependencies":{
+    "zhee": ">0.0.0"
+  }
 }

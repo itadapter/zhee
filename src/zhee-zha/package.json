@@ -1,5 +1,20 @@
 {
   "name": "zhee-zha",
+  "version": "0.0.1",
+  "main": "zhee-zha",
   "description": "ZheeZha UI Controls Package", 
-  "version": "0.0.1"
+  "license": "MIT",
+  "contributors":[{
+    "name":  "Dmitriy Khmaladze aka ITAdapter",
+    "email": "dmitriy@itadapter.com",
+    "url":   "http://nfxlib.com"
+  }],
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/itadapter/zhee.git"
+  },
+  "dependencies":{
+    "zhee": ">0.0.0",
+    "zhee-bro": ">0.0.0"
+  }
 }

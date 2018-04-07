@@ -1,5 +1,19 @@
 {
   "name": "zhee",
+  "version": "0.0.1",
+  "main": "zhee",
   "description": "Zhee Core Package", 
-  "version": "0.0.1"
+  "license": "MIT",
+  "contributors":[{
+    "name":  "Dmitriy Khmaladze aka ITAdapter",
+    "email": "dmitriy@itadapter.com",
+    "url":   "http://nfxlib.com"
+  }],
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/itadapter/zhee.git"
+  },
+  "dependencies":{
+    
+  }
 }
