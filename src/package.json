@@ -4,7 +4,8 @@
   "scripts": {
     "wpk": "webpack --config webpack.config.js",
     "XXtest": "mocha --require ./test/setup.js",
-    "test": "mocha \"./test/**/*.js\"",
+    "Xtest": "mocha \"./test/**/*.js\"",
+    "test": "mocha --compilers js:babel-core/register \"./test/**/*.js\"",
     "zzzzzzzbabel": "babel --presets es2015 js/main.js -o build/main.bundle.js"
   },
   "devDependencies": {

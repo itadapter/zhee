@@ -1,0 +1,4 @@
+{
+  "presets": ["clses2015", "stage-3"],
+  "plugins": []
+}

@@ -1,5 +1,5 @@
-import * as aver from "../../zhee/aver";
-import * as sut  from "../../zhee/types";
+import * as aver from "../../../out/zhee/aver";
+import * as sut  from "../../../out/zhee/types";
 
 describe("Types", function() {
 

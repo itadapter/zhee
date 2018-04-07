@@ -1,4 +1,3 @@
-
 import * as CC from "coreconsts";
 
 /**
@@ -16,6 +15,7 @@ export function describeValue(v, mlen = 64){
   if (v===undefined) return CC.UNDEFINED;
   if (v===null) return CC.NULL;
   //todo: Finish, show the type, and a piece of data itself
+  return "aaaa"+mlen;
 }
 
 const d = (v) => describeValue(v);
