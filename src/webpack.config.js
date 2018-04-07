@@ -28,26 +28,27 @@ var cfgBase = {
 var cfgZhee = {
   ...cfgBase,
   entry: {
-    waev: "./zhee/index.js"
+    zhee: "./zhee/index.js"
   },
   output: {
     library: "zhee",
     libraryTarget: "umd",
-    path: path.resolve(__dirname, "../../out/zhee"),
+    path: path.resolve(__dirname, "../out/zhee"),
     filename: "zhee.js" // or [name.js]
   }
 };
 
 
+
 var cfgZheeBro = {
   ...cfgBase,
   entry: {
-    waev: "./zhee-bro/index.js"
+    zheebro: "./zhee-bro/index.js"
   },
   output: {
-    library: "zheebro",
+    library: "zhee",
     libraryTarget: "umd",
-    path: path.resolve(__dirname, "../../out/zhee-bro"),
+    path: path.resolve(__dirname, "../out/zhee-bro"),
     filename: "zhee-bro.js" // or [name.js]
   }
 };
@@ -55,16 +56,17 @@ var cfgZheeBro = {
 var cfgZheeZha = {
   ...cfgBase,
   entry: {
-    waev: "./zhee-zha/index.js"
+    zhezha: "./zhee-zha/index.js"
   },
   output: {
-    library: "zheezha",
+    library: "zhee",
     libraryTarget: "umd",
-    path: path.resolve(__dirname, "../../out/zhee-zha"),
+    path: path.resolve(__dirname, "../out/zhee-zha"),
     filename: "zhee-zha.js" // or [name.js]
   }
 };
 
 
 //Tell Webpack what to zhabify
-module.exports = [ cfgZhee, cfgZheeBro, cfgZheeZha ];
+module.exports = [ cfgZhee, cfgZheeZha ];
+//module.exports = [ cfgZhee, cfgZheeBro, cfgZheeZha ];
