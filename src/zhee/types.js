@@ -35,12 +35,11 @@ export function isObject(v) {
 }
 
 /**
- * Returns true when the passed parameter is an array, or map but not a function
+ * Returns true when the passed parameter is an array, or object but not a function
  * @param { Object } obj
  */
-export function isMapOrArray(obj) {
-  if (obj === undefined || obj === null) return false;
-  return obj === Object(obj) && !isFunction(obj);
+export function isObjectOrArray(v) {
+  return  v === Object(v)  && !isFunction(v);
 };
 
 /**
@@ -50,5 +49,3 @@ export function isMapOrArray(obj) {
 export function isFunction(obj) {
   return typeof obj === "function";
 }
-
-//export default { isString, isArray, isObject, isFunction };
