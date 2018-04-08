@@ -3,9 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "wpk": "webpack --config webpack.config.js",
-    "XXtest": "mocha --require ./test/setup.js",
-    "Xtest": "mocha \"./test/**/*.js\"",
-    "test": "mocha --compilers js:babel-core/register \"./test/**/*.js\"",
+    "test": "webpack --config webpack.config.js  &&  mocha \"./test/**/*.js\"",
+
     "zzzzzzzbabel": "babel --presets es2015 js/main.js -o build/main.bundle.js"
   },
   "devDependencies": {

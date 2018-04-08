@@ -1,4 +1,4 @@
-import * as CC from "coreconsts";
+import * as CC from "./coreconsts";
 
 /**
  * Makes an Error() initialized with message

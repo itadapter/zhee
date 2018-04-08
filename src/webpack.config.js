@@ -21,8 +21,17 @@ var cfgBase = {
   stats: {
     colors: true
   },
-  devtool: "source-map"
+  devtool: "source-map",
 };
+
+var cfgOutBase = {
+  library: "zhee",
+  libraryTarget: "umd",
+  //https://github.com/webpack/webpack/issues/6522
+  globalObject: 'typeof self !== \'undefined\' ? self : this',
+};
+
+
 
 
 var cfgZhee = {
@@ -31,13 +40,11 @@ var cfgZhee = {
     zhee: "./zhee/index.js"
   },
   output: {
-    library: "zhee",
-    libraryTarget: "umd",
+    ...cfgOutBase,
     path: path.resolve(__dirname, "../out/zhee"),
-    filename: "zhee.js" // or [name.js]
+    filename: "zhee.js" // or [name].js
   }
 };
-
 
 
 var cfgZheeBro = {
@@ -46,12 +53,12 @@ var cfgZheeBro = {
     zheebro: "./zhee-bro/index.js"
   },
   output: {
-    library: "zhee",
-    libraryTarget: "umd",
+    ...cfgOutBase,
     path: path.resolve(__dirname, "../out/zhee-bro"),
-    filename: "zhee-bro.js" // or [name.js]
+    filename: "zhee-bro.js" // or [name].js
   }
 };
+
 
 var cfgZheeZha = {
   ...cfgBase,
@@ -59,8 +66,7 @@ var cfgZheeZha = {
     zhezha: "./zhee-zha/index.js"
   },
   output: {
-    library: "zhee",
-    libraryTarget: "umd",
+    ...cfgOutBase,
     path: path.resolve(__dirname, "../out/zhee-zha"),
     filename: "zhee-zha.js" // or [name.js]
   }
@@ -68,5 +74,4 @@ var cfgZheeZha = {
 
 
 //Tell Webpack what to zhabify
-module.exports = [ cfgZhee, cfgZheeZha ];
-//module.exports = [ cfgZhee, cfgZheeBro, cfgZheeZha ];
+module.exports = [ cfgZhee, /*cfgZheeBro,*/ cfgZheeZha ];
