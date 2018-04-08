@@ -84,6 +84,26 @@ describe("Types", function() {
     it("ret true for [1,2,3]",       function() { aver.isTrue( sut.isObjectOrArray([1,2,3])      );});
   });
 
+  describe("#mixin()", function() {
+    it("ret null for (undef, undef)",   function() { aver.isNull( sut.mixin(undefined));  });
+    it("ret null for (null, null)",   function() { aver.isNull( sut.mixin(null, null));  });
+    it("ret object for ({})",   function() { aver.isObject( sut.mixin({}) );  });
+    it("ret object for ({}, null)",   function() { aver.isObject( sut.mixin({}, null));  });
+
+
+    it("case 1",   function() {
+        let a = {};
+        let b = {d: 2, e: true}
+        let c = sut.mixin(a, b);
+        
+        aver.isTrue( 2    === c.d );
+        aver.isTrue( true === c.e );
+      });
+
+
+  });  
+
+
 
 
 });
