@@ -4,7 +4,7 @@
   "scripts": {
     "wpk": "webpack --config webpack.config.js",
     "test": "webpack --config webpack.config.js  &&  mocha \"./test/**/*.js\"",
-
+    
     "zzzzzzzbabel": "babel --presets es2015 js/main.js -o build/main.bundle.js"
   },
   "devDependencies": {
