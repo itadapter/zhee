@@ -2,10 +2,9 @@
   "name": "zhee",
   "version": "0.0.1",
   "scripts": {
-    "wpk": "webpack --config webpack.config.js",
+    "wpk":  "webpack --config webpack.config.js",
     "test": "webpack --config webpack.config.js  &&  mocha \"./test/**/*.js\"",
-    
-    "zzzzzzzbabel": "babel --presets es2015 js/main.js -o build/main.bundle.js"
+    "trun": "webpack --config webpack.config.js  &&  mocha \"./test/**/*.js\" -g"
   },
   "devDependencies": {
     "babel-loader": "^7.1.4",
