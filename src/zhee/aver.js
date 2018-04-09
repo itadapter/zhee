@@ -115,11 +115,13 @@ export function throws(f, msg){
     throw AVERMENT_FAILURE(`throws(${d(f)})`);
   } 
   catch(e){
-   if (!msg) return;
-  //  console.log(e);
-   let got = e.toString().toLowerCase();
-   msg = msg.toLowerCase();
-   if (got.indexOf(msg)==-1)
-    throw AVERMENT_FAILURE(`throws(${d(f)}, expect '${msg}' but was '${got}')`);
+    if (!msg) return;
+    //  console.log(e);
+    
+    let got = e.toString().toLowerCase();
+    msg = msg.toLowerCase();
+    
+    if (got.indexOf(msg)==-1)
+      throw AVERMENT_FAILURE(`throws(${d(f)}, expect '${msg}' but was '${got}')`);
   }
 }
