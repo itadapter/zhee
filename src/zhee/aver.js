@@ -103,3 +103,23 @@ export function isTrue(a){
   if (a===true) return;
   throw AVERMENT_FAILURE(`isTrue(${d(a)})`);
 }
+
+/**
+ * Expects that function thows a message optionaly containing the msg
+ * @param {*} f function to call
+ * @param {*} msg? optional message to expect in the error 
+ */
+export function throws(f, msg){
+  try {
+    f();
+    throw AVERMENT_FAILURE(`throws(${d(f)})`);
+  } 
+  catch(e){
+   if (!msg) return;
+  //  console.log(e);
+   let got = e.toString().toLowerCase();
+   msg = msg.toLowerCase();
+   if (got.indexOf(msg)==-1)
+    throw AVERMENT_FAILURE(`throws(${d(f)}, expect '${msg}' but was '${got}')`);
+  }
+}
