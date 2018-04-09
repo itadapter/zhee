@@ -92,13 +92,13 @@ describe("Types", function() {
 
 
     it("case 1",   function() {
-        let a = {};
-        let b = {d: 2, e: true}
-        let c = sut.mixin(a, b);
-        
-        aver.isTrue( 2    === c.d );
-        aver.isTrue( true === c.e );
-      });
+      let a = {};
+      let b = {d: 2, e: true}
+      let c = sut.mixin(a, b);
+    
+      aver.isTrue( 2    === c.d );
+      aver.isTrue( true === c.e );
+    });
 
 
   });  
