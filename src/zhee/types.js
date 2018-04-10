@@ -1,6 +1,6 @@
 
 /**
- * Returns true if the argument is assigned - not undefined non-null value, even empty string is assigned
+ * Returns true if the argument is assigned - not undefined non-null value, even an empty string is assigned
  * @param { Object } v
  */
 export function isAssigned(v) {

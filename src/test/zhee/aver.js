@@ -210,6 +210,37 @@ describe("Aver", function() {
     });
   });
 
+  describe("#isOf()", function() {
+    it("TRUE", function(){
+      let obj = new sut.MockA(1, 2);
+      sut.isOf(obj, sut.MockBase);
+      sut.isOf(obj, sut.MockA);
+    });
+
+    it("FALSE", function(){
+      let obj = new sut.MockA(1, 2);
+      sut.throws( function(){ sut.isOf(obj, Array); }, "isOf" );
+      sut.throws( function(){ sut.isOf(null, null); }, "isOf" );
+      sut.throws( function(){ sut.isOf(undefined, undefined); }, "isOf");
+    });
+  });
+
+  describe("#isNotOf()", function() {
+    it("TRUE", function(){
+      let obj = new sut.MockB(1, 2);
+      sut.isNotOf(obj, Array);
+      sut.isNotOf(obj, sut.MockA);
+    });
+
+    it("FALSE", function(){
+      let obj = new sut.MockA(1, 2);
+      sut.throws( function(){ sut.isNotOf(obj, sut.MockBase); }, "isNotOf" );
+      sut.throws( function(){ sut.isNotOf(obj, sut.MockA); }, "isNotOf" );
+      sut.throws( function(){ sut.isNotOf(null, null); }, "isNotOf"  );
+      sut.throws( function(){ sut.isNotOf(undefined, undefined); }, "isNotOf" );
+    });
+  });
+
   describe("#classes", function() {
 
     it("inherits", function(){

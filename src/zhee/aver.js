@@ -151,13 +151,28 @@ export function throws(f, msg){
 }
 
 /**
- * Performs instanceof check
+ * Performs strict instanceof check on object and function args
  * @param {Object} o 
  * @param {type} t 
  */
 export function isOf(o, t){
-  if (o instanceof t) return;
-  throw AVERMENT_FAILURE(`areNotEqual(${d(o)}, ${d(t)})`);
+  if (types.isObject(o) && types.isFunction(t))
+    if (o instanceof t) return;
+
+  throw AVERMENT_FAILURE(`isOf(${d(o)}, ${d(t)})`);
+}
+
+
+/**
+ * Performs strict !instanceof check on object and function args
+ * @param {Object} o 
+ * @param {type} t 
+ */
+export function isNotOf(o, t){
+  if (types.isObject(o) && types.isFunction(t))
+    if (!(o instanceof t)) return;
+
+  throw AVERMENT_FAILURE(`isNotOf(${d(o)}, ${d(t)})`);
 }
 
 
