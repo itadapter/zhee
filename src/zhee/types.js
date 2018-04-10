@@ -39,7 +39,7 @@ export function isObject(v) {
  */
 export function isObjectOrArray(v) {
   return  v === Object(v)  && !isFunction(v);
-};
+}
 
 /**
  * Returns true when poassed parameter is a function, not a map object or an array
@@ -69,4 +69,24 @@ export function mixin(obj, ext, keepExisting = false){
         obj[prop] = ext[prop];
   }
   return obj;
+}
+
+
+/**
+ * Returns true if the argument is an int32 value
+ * @param {int32} v 
+ */
+export function isInt32(v){
+  if (Number.isInteger) return Number.isInteger(v);
+  return v === (v|0);
+}
+
+/**
+ * Returns true if the value is either integer number or a string representing an integer number
+ * @param {int|string} v Value to check 
+ */
+export function isIntValue(v){
+  if (isNaN(v)) return false;
+  let x = parseFloat(v);
+  return x === (x|0);
 }

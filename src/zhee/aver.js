@@ -1,5 +1,6 @@
 import * as CC from "./coreconsts";
 import * as types from "./types";
+import * as str from "./strings";
 
 /**
  * Makes an Error() initialized with message
@@ -19,8 +20,7 @@ export function describeValue(v, mlen = 64){
   return "aaaa"+mlen;
 }
 
-const d = (v) => describeValue(v);
-
+const dv = (v) => str.describeValue(v);//shortcut
 
 /**
  * Performs strict test undefined
@@ -28,7 +28,7 @@ const d = (v) => describeValue(v);
  */
 export function isUndefined(a){
   if (a===undefined) return;
-  throw AVERMENT_FAILURE(`isUndefined(${d(a)})`);
+  throw AVERMENT_FAILURE(`isUndefined(${dv(a)})`);
 }
 
 /**
@@ -37,7 +37,7 @@ export function isUndefined(a){
  */
 export function isDefined(a){
   if (a!==undefined) return;
-  throw AVERMENT_FAILURE(`isDefined(${d(a)})`);
+  throw AVERMENT_FAILURE(`isDefined(${dv(a)})`);
 }
 
 /**
@@ -46,7 +46,7 @@ export function isDefined(a){
  */
 export function isNull(a){
   if (a!==undefined && a===null) return;
-  throw AVERMENT_FAILURE(`isNull(${d(a)})`);
+  throw AVERMENT_FAILURE(`isNull(${dv(a)})`);
 }
 
 /**
@@ -55,7 +55,7 @@ export function isNull(a){
  */
 export function isNotNull(a){
   if (a!==undefined && a!==null) return;
-  throw AVERMENT_FAILURE(`isNotNull(${d(a)})`);
+  throw AVERMENT_FAILURE(`isNotNull(${dv(a)})`);
 }
 
 /**
@@ -64,7 +64,7 @@ export function isNotNull(a){
  */
 export function isObject(a){
   if (types.isObject(a)) return;
-  throw AVERMENT_FAILURE(`isObject(${d(a)})`);
+  throw AVERMENT_FAILURE(`isObject(${dv(a)})`);
 }
 
 /**
@@ -73,7 +73,7 @@ export function isObject(a){
  */
 export function isArray(a){
   if (types.isArray(a)) return;
-  throw AVERMENT_FAILURE(`isArray(${d(a)})`);
+  throw AVERMENT_FAILURE(`isArray(${dv(a)})`);
 }
 
 /**
@@ -82,7 +82,7 @@ export function isArray(a){
  */
 export function isFunction(a){
   if (types.isFunction(a)) return;
-  throw AVERMENT_FAILURE(`isFunction(${d(a)})`);
+  throw AVERMENT_FAILURE(`isFunction(${dv(a)})`);
 }
 
 
@@ -92,7 +92,7 @@ export function isFunction(a){
  */
 export function isFalse(a){
   if (a===false) return;
-  throw AVERMENT_FAILURE(`isFalse(${d(a)})`);
+  throw AVERMENT_FAILURE(`isFalse(${dv(a)})`);
 }
 
 /**
@@ -101,7 +101,7 @@ export function isFalse(a){
  */
 export function isTrue(a){
   if (a===true) return;
-  throw AVERMENT_FAILURE(`isTrue(${d(a)})`);
+  throw AVERMENT_FAILURE(`isTrue(${dv(a)})`);
 }
 
 /**
@@ -111,7 +111,7 @@ export function isTrue(a){
  */
 export function areEqual(a, b){
   if (a===b) return;
-  throw AVERMENT_FAILURE(`areEqual(${d(a)}, ${d(b)})`);
+  throw AVERMENT_FAILURE(`areEqual(${dv(a)}, ${dv(b)})`);
 }
 
 /**
@@ -121,7 +121,7 @@ export function areEqual(a, b){
  */
 export function areNotEqual(a, b){
   if (a!==b) return;
-  throw AVERMENT_FAILURE(`areNotEqual(${d(a)}, ${d(b)})`);
+  throw AVERMENT_FAILURE(`areNotEqual(${dv(a)}, ${dv(b)})`);
 }
 
 
@@ -142,12 +142,12 @@ export function throws(f, msg){
     msg = msg.toLowerCase();
     
     if (got.indexOf(msg)==-1)
-      throw AVERMENT_FAILURE(`throws(${d(f)}, expect '${msg}' but was '${got}')`);
+      throw AVERMENT_FAILURE(`throws(${dv(f)}, expect '${msg}' but was '${got}')`);
 
     return;
   }
 
-  throw AVERMENT_FAILURE(`throws(${d(f)})`);
+  throw AVERMENT_FAILURE(`throws(${dv(f)})`);
 }
 
 /**
@@ -159,7 +159,7 @@ export function isOf(o, t){
   if (types.isObject(o) && types.isFunction(t))
     if (o instanceof t) return;
 
-  throw AVERMENT_FAILURE(`isOf(${d(o)}, ${d(t)})`);
+  throw AVERMENT_FAILURE(`isOf(${dv(o)}, ${dv(t)})`);
 }
 
 
@@ -172,7 +172,7 @@ export function isNotOf(o, t){
   if (types.isObject(o) && types.isFunction(t))
     if (!(o instanceof t)) return;
 
-  throw AVERMENT_FAILURE(`isNotOf(${d(o)}, ${d(t)})`);
+  throw AVERMENT_FAILURE(`isNotOf(${dv(o)}, ${dv(t)})`);
 }
 
 
