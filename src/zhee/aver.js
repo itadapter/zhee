@@ -20,7 +20,7 @@ export function describeValue(v, mlen = 64){
   return "aaaa"+mlen;
 }
 
-const dv = (v) => str.describeValue(v);//shortcut
+const dv = (v) => str.describe(v);//shortcut
 
 /**
  * Performs strict test undefined

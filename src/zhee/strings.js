@@ -10,11 +10,12 @@ import * as types from "./types";
  * @param {string} [ending] The ending of the capped string, ellipsis is used by default
  */
 export function truncate(str, maxLen, ending){
-  if (!str || !(maxLen>0)) return str;
+  if (!str) return str;
   str = str.toString();
+  if (!(maxLen>0)) return str;//!!!not the same maxLength<=0
   let len = str.length;
   if (len <= maxLen) return str;
-  ending = ending || "...";
+  ending = ending || "";
   return str.substr(0, maxLen - ending.length) + ending;
 }
 
@@ -24,11 +25,11 @@ export function truncate(str, maxLen, ending){
  * @param {String} v value to describe
  * @param {int} [maxLen=64] impose maximum length on the resulting description 
  */
-export function describeValue(v, maxLen = 64){
+export function describe(v, maxLen = 64){
   if (v===undefined) return CC.UNDEFINED;
   if (v===null) return CC.NULL;
   
-  let t = typeof(v);
+  let t = types.isArray(v) ? "Array" : typeof(v);
   let subs = v.length ? `[${v.length}]` : "";
   
   let d = "";
@@ -37,6 +38,6 @@ export function describeValue(v, maxLen = 64){
   else 
     d = v.toString();
 
-  d = truncate(d, maxLen);
+  d = truncate(d, maxLen, CC.ELLIPSIS);
   return `(${t}${subs})${d}`;
 }
