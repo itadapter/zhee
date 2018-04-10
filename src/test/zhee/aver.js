@@ -214,8 +214,8 @@ describe("Aver", function() {
 
     it("inherits", function(){
       let obj = new sut.MockA(3, 9);
-      sut.isTrue( obj instanceof sut.MockBase );
-      sut.isTrue( obj instanceof sut.MockA );
+      sut.isOf(obj, sut.MockBase );
+      sut.isOf(obj, sut.MockA );
 
       sut.areEqual(3, obj.a);
       sut.areEqual(9, obj.b);

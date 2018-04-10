@@ -119,13 +119,28 @@ describe("Types", function() {
     });
 
 
-    it("class",   function() {
+    it("class this",   function() {
       let a = new aver.MockA(3, 4);
       let b = {d: 2, e: true};
       let c = sut.mixin(a, b);
     
       aver.areEqual(2, c.d );
       aver.isTrue( c.e );
+    });
+
+    
+    it("class prototype",   function() {
+      
+      function classX(){ this.z = 123; }
+      
+      let a = new classX();
+      let b = {d: 2, e: true};
+      sut.mixin(classX.prototype, b);
+      
+    
+      aver.areEqual(123, a.z );
+      aver.areEqual(2, a.d );
+      aver.isTrue( a.e );
     });
 
   });

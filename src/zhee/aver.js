@@ -143,12 +143,23 @@ export function throws(f, msg){
     
     if (got.indexOf(msg)==-1)
       throw AVERMENT_FAILURE(`throws(${d(f)}, expect '${msg}' but was '${got}')`);
-      
+
     return;
   }
 
   throw AVERMENT_FAILURE(`throws(${d(f)})`);
 }
+
+/**
+ * Performs instanceof check
+ * @param {Object} o 
+ * @param {type} t 
+ */
+export function isOf(o, t){
+  if (o instanceof t) return;
+  throw AVERMENT_FAILURE(`areNotEqual(${d(o)}, ${d(t)})`);
+}
+
 
 /**
  * Used for internal derivation testing
