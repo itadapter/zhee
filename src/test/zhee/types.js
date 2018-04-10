@@ -91,19 +91,43 @@ describe("Types", function() {
     it("ret object for ({}, null)",   function() { aver.isObject( sut.mixin({}, null));  });
 
 
-    it("case 1",   function() {
+    it("basically works",   function() {
       let a = {};
-      let b = {d: 2, e: true}
+      let b = {d: 2, e: true};
       let c = sut.mixin(a, b);
     
       aver.isTrue( 2    === c.d );
       aver.isTrue( true === c.e );
     });
 
+    it("overrides existing",   function() {
+      let a = {d: 4};
+      let b = {d: 2, e: true};
+      let c = sut.mixin(a, b);
+    
+      aver.isTrue( 2    === c.d );
+      aver.isTrue( true === c.e );
+    });
 
-  });  
+    it("keeps existing",   function() {
+      let a = {d: 4};
+      let b = {d: 2, e: true};
+      let c = sut.mixin(a, b, true);
+    
+      aver.isTrue( 4    === c.d );
+      aver.isTrue( true === c.e );
+    });
 
 
+    it("keeps existing",   function() {
+      let a = new WaveShaperNode();
+      let b = {d: 2, e: true};
+      let c = sut.mixin(a, b, true);
+    
+      aver.isTrue( 4    === c.d );
+      aver.isTrue( true === c.e );
+    });
 
+  });
 
 });

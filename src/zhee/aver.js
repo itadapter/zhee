@@ -105,14 +105,34 @@ export function isTrue(a){
 }
 
 /**
+ * Performs strict equality check using ===
+ * @param {Object} a 
+ * @param {Object} b 
+ */
+export function areEqual(a, b){
+  if (a===b) return;
+  throw AVERMENT_FAILURE(`areEqual(${d(a)}, ${d(b)})`);
+}
+
+/**
+ * Performs strict inequality check using !==
+ * @param {Object} a 
+ * @param {Object} b 
+ */
+export function areNotEqual(a, b){
+  if (a!==b) return;
+  throw AVERMENT_FAILURE(`areNotEqual(${d(a)}, ${d(b)})`);
+}
+
+
+/**
  * Expects that function thows a message optionaly containing the msg
- * @param {*} f function to call
- * @param {*} msg? optional message to expect in the error 
+ * @param {function} f function to call
+ * @param {string} [msg] optional message to expect in the error 
  */
 export function throws(f, msg){
-  try {
+  try{
     f();
-    throw AVERMENT_FAILURE(`throws(${d(f)})`);
   } 
   catch(e){
     if (!msg) return;
@@ -123,5 +143,47 @@ export function throws(f, msg){
     
     if (got.indexOf(msg)==-1)
       throw AVERMENT_FAILURE(`throws(${d(f)}, expect '${msg}' but was '${got}')`);
+      
+    return;
+  }
+
+  throw AVERMENT_FAILURE(`throws(${d(f)})`);
+}
+
+/**
+ * Used for internal derivation testing
+ */
+export class MockBase{
+  constructor(a,b){
+    this.m_A = a | 0;
+    this.m_B = b | 0;
+  }
+  get a( ) { return this.m_A; }  set a(v) { this.m_A = v; }
+  get b( ) { return this.m_B; }  set b(v) { this.m_B = v; }
+
+  virt(){ return "base"; }
+
+  describe(){
+    return `${this.virt()}(a: ${this.a}, b: ${this.b})`;
+  }
+
+}
+
+/**
+ * Used for internal derivation testing
+ */
+export class MockA extends MockBase{
+  constructor(a,b){
+    super(a, b);
+  }
+  virt(){ return "MockA"; }
+}
+
+/**
+ * Used for internal derivation testing
+ */
+export class MockB extends MockBase{
+  constructor(a,b){
+    super(a, b);
   }
 }

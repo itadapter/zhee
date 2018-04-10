@@ -182,4 +182,62 @@ describe("Aver", function() {
   });
 
 
+  describe("#areEqual()", function() {
+    it("TRUE", function(){
+      sut.areEqual(1, 1);
+      sut.areEqual(null, null);
+      sut.areEqual(undefined, undefined); 
+    });
+
+    it("FALSE", function(){
+      sut.throws( function(){ sut.areEqual(1, "1"); } );
+      sut.throws( function(){ sut.areEqual(0, null); } );
+      sut.throws( function(){ sut.areEqual(undefined, null); } );
+    });
+  });
+
+  describe("#areNotEqual()", function() {
+    it("TRUE", function(){
+      sut.areNotEqual(1, "1");
+      sut.areNotEqual(0, null);
+      sut.areNotEqual(undefined, null);
+    });
+
+    it("FALSE", function(){
+      sut.throws( function(){ sut.areNotEqual(1, 1); } );
+      sut.throws( function(){ sut.areNotEqual(null, null); } );
+      sut.throws( function(){ sut.areNotEqual(undefined, undefined); } );
+    });
+  });
+
+  describe("#classes", function() {
+
+    it("inherits", function(){
+      let obj = new sut.MockA(3, 9);
+      sut.isTrue( obj instanceof sut.MockBase );
+      sut.isTrue( obj instanceof sut.MockA );
+
+      sut.areEqual(3, obj.a);
+      sut.areEqual(9, obj.b);
+      obj.b = -8;
+      sut.areEqual(-8, obj.b);
+    });
+
+    it("virtual override function", function(){
+      let a = new sut.MockA(3, 9);
+
+      let dscr = a.describe();
+      sut.areEqual("MockA(a: 3, b: 9)", dscr);
+    });
+
+    it("virtual base function", function(){
+      let a = new sut.MockB(3, 9);
+
+      let dscr = a.describe();
+      sut.areEqual("base(a: 3, b: 9)", dscr);
+    });
+
+  });
+
+
 });
