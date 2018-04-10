@@ -96,8 +96,8 @@ describe("Types", function() {
       let b = {d: 2, e: true};
       let c = sut.mixin(a, b);
     
-      aver.isTrue( 2    === c.d );
-      aver.isTrue( true === c.e );
+      aver.areEqual(2,  c.d );
+      aver.isTrue( c.e );
     });
 
     it("overrides existing",   function() {
@@ -105,8 +105,8 @@ describe("Types", function() {
       let b = {d: 2, e: true};
       let c = sut.mixin(a, b);
     
-      aver.isTrue( 2    === c.d );
-      aver.isTrue( true === c.e );
+      aver.areEqual( 2, c.d );
+      aver.isTrue( c.e );
     });
 
     it("keeps existing",   function() {
@@ -114,18 +114,18 @@ describe("Types", function() {
       let b = {d: 2, e: true};
       let c = sut.mixin(a, b, true);
     
-      aver.isTrue( 4    === c.d );
-      aver.isTrue( true === c.e );
+      aver.areEqual(4, c.d );
+      aver.isTrue( c.e );
     });
 
 
-    it("keeps existing",   function() {
-      let a = new WaveShaperNode();
+    it("class",   function() {
+      let a = new aver.MockA(3, 4);
       let b = {d: 2, e: true};
-      let c = sut.mixin(a, b, true);
+      let c = sut.mixin(a, b);
     
-      aver.isTrue( 4    === c.d );
-      aver.isTrue( true === c.e );
+      aver.areEqual(2, c.d );
+      aver.isTrue( c.e );
     });
 
   });
