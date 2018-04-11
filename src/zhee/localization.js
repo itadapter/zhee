@@ -6,7 +6,7 @@ import * as aver from "./aver";
 /**
  * Provides default implementation of invariant localizer.
  * Other localizer shall extend this class and inject their instance using
- *  localization.InjectLocalizer(new CustomLocalizer(...))
+ *  localization.injectLocalizer(new CustomLocalizer(...))
  */
 export class DefaultLocalizer{
   
@@ -33,7 +33,7 @@ let s_Localizer = new DefaultLocalizer();
  * Injects custom localizer
  * @param {DefaultLocalizer} loc 
  */
-export function InjectLocalizer(loc){
+export function injectLocalizer(loc){
   aver.isOf(loc, DefaultLocalizer);
   s_Localizer = loc;
 }
@@ -41,7 +41,7 @@ export function InjectLocalizer(loc){
 /**
  * Returns currently injected localizer
  */
-export function GetCurrentLocalizer(){ return s_Localizer; }
+export function getCurrentLocalizer(){ return s_Localizer; }
 
 
 
