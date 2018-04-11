@@ -22,7 +22,20 @@ export class DefaultLocalizer{
     return "$";
   }
 
-  formatCurrency({amount = 0, iso = "usd", precision = 2, symbol = true, sign = true} = {}){
+  getCurrencyThousandsSeparator(iso){
+    return ",";
+  }
+
+  getCurrencyDecimalSeparator(iso){
+    return ".";
+  }
+
+  /**
+   * 
+   * @param {Object|number} amount Amount object or number for defaults
+   */
+  formatCurrency({amount = NaN, iso = "usd", precision = 2, symbol = true, sign = true, thousands = true} = {}){
+    if (isNaN(amount) && arguments.length>0) amount = arguments[0];
     console.log(amount, iso, precision, symbol, sign);
   }
 }
