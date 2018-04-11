@@ -2,6 +2,20 @@ import * as CC from "./coreconsts";
 import * as types from "./types";
 
 
+//todo  Finish and test cover
+export function formatDateTime(d, cult, utc){
+  return d.toString();
+}
+
+export function formatDate(d, cult, utc){
+  return d.toString();
+}
+
+export function formatTime(d, cult, utc){
+  return d.toString();
+}
+
+
 /**
  * Truncates/caps a string at the specified maxLen optionally adding ellipsis at the end.
  * The non-string input values are coerced to string
@@ -35,7 +49,11 @@ export function describe(v, maxLen = 64){
   let d = "";
   if (types.isObjectOrArray(v))
     d = JSON.stringify(v);
-  else 
+  else if (types.isString(v))
+    d = `"${v}"`;
+  else if (types.isDate(v))
+    d = formatDateTime(v);
+  else
     d = v.toString();
 
   d = truncate(d, maxLen, CC.ELLIPSIS);
