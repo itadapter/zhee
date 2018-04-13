@@ -11,12 +11,60 @@ describe("Localization", function() {
 
     describe("#formatDateTime()", function() {
       
-      const dt = new Date(2017, 6, 12,  15, 43, 19, 789);
+      const dt = new Date(2017, 5, 12,  15, 43, 19, 789);// 12/june/2017 = Monday
 
       it("arg0s", function(){ 
         let got = dloc.formatDateTime(dt);
         console.log( got );
-        aver.areEqual("", got);
+        aver.areEqual("06/12/2017", got);
+      });
+
+      it("LONG_WEEK_DATE", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.LONG_WEEK_DATE});
+        console.log( got );
+        aver.areEqual("Monday, 12 June 2017", got);
+      });
+
+      it("SHORT_WEEK_DATE", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.SHORT_WEEK_DATE});
+        console.log( got );
+        aver.areEqual("Mon, 12 Jun 2017", got);
+      });
+
+      it("LONG_DATE", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.LONG_DATE});
+        console.log( got );
+        aver.areEqual("12 June 2017", got);
+      });
+
+      it("SHORT_DATE", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.SHORT_DATE});
+        console.log( got );
+        aver.areEqual("12 Jun 2017", got);
+      });
+
+      it("NUM_DATE", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.NUM_DATE});
+        console.log( got );
+        aver.areEqual("06/12/2017", got);
+      });
+
+      it("LONG_MONTH", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.LONG_MONTH});
+        console.log( got );
+        aver.areEqual("June 2017", got);
+      });
+
+      it("SHORT_MONTH", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.SHORT_MONTH});
+        console.log( got );
+        aver.areEqual("Jun 2017", got);
+      });
+
+      it("NUM_MONTH", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.NUM_MONTH});
+        console.log( got );
+        aver.areEqual("06/2017", got);
       });
 
     });

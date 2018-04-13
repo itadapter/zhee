@@ -28,7 +28,7 @@ export const DATE_FORMAT = {
 
   LONG_MONTH:      "LongMonth",      // August 2018
   SHORT_MONTH:     "ShortMonth",     // Aug 2018
-  SHORT_NUM_MONTH: "NumMonth",       // 10/2018
+  NUM_MONTH:       "NumMonth",       // 10/2018
 
   LONG_DAY_MONTH: "LongDayMonth",    //  12 August
   SHORT_DAY_MONTH: "ShortDayMonth",  //  12 Aug
@@ -78,9 +78,14 @@ export class DefaultLocalizer{
 
   /**
    * Formats the date and time
-   * @param {*} param0 
+   * @param {Object} args
+   * @param {Date} args.dt Datetime argument, it may be supplied without an args object as a sole argument
+   * @param {string} args.culture Localization culture id
+   * @param {DATE_FORMAT} args.dtFormat Format of date part representation
+   * @param {TIME_DETAILS} args.tmDetails Time detalization (NONE= no time)
+   * @param {boolean} args.utc Treat date time as UTC value
    */
-  formatDateTime({dt = null, culture = null, dtFormat = DATE_FORMAT.LONG_DATE, tmDetails = TIME_DETAILS.NONE, utc = false} = {}){
+  formatDateTime({dt = null, culture = null, dtFormat = DATE_FORMAT.NUM_DATE, tmDetails = TIME_DETAILS.NONE, utc = false} = {}){
     if (dt===null){
       if (arguments.length==0)
         throw new Error("'dt' arg is missing");
@@ -112,7 +117,7 @@ export class DefaultLocalizer{
       
       case DATE_FORMAT.LONG_MONTH:       result = `${mnl(month)} ${year}`;  break;  // August 2018
       case DATE_FORMAT.SHORT_MONTH:      result = `${mns(month)} ${year}`;  break;  // Aug 2018
-      case DATE_FORMAT.NUM_MONTH:        result = `${d2(month)} ${year}`;  break;   // 10/2018
+      case DATE_FORMAT.NUM_MONTH:        result = `${d2(month+1)}/${year}`;  break;   // 10/2018
       
       case DATE_FORMAT.LONG_DAY_MONTH:   result = `${daym} ${mnl(month)}`;  break;    //  12 August
       case DATE_FORMAT.SHORT_DAY_MONTH:  result = `${daym} ${mns(month)}`; break;     //  12 Aug
@@ -227,18 +232,3 @@ export function injectLocalizer(loc){
  * Returns currently injected localizer
  */
 export function getCurrentLocalizer(){ return s_Localizer; }
-
-
-
-//todo  Finish and test cover
-export function formatDateTime(d, cult, utc){
-  return s_Localizer.formatDateTime(d, cult, utc);
-}
-
-export function formatDate(d, cult, utc){
-  return s_Localizer.formatDate(d, cult, utc);
-}
-
-export function formatTime(d, cult, utc){
-  return s_Localizer.formatTime(d, cult, utc);
-}
