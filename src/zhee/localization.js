@@ -101,6 +101,7 @@ export class DefaultLocalizer{
     const year    = utc ? v.getUTCFullYear() : v.getFullYear();
     
     const d2 = (num) => ("0" + num.toString()).slice(-2);
+    const d3 = (num) => ("00" + num.toString()).slice(-3);
     const dnl = (idx) => this.localizeCultureString(INVARIANT_DAY_LONG_NAMES[idx], culture, FIELD_DAY);
     const dns = (idx) => this.localizeCultureString(INVARIANT_DAY_SHORT_NAMES[idx], culture, FIELD_DAY);
     const mnl = (idx) => this.localizeCultureString(INVARIANT_MONTH_LONG_NAMES[idx], culture, FIELD_MONTH);
@@ -137,7 +138,7 @@ export class DefaultLocalizer{
     if (tmDetails===TIME_DETAILS.HMS) return `${result} ${d2(hours)}:${d2(minutes)}:${d2(seconds)}`;
 
     const millis =  utc ? v.getUTCMilliseconds()  : v.getMilliseconds();
-    return `${result} ${d2(hours)}:${d2(minutes)}:${d2(seconds)}:${millis}`;
+    return `${result} ${d2(hours)}:${d2(minutes)}:${d2(seconds)}:${d3(millis)}`;
   }
 
   getCurrencySymbol(culture){

@@ -11,7 +11,7 @@ describe("Localization", function() {
 
     describe("#formatDateTime()", function() {
       
-      const dt = new Date(2017, 5, 12,  15, 43, 19, 789);// 12/june/2017 = Monday
+      const dt = new Date(2017, 5, 12,  15, 43, 19, 89);// 12/june/2017 = Monday
 
       it("arg0s", function(){ 
         let got = dloc.formatDateTime(dt);
@@ -77,6 +77,25 @@ describe("Localization", function() {
         let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.SHORT_DAY_MONTH});
         console.log( got );
         aver.areEqual("12 Jun", got);
+      });
+
+
+      it("LONG_WEEK_DATE+HM", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.LONG_WEEK_DATE, tmDetails: sut.TIME_DETAILS.HM});
+        console.log( got );
+        aver.areEqual("Monday, 12 June 2017 15:43", got);
+      });
+
+      it("LONG_WEEK_DATE+HMS", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.LONG_WEEK_DATE, tmDetails: sut.TIME_DETAILS.HMS});
+        console.log( got );
+        aver.areEqual("Monday, 12 June 2017 15:43:19", got);
+      });
+
+      it("LONG_WEEK_DATE+HMSM", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.LONG_WEEK_DATE, tmDetails: sut.TIME_DETAILS.HMSM});
+        console.log( got );
+        aver.areEqual("Monday, 12 June 2017 15:43:19:089", got);
       });
 
 
