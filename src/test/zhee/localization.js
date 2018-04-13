@@ -67,6 +67,19 @@ describe("Localization", function() {
         aver.areEqual("06/2017", got);
       });
 
+      it("LONG_DAY_MONTH", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.LONG_DAY_MONTH});
+        console.log( got );
+        aver.areEqual("12 June", got);
+      });
+
+      it("SHORT_DAY_MONTH", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.SHORT_DAY_MONTH});
+        console.log( got );
+        aver.areEqual("12 Jun", got);
+      });
+
+
     });
 
 
