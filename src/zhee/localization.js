@@ -1,15 +1,22 @@
 import * as CC from "./coreconsts";
 import * as types from "./types";
 import * as aver from "./aver";
-
-import { truncate } from "./strings";
+import * as strings from "./strings";
 
 export const CULTURE_INVARIANT = "*";
 export const CULTURE_US = "us";
 
 export const ISO_LANG_ENG = "eng";
 export const ISO_LANG_DEU = "deu";
+export const ISO_LANG_FRA = "fra";
 export const ISO_LANG_RUS = "rus";
+export const ISO_LANG_ESP = "esp";
+
+export const ANY_SCHEMA = "--ANY-SCHEMA--";
+export const ANY_FIELD  = "--ANY-FIELD--";
+
+export const FIELD_DAY   = "day";
+export const FIELD_MONTH = "month";
 
 
 export const DATE_FORMAT = {
@@ -35,29 +42,18 @@ export const TIME_DETAILS = {
 };
 
 
-export const INVARIANT_MONTH_LONG_NAMES = ["January",
-                                  "February",
-                                  "March",
-                                  "April",
-                                  "May",
-                                  "June",
-                                  "July",
-                                  "August",
-                                  "September",
-                                  "October",
-                                  "November",
-                                  "December"];
+export const INVARIANT_MONTH_LONG_NAMES = [
+  "January", "February", "March",
+  "April", "May", "June",
+  "July", "August", "September",
+  "October", "November", "December"];
 
-export const INVARIANT_MONTH_SHORT_NAMES = INVARIANT_MONTH_LONG_NAMES.map( v => truncate(v, 3) );
+export const INVARIANT_MONTH_SHORT_NAMES = INVARIANT_MONTH_LONG_NAMES.map( v => strings.truncate(v, 3) );
 
-export const INVARIANT_DAY_LONG_NAMES = ['Sunday', 
-                                       'Monday', 
-                                       'Tuesday', 
-                                       'Wednesday', 
-                                       'Thursday', 
-                                       'Friday', 
-                                       'Saturday'];
-export const INVARIANT_DAY_SHORT_NAMES = INVARIANT_DAY_LONG_NAMES.map( v => truncate(v, 3) );
+export const INVARIANT_DAY_LONG_NAMES = 
+  ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+export const INVARIANT_DAY_SHORT_NAMES = INVARIANT_DAY_LONG_NAMES.map( v => strings.truncate(v, 3) );
+
 
 
 
@@ -68,7 +64,15 @@ export const INVARIANT_DAY_SHORT_NAMES = INVARIANT_DAY_LONG_NAMES.map( v => trun
  */
 export class DefaultLocalizer{
   
-  constructor(){ }
+  constructor(){
+    this.m_Strings = {
+      [ISO_LANG_ENG]: { },
+      [ISO_LANG_RUS]: { },
+      [ISO_LANG_DEU]: { },
+      [ISO_LANG_FRA]: { },
+      [ISO_LANG_ESP]: { }
+    };
+  }
 
   get isInvariant() { return true; }
 
@@ -79,7 +83,8 @@ export class DefaultLocalizer{
   formatDateTime({dt = null, culture = null, dtFormat = DATE_FORMAT.LONG_DATE, tmDetails = TIME_DETAILS.NONE, utc = false} = {}){
     if (dt===null){
       if (arguments.length==0)
-      throw new Error("'dt' arg is missing");
+        throw new Error("'dt' arg is missing");
+    
       dt = arguments[0]; 
     }
     
@@ -91,10 +96,10 @@ export class DefaultLocalizer{
     const year    = utc ? v.getUTCFullYear() : v.getFullYear();
     
     const d2 = (num) => ("0" + num.toString()).slice(-2);
-    const dnl = (idx) => strLocalize(langIso, "date", "", INVARIANT_DAY_LONG_NAMES[idx]);
-    const dns = (idx) => strLocalize(langIso, "date", "", INVARIANT_DAY_SHORT_NAMES[idx]);
-    const mnl = (idx) => strLocalize(langIso, "date", "", INVARIANT_MONTH_LONG_NAMES[idx]);
-    const mns = (idx) => strLocalize(langIso, "date", "", INVARIANT_MONTH_SHORT_NAMES[idx]);
+    const dnl = (idx) => this.localizeCultureString(INVARIANT_DAY_LONG_NAMES[idx], culture, FIELD_DAY);
+    const dns = (idx) => this.localizeCultureString(INVARIANT_DAY_SHORT_NAMES[idx], culture, FIELD_DAY);
+    const mnl = (idx) => this.localizeCultureString(INVARIANT_MONTH_LONG_NAMES[idx], culture, FIELD_MONTH);
+    const mns = (idx) => this.localizeCultureString(INVARIANT_MONTH_SHORT_NAMES[idx], culture, FIELD_MONTH);
     
     let result = "";
     
@@ -130,16 +135,32 @@ export class DefaultLocalizer{
     return `${result} ${d2(hours)}:${d2(minutes)}:${d2(seconds)}:${millis}`;
   }
 
-  getCurrencySymbol(iso){
+  getCurrencySymbol(culture){
     return "$";
   }
 
-  getCurrencyThousandsSeparator(iso){
+  getCurrencyThousandsSeparator(culture){
     return ",";
   }
 
-  getCurrencyDecimalSeparator(iso){
+  getCurrencyDecimalSeparator(culture){
     return ".";
+  }
+
+  /**
+   * Returns primary language iso code for the specified culture
+   * @param {string} culture 
+   */
+  getCulturePrimaryLanguageIso(culture){
+    return ISO_LANG_ENG;
+  }
+
+  /**
+   * Returns an array of languages in the order of imporatnce for the specified culture
+   * @param {string} culture 
+   */
+  getCultureLanguageIsos(culture){
+    return [ISO_LANG_ENG];
   }
 
   /**
@@ -150,6 +171,45 @@ export class DefaultLocalizer{
     if (isNaN(amount) && arguments.length>0) amount = arguments[0];
     console.log(amount, iso, precision, symbol, sign);
   }
+
+  /**
+   * Localizes string identified by the value within the schema and field scopes for the primary language of the supplied culture
+   */
+  localizeCultureString(value, culture, field = ANY_FIELD, schema = ANY_SCHEMA){
+    let iso = this.getCulturePrimaryLanguageIso(culture);
+    return this.localizeString(value, iso, field, schema);
+  }
+
+  /**
+   * Localizes string identified by the value within the schema and field scopes per supplied language iso code
+   * @param {} param0 
+   */
+  localizeString(value, iso, field = ANY_FIELD, schema = ANY_SCHEMA){
+    if (!value) return null;
+    if (strings.isEmpty(value) || strings.isEmpty(iso)) return null;
+  
+    if (strings.isEmpty(field)) field = ANY_FIELD;
+    if (strings.isEmpty(schema)) schema = ANY_SCHEMA;
+  
+    var node = this.m_Strings;
+    if (!node.hasOwnProperty(iso)) return value;
+    node = node[iso];
+  
+    if (!node.hasOwnProperty(schema)){
+      if (!node.hasOwnProperty(ANY_SCHEMA)) return value;
+      node = node[ANY_SCHEMA];
+    } else node = node[schema];
+  
+    if (!node.hasOwnProperty(field)){
+      if (!node.hasOwnProperty(ANY_FIELD)) return value;
+      node = node[ANY_FIELD];
+    } else node = node[field];
+  
+    if (!node.hasOwnProperty(value)) return value;
+    return node[value];
+  }
+
+
 }
 
 let s_Localizer = new DefaultLocalizer();

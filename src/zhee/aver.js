@@ -8,18 +8,6 @@ import * as str from "./strings";
  */
 export const AVERMENT_FAILURE = (m) => Error(`Averment failure: ${m}`);
 
-/**
- * Provides a textual representation of a value, suitable for report in error logs etc.
- * @param {String} a 
- * @param {int} mlen
- */
-export function describeValue(v, mlen = 64){
-  if (v===undefined) return CC.UNDEFINED;
-  if (v===null) return CC.NULL;
-  //todo: Finish, show the type, and a piece of data itself
-  return "aaaa"+mlen;
-}
-
 const dv = (v) => str.describe(v);//shortcut
 
 /**
@@ -84,7 +72,6 @@ export function isFunction(a){
   if (types.isFunction(a)) return;
   throw AVERMENT_FAILURE(`isFunction(${dv(a)})`);
 }
-
 
 /**
  * Performs strict test for false
