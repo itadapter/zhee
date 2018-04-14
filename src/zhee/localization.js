@@ -222,7 +222,8 @@ export class Localizer{
 
 }
 
-let s_Localizer = new Localizer();
+export const INVARIANT = new Localizer();
+let s_Current = INVARIANT;
 
 /**
  * Injects custom localizer, typically this is done in the app.js file for the specific application
@@ -230,10 +231,10 @@ let s_Localizer = new Localizer();
  */
 export function injectLocalizer(loc){
   aver.isOf(loc, Localizer);
-  s_Localizer = loc;
+  s_Current = loc;
 }
 
 /**
  * Returns currently injected localizer
  */
-export function currentLocalizer(){ return s_Localizer; }
+export function currentLocalizer(){ return s_Current; }

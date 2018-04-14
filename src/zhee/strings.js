@@ -1,6 +1,6 @@
 import * as CC from "./coreconsts";
 import * as types from "./types";
-import * as loclz from "./localization";
+import * as lcl from "./localization";
 
 /**
  * Returns true if the argument is an undefined, null, zero length or an empty string.
@@ -39,16 +39,16 @@ export function describe(v, maxLen = 64){
   if (v===undefined) return CC.UNDEFINED;
   if (v===null) return CC.NULL;
   
-  let t = types.isArray(v) ? "Array" : typeof(v);
+  let t = types.describeTypeOf(v);
   let subs = v.length ? `[${v.length}]` : "";
   
-  let d = "";
-  if (types.isObjectOrArray(v))
-    d = JSON.stringify(v);
+  let d = CC.UNKNOWN;
+  if (types.isDate(v))
+    d = lcl.INVARIANT.formatDateTime(v);
   else if (types.isString(v))
     d = `"${v}"`;
-  else if (types.isDate(v))
-    d = loclz.formatDateTime(v);
+  else if (types.isObjectOrArray(v))
+    d = JSON.stringify(v);
   else
     d = v.toString();
 

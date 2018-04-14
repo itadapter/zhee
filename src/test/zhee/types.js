@@ -39,9 +39,41 @@ describe("Types", function() {
     it("false for undefined", function() { aver.isFalse( sut.isDate(undefined)  );});
     it("false for null",      function() { aver.isFalse( sut.isDate(null)       );});
 
-    it("for date",      function() { aver.isTrue( sut.isDate( new Date("December 25, 2014")) );});
-    it("for date(now)", function() { aver.isTrue( sut.isDate( new Date( Date.now() )) );});
-  }); 
+    it("true for date",      function() { aver.isTrue( sut.isDate( new Date("December 25, 2014")) );});
+    it("true for date(now)", function() { aver.isTrue( sut.isDate( new Date( Date.now() )) );});
+  });
+  
+  
+  describe("#isNumber()", function() {
+    it("false for empty()",   function() { aver.isFalse( sut.isNumber()           );});
+    it("false for undefined", function() { aver.isFalse( sut.isNumber(undefined)  );});
+    it("false for null",      function() { aver.isFalse( sut.isNumber(null)       );});
+
+    it("false for {}",      function() { aver.isFalse( sut.isNumber({})       );});
+    it("false for true",      function() { aver.isFalse( sut.isNumber(true)   );});
+    it("false for 'abc'",      function() { aver.isFalse( sut.isNumber("abc") );});
+    it("false for '2'",  function() { aver.isFalse( sut.isNumber( "2" )); });
+
+
+    it("true for 2",    function() { aver.isTrue( sut.isNumber( 2 )); });
+    it("true for -123.1232",    function() { aver.isTrue( sut.isNumber( -123.1232 )); });
+  });
+
+
+  describe("#isBool()", function() {
+    it("false for empty()",   function() { aver.isFalse( sut.isBool()           );});
+    it("false for undefined", function() { aver.isFalse( sut.isBool(undefined)  );});
+    it("false for null",      function() { aver.isFalse( sut.isBool(null)       );});
+
+    it("false for {}",      function() { aver.isFalse( sut.isBool({})       );});
+    it("false for 'abc'",   function() { aver.isFalse( sut.isBool("abc") );});
+    it("false for 1",       function() { aver.isFalse( sut.isBool( 1 )); });
+    it("false for '1'",     function() { aver.isFalse( sut.isBool( "1" )); });
+
+
+    it("true for true",    function() { aver.isTrue( sut.isBool( true )); });
+    it("true for false",    function() { aver.isTrue( sut.isBool( false )); });
+  });
 
 
   describe("#isArray()", function() {
@@ -94,6 +126,29 @@ describe("Types", function() {
     it("true for [null, null]",  function() { aver.isTrue( sut.isObjectOrArray([null, null]) );});
     it("true for [1,2,3]",       function() { aver.isTrue( sut.isObjectOrArray([1,2,3])      );});
   });
+
+
+
+
+  describe("#describeTypeOf()", function() {
+    it("for ()",   function() { aver.areEqual( "<undefined>", sut.describeTypeOf() );});
+    it("for undefined",   function() { aver.areEqual( "<undefined>", sut.describeTypeOf(undefined) );});
+    it("for null",   function() { aver.areEqual( "<null>", sut.describeTypeOf(null) );});
+
+    it("for 1",   function() { aver.areEqual( "number", sut.describeTypeOf(1) );});
+    it("for 1.3",   function() { aver.areEqual( "number", sut.describeTypeOf(1.3) );});
+    it("for true",   function() { aver.areEqual( "boolean", sut.describeTypeOf(true) );});
+    it("for false",   function() { aver.areEqual( "boolean", sut.describeTypeOf(false) );});
+
+    it("for Date",   function() { aver.areEqual( "date", sut.describeTypeOf(new Date()) );});
+    it("for []",   function() { aver.areEqual( "array", sut.describeTypeOf([]) );});
+    it("for [1,2,3]",   function() { aver.areEqual( "array", sut.describeTypeOf([1,2,3]) );});
+    it("for {}",   function() { aver.areEqual( "object", sut.describeTypeOf({}) );});
+    it("for {a: 1}",   function() { aver.areEqual( "object", sut.describeTypeOf({a: 1}) );});
+    
+  });
+
+
 
   describe("#mixin()", function() {
     it("null for (undef, undef)",   function() { aver.isNull( sut.mixin(undefined));  });

@@ -79,10 +79,10 @@ describe("Strings", function() {
     });
 
     it("date",   function() {
-      let v = new Date("January 10, 1980 3:15:00");
+      let v = new Date(1980, 7, 15);
       let got = sut.describe(v);
       console.log( got );
-      aver.areEqual("(date)false", got);
+      aver.areEqual("(date)08/15/1980", got);
     });
 
 
@@ -92,7 +92,7 @@ describe("Strings", function() {
 
       let got = sut.describe(v);
       console.log( got );
-      aver.areEqual("(Array[5])[1,2,3,true,-34.2]", got);
+      aver.areEqual("(array[5])[1,2,3,true,-34.2]", got);
     });
 
     it("object",   function() {

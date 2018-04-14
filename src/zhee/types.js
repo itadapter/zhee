@@ -1,3 +1,4 @@
+import * as CC from "./coreconsts";
 
 /**
  * Returns true if the argument is assigned - not undefined non-null value, even an empty string is assigned
@@ -58,6 +59,62 @@ export function isFunction(v) {
   return typeof v === "function";
 }
 
+
+/**
+ * Returns true if the argument is an int32 value
+ * @param {int32} v 
+ */
+export function isInt32(v){
+  if (Number.isInteger) return Number.isInteger(v);
+  return v === (v|0);
+}
+
+/**
+ * Returns true if the value is either integer number or a string representing an integer number
+ * @param {int|string} v Value to check 
+ */
+export function isIntValue(v){
+  if (isNaN(v)) return false;
+  let x = parseFloat(v);
+  return x === (x|0);
+}
+
+/**
+ * Return true if the value is a Number
+ * @param {Object} v Value to check 
+ */
+export function isNumber(v){
+  return typeof(v) === "number";
+}
+
+
+/**
+ * Return true if the value is a boolean
+ * @param {Object} v Value to check 
+ */
+export function isBool(v){
+  return typeof(v) === "boolean";
+}
+
+
+/**
+ * Describes the type of value returning the string description, not type moniker
+ * @param {Object} v 
+ */
+export function describeTypeOf(v){
+  if(v === undefined) return CC.UNDEFINED;
+  if(v === null) return CC.NULL;
+
+  if (isDate(v)) return "date";
+  if (isFunction(v)) return "function";
+  if (isString(v)) return "string";
+  if (isArray(v)) return "array";
+  if (isNumber(v)) return "number";
+  if (isBool(v)) return "boolean";
+  return typeof(v);
+}
+
+
 /**
  * Mixes in an extension's own keys into an object, conditionally keeping existing keys even if null
  * @param {Object} obj An object to mix into
@@ -81,21 +138,3 @@ export function mixin(obj, ext, keepExisting = false){
 }
 
 
-/**
- * Returns true if the argument is an int32 value
- * @param {int32} v 
- */
-export function isInt32(v){
-  if (Number.isInteger) return Number.isInteger(v);
-  return v === (v|0);
-}
-
-/**
- * Returns true if the value is either integer number or a string representing an integer number
- * @param {int|string} v Value to check 
- */
-export function isIntValue(v){
-  if (isNaN(v)) return false;
-  let x = parseFloat(v);
-  return x === (x|0);
-}
