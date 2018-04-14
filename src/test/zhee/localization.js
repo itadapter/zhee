@@ -54,6 +54,11 @@ describe("Localization", function() {
       it("yes",  function(){   aver.areEqual("ja",   dloc.localizeString("yes", sut.ISO_LANG_DEU));   });
       it("no",   function(){   aver.areEqual("nein", dloc.localizeString("no", sut.ISO_LANG_DEU));    });
       it("abra", function(){   aver.areEqual("abra", dloc.localizeString("abra", sut.ISO_LANG_DEU));  });
+
+      it("yes in schema",  function(){   aver.areEqual("так",   dloc.localizeString("yes", sut.ISO_LANG_RUS, sut.ANY_FIELD, "tezt"));   });
+      it("no in schema",  function(){   aver.areEqual("неа",   dloc.localizeString("no", sut.ISO_LANG_RUS, sut.ANY_FIELD, "tezt"));   });
+      it("yes in n/a filed n/a schema",  function(){   aver.areEqual("да",   dloc.localizeString("yes", sut.ISO_LANG_RUS, "fieldX", "schemaX"));   });
+      it("yes in anyf/anys",  function(){   aver.areEqual("да",   dloc.localizeString("yes", sut.ISO_LANG_RUS, sut.ANY_FIELD, sut.ANY_SCHEMA));   });
     });
 
 

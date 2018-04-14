@@ -66,7 +66,7 @@ export class Localizer{
   constructor(){
     this.m_Strings = {
       [ISO_LANG_ENG]: { [ANY_SCHEMA]: {[ANY_FIELD]: {  }} },
-      [ISO_LANG_RUS]: { [ANY_SCHEMA]: {[ANY_FIELD]: {"yes":"да", "no":"нет"}} },
+      [ISO_LANG_RUS]: { [ANY_SCHEMA]: {[ANY_FIELD]: {"yes":"да", "no":"нет"}}, "tezt": {[ANY_FIELD]: {"yes":"так", "no":"неа"}} },
       [ISO_LANG_DEU]: { [ANY_SCHEMA]: {[ANY_FIELD]: {"yes":"ja", "no":"nein"}} },
       [ISO_LANG_FRA]: { },
       [ISO_LANG_ESP]: { }
