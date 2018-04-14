@@ -4,9 +4,9 @@ const sut = zhee.Localization;
 
 describe("Localization", function() {
 
-  describe("#DefaultLocalizer", function() {
+  describe("#Localizer", function() {
     
-    const dloc = new sut.DefaultLocalizer();
+    const dloc = new sut.Localizer();//Default Localizer
 
 
     describe("#formatDateTime()", function() {

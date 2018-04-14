@@ -61,7 +61,7 @@ export const INVARIANT_DAY_SHORT_NAMES = INVARIANT_DAY_LONG_NAMES.map( v => stri
  * Other localizer shall extend this class and inject their instance using
  *  localization.injectLocalizer(new CustomLocalizer(...))
  */
-export class DefaultLocalizer{
+export class Localizer{
   
   constructor(){
     this.m_Strings = {
@@ -222,18 +222,18 @@ export class DefaultLocalizer{
 
 }
 
-let s_Localizer = new DefaultLocalizer();
+let s_Localizer = new Localizer();
 
 /**
- * Injects custom localizer
- * @param {DefaultLocalizer} loc 
+ * Injects custom localizer, typically this is done in the app.js file for the specific application
+ * @param {Localizer} loc 
  */
 export function injectLocalizer(loc){
-  aver.isOf(loc, DefaultLocalizer);
+  aver.isOf(loc, Localizer);
   s_Localizer = loc;
 }
 
 /**
  * Returns currently injected localizer
  */
-export function getCurrentLocalizer(){ return s_Localizer; }
+export function currentLocalizer(){ return s_Localizer; }
