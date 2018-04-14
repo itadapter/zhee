@@ -73,6 +73,45 @@ export function isFunction(a){
 }
 
 /**
+ * Performs strict test for date
+ * @param {Object} a 
+ */
+export function isDate(a){
+  if (types.isDate(a)) return;
+  throw AVERMENT_FAILURE(`isDate(${dv(a)})`);
+}
+
+/**
+ * Performs strict test for number
+ * @param {Object} a 
+ */
+export function isNumber(a){
+  if (types.isNumber(a)) return;
+  throw AVERMENT_FAILURE(`isNumber(${dv(a)})`);
+}
+
+/**
+ * Performs strict test for string
+ * @param {Object} a 
+ */
+export function isString(a){
+  if (types.isString(a)) return;
+  throw AVERMENT_FAILURE(`isString(${dv(a)})`);
+}
+
+/**
+ * Performs strict test for bool
+ * @param {Object} a 
+ */
+export function isBool(a){
+  if (types.isBool(a)) return;
+  throw AVERMENT_FAILURE(`isBool(${dv(a)})`);
+}
+
+
+
+
+/**
  * Performs strict test for false
  * @param {bool} a 
  */

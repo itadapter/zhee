@@ -182,6 +182,111 @@ describe("Aver", function() {
   });
 
 
+  describe("#isString()", function() {
+
+    it("pass string",   function() {
+      sut.isString("aaaaa");
+    });
+
+    it("fail 1",   function() {
+      sut.throws(function(){
+        sut.isString(1);
+      }, "averment failure: isstring");
+    });
+
+    it("fail undefined",   function() {
+      sut.throws(function(){
+        sut.isString(undefined);
+      }, "averment failure: isstring");
+    });
+
+    it("fail null",   function() {
+      sut.throws(function(){
+        sut.isString(null);
+      }, "averment failure: isstring");
+    });
+  });
+
+  describe("#isBool()", function() {
+
+    it("pass bool",   function() {
+      sut.isBool(true);
+      sut.isBool(false);
+      sut.isBool(1===1);
+    });
+
+    it("fail 1",   function() {
+      sut.throws(function(){
+        sut.isBool(1);
+      }, "averment failure: isbool");
+    });
+
+    it("fail undefined",   function() {
+      sut.throws(function(){
+        sut.isBool(undefined);
+      }, "averment failure: isbool");
+    });
+
+    it("fail null",   function() {
+      sut.throws(function(){
+        sut.isBool(null);
+      }, "averment failure: isbool");
+    });
+  });
+
+  describe("#isNumber()", function() {
+
+    it("pass nums",   function() {
+      sut.isNumber(1);
+      sut.isNumber(-1123.23);
+      sut.isNumber(0);
+    });
+
+    it("fail str",   function() {
+      sut.throws(function(){
+        sut.isNumber("123");
+      }, "averment failure: isnumber");
+    });
+
+    it("fail undefined",   function() {
+      sut.throws(function(){
+        sut.isNumber(undefined);
+      }, "averment failure: isnumber");
+    });
+
+    it("fail null",   function() {
+      sut.throws(function(){
+        sut.isNumber(null);
+      }, "averment failure: isnumber");
+    });
+  });
+
+  describe("#isDate()", function() {
+
+    it("pass date",   function() {
+      sut.isDate( new Date(1980, 1, 1));
+    });
+
+    it("fail str",   function() {
+      sut.throws(function(){
+        sut.isDate("1/1/2001");
+      }, "averment failure: isdate");
+    });
+
+    it("fail undefined",   function() {
+      sut.throws(function(){
+        sut.isDate(undefined);
+      }, "averment failure: isdate");
+    });
+
+    it("fail null",   function() {
+      sut.throws(function(){
+        sut.isDate(null);
+      }, "averment failure: isdate");
+    });
+  });
+
+
   describe("#areEqual()", function() {
     it("TRUE", function(){
       sut.areEqual(1, 1);
