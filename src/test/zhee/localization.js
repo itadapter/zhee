@@ -98,6 +98,12 @@ describe("Localization", function() {
         aver.areEqual("Monday, 12 June 2017 15:43:19:089", got);
       });
 
+      it("LONG_WEEK_DATE+HMSM in UTC", function(){ 
+        let got = dloc.formatDateTime({dt: dt, dtFormat: sut.DATE_FORMAT.LONG_WEEK_DATE, tmDetails: sut.TIME_DETAILS.HMSM, utc: true});
+        console.log( got );
+        aver.areNotEqual("Monday, 12 June 2017 15:43:19:089", got);// the actual time shift depends on the workstation
+      });
+
 
     });
 

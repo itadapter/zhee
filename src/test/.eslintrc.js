@@ -3,6 +3,9 @@ module.exports = {
     browser: true,
     es6: false,
     mocha: true,
-    node: true
+    node: true, 
+  },
+  rules: {
+    "no-console": "off",
   }
 };

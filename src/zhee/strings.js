@@ -1,20 +1,6 @@
 import * as CC from "./coreconsts";
 import * as types from "./types";
-
-
-//todo  Finish and test cover
-export function formatDateTime(d, cult, utc){
-  return d.toString();
-}
-
-export function formatDate(d, cult, utc){
-  return d.toString();
-}
-
-export function formatTime(d, cult, utc){
-  return d.toString();
-}
-
+import * as loclz from "./localization";
 
 /**
  * Returns true if the argument is an undefined, null, zero length or an empty string.
@@ -62,7 +48,7 @@ export function describe(v, maxLen = 64){
   else if (types.isString(v))
     d = `"${v}"`;
   else if (types.isDate(v))
-    d = formatDateTime(v);
+    d = loclz.formatDateTime(v);
   else
     d = v.toString();
 

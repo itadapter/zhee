@@ -1,4 +1,3 @@
-import * as CC from "./coreconsts";
 import * as types from "./types";
 import * as str from "./strings";
 

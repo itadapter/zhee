@@ -1,4 +1,3 @@
-import * as CC from "./coreconsts";
 import * as types from "./types";
 import * as aver from "./aver";
 import * as strings from "./strings";
@@ -115,15 +114,15 @@ export class DefaultLocalizer{
       case DATE_FORMAT.LONG_DATE:        result = `${daym} ${mnl(month)} ${year}`;  break; //  30 August 2018
       case DATE_FORMAT.SHORT_DATE:       result = `${daym} ${mns(month)} ${year}`;  break; //  30 Aug 2018 
       case DATE_FORMAT.NUM_DATE:         result = `${d2(month+1)}/${d2(daym)}/${year}`;  break;//  08/30/2018
-      
+
       case DATE_FORMAT.LONG_MONTH:       result = `${mnl(month)} ${year}`;  break;  // August 2018
       case DATE_FORMAT.SHORT_MONTH:      result = `${mns(month)} ${year}`;  break;  // Aug 2018
       case DATE_FORMAT.NUM_MONTH:        result = `${d2(month+1)}/${year}`;  break;   // 10/2018
-      
+
       case DATE_FORMAT.LONG_DAY_MONTH:   result = `${daym} ${mnl(month)}`;  break;    //  12 August
       case DATE_FORMAT.SHORT_DAY_MONTH:  result = `${daym} ${mns(month)}`; break;     //  12 Aug
       default:
-      result = `${daym} ${mnl(month)} ${year}`;
+        result = `${daym} ${mnl(month)} ${year}`;
     }
     
     if (tmDetails===TIME_DETAILS.NONE) return result;
@@ -141,10 +140,13 @@ export class DefaultLocalizer{
     return `${result} ${d2(hours)}:${d2(minutes)}:${d2(seconds)}:${d3(millis)}`;
   }
 
+  /*eslint-disable no-unused-vars*///------------------------------
+  
   getCurrencySymbol(culture){
     return "$";
   }
 
+  /*eslint-disable no-unused-vars*/
   getCurrencyThousandsSeparator(culture){
     return ",";
   }
@@ -169,13 +171,15 @@ export class DefaultLocalizer{
     return [ISO_LANG_ENG];
   }
 
+  /*eslint-enable no-unused-vars*///------------------------------
+
   /**
    * 
    * @param {Object|number} amount Amount object or number for defaults
    */
   formatCurrency({amount = NaN, iso = "usd", precision = 2, symbol = true, sign = true, thousands = true} = {}){
     if (isNaN(amount) && arguments.length>0) amount = arguments[0];
-    console.log(amount, iso, precision, symbol, sign);
+    //console.log(amount, iso, precision, symbol, sign);
   }
 
   /**
