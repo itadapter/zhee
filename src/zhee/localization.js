@@ -162,7 +162,7 @@ export class Localizer{
    * Returns primary language iso code for the specified culture
    * @param {string} culture 
    */
-  getCulturePrimaryLanguageIso(culture){
+  getPrimaryLanguageIso(culture){
     return ISO_LANG_ENG;
   }
 
@@ -170,7 +170,7 @@ export class Localizer{
    * Returns an array of languages in the order of imporatnce for the specified culture
    * @param {string} culture 
    */
-  getCultureLanguageIsos(culture){
+  getLanguageIsos(culture){
     return [ISO_LANG_ENG];
   }
 
@@ -189,15 +189,15 @@ export class Localizer{
   /**
    * Returns an array of all language ISOs supported by the instance
    */
-  allLanguageISOs(){
-    return Object.keys(this.m_String).filter(n => n.length === 3);
+  getStringLocalizationIsos(){
+    return Object.keys(this.m_Strings).filter(n => n.length === 3);
   }
 
   /**
    * Localizes string identified by the value within the schema and field scopes for the primary language of the supplied culture
    */
   localizeCultureString(value, culture, field, schema){
-    let iso = this.getCulturePrimaryLanguageIso(culture);
+    let iso = this.getPrimaryLanguageIso(culture);
     return this.localizeString(value, iso, field, schema);
   }
 

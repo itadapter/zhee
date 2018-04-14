@@ -9,6 +9,54 @@ describe("Localization", function() {
     const dloc = new sut.Localizer();//Default Localizer
 
 
+    describe("#getCurrencySymbols()", function() {
+      it("returns object", function(){ 
+        let got = dloc.getCurrencySymbols(sut.CULTURE_INVARIANT);
+        console.log( got );
+        aver.areEqual("$", got.sym);
+        aver.areEqual(",", got.ts);
+        aver.areEqual(".", got.ds);
+      });
+    });
+    
+    describe("#getPrimaryLanguageIso()", function() {
+      it("returns ENG", function(){ 
+        let got = dloc.getPrimaryLanguageIso(sut.CULTURE_INVARIANT);
+        console.log( got );
+        aver.areEqual(sut.ISO_LANG_ENG, got);
+      });
+    });
+
+    describe("#getLanguageIsos()", function() {
+      it("returns ENG", function(){ 
+        let got = dloc.getLanguageIsos(sut.CULTURE_INVARIANT);
+        aver.isArray(got);
+        aver.areEqual(sut.ISO_LANG_ENG, got[0]);
+      });
+    });
+
+    describe("#getStringLocalizationIsos()", function() {
+      it("returns ENG", function(){ 
+        let got = dloc.getStringLocalizationIsos();
+        aver.isArray(got);
+        aver.areEqual(5, got.length);
+        aver.areEqual(sut.ISO_LANG_ENG, got[0]);
+        aver.areEqual(sut.ISO_LANG_ESP, got[4]);
+      });
+    });
+
+    describe("#localizeString()", function() {
+      it("passthrough", function(){   aver.areEqual("doesnotexist", dloc.localizeString("doesnotexist", sut.ISO_LANG_ENG));   });
+      it("yes",  function(){   aver.areEqual("да",   dloc.localizeString("yes", sut.ISO_LANG_RUS));   });
+      it("no",   function(){   aver.areEqual("нет",  dloc.localizeString("no", sut.ISO_LANG_RUS));    });
+      it("abra", function(){   aver.areEqual("abra", dloc.localizeString("abra", sut.ISO_LANG_RUS));  });
+
+      it("yes",  function(){   aver.areEqual("ja",   dloc.localizeString("yes", sut.ISO_LANG_DEU));   });
+      it("no",   function(){   aver.areEqual("nein", dloc.localizeString("no", sut.ISO_LANG_DEU));    });
+      it("abra", function(){   aver.areEqual("abra", dloc.localizeString("abra", sut.ISO_LANG_DEU));  });
+    });
+
+
     describe("#formatDateTime()", function() {
       
       const dt = new Date(2017, 5, 12,  15, 43, 19, 89);// 12/june/2017 = Monday
