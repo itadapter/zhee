@@ -222,7 +222,11 @@ export class Localizer{
 
 }
 
+/**
+ * Default Invariant Localizer instance
+ */
 export const INVARIANT = new Localizer();
+
 let s_Current = INVARIANT;
 
 /**
