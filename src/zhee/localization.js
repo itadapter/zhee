@@ -65,9 +65,9 @@ export class Localizer{
   
   constructor(){
     this.m_Strings = {
-      [ISO_LANG_ENG]: { },
-      [ISO_LANG_RUS]: { },
-      [ISO_LANG_DEU]: { },
+      [ISO_LANG_ENG]: { [ANY_SCHEMA]: {[ANY_FIELD]: {  }} },
+      [ISO_LANG_RUS]: { [ANY_SCHEMA]: {[ANY_FIELD]: {"yes":"да", "no":"нет"}} },
+      [ISO_LANG_DEU]: { [ANY_SCHEMA]: {[ANY_FIELD]: {"yes":"ja", "no":"nein"}} },
       [ISO_LANG_FRA]: { },
       [ISO_LANG_ESP]: { }
     };
@@ -142,17 +142,20 @@ export class Localizer{
 
   /*eslint-disable no-unused-vars*///------------------------------
   
-  getCurrencySymbol(culture){
-    return "$";
-  }
+  /**
+  * @typedef {Object} CurrencySymbols
+  * @property {string} sym Currency symbol, such as $
+  * @property {string} ts Thousands separator, such as ,
+  * @property {string} ds Decimal separator, such as .
+  */
 
-  /*eslint-disable no-unused-vars*/
-  getCurrencyThousandsSeparator(culture){
-    return ",";
-  }
-
-  getCurrencyDecimalSeparator(culture){
-    return ".";
+  /**
+   * Returns currency formatting symbols for culture
+   * @param {string} culture
+   * @returns {CurrencySymbols} Currency formatting symbols
+   */
+  getCurrencySymbols(culture){
+    return {sym: "$", ts: ",", ds: "."};
   }
 
   /**
@@ -182,19 +185,30 @@ export class Localizer{
     //console.log(amount, iso, precision, symbol, sign);
   }
 
+
+  /**
+   * Returns an array of all language ISOs supported by the instance
+   */
+  allLanguageISOs(){
+    return Object.keys(this.m_String).filter(n => n.length === 3);
+  }
+
   /**
    * Localizes string identified by the value within the schema and field scopes for the primary language of the supplied culture
    */
-  localizeCultureString(value, culture, field = ANY_FIELD, schema = ANY_SCHEMA){
+  localizeCultureString(value, culture, field, schema){
     let iso = this.getCulturePrimaryLanguageIso(culture);
     return this.localizeString(value, iso, field, schema);
   }
 
   /**
    * Localizes string identified by the value within the schema and field scopes per supplied language iso code
-   * @param {} param0 
+   * @param {string} value to localize/localization key
+   * @param {string} iso language iso code
+   * @param {string} field field name to which localization is applied, e.g. ANY_FIELD. Fields are resolved under schema
+   * @param {string} schema schema name to which localization is applied, e.g. ANY_SCHEMA 
    */
-  localizeString(value, iso, field = ANY_FIELD, schema = ANY_SCHEMA){
+  localizeString(value, iso, field, schema){
     if (!value) return null;
     if (strings.isEmpty(value) || strings.isEmpty(iso)) return null;
   
