@@ -5,7 +5,9 @@ import * as str from "./strings";
  * Makes an Error() initialized with message
  * @param { String } m
  */
-export const AVERMENT_FAILURE = (m) => Error(`Averment failure: ${m}`);
+export function AVERMENT_FAILURE(m){
+  return Error(`Averment failure: ${m}`);
+}
 
 const dv = (v) => str.describe(v);//shortcut
 

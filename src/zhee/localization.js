@@ -177,12 +177,45 @@ export class Localizer{
   /*eslint-enable no-unused-vars*///------------------------------
 
   /**
-   * 
+   * Formats currency per supplied culture
    * @param {Object|number} amount Amount object or number for defaults
    */
-  formatCurrency({amount = NaN, iso = "usd", precision = 2, symbol = true, sign = true, thousands = true} = {}){
-    if (isNaN(amount) && arguments.length>0) amount = arguments[0];
-    //console.log(amount, iso, precision, symbol, sign);
+  formatCurrency({amt = NaN, iso = null, culture = null,  precision = 2, symbol = true, sign = true, thousands = true} = {}){
+    if (isNaN(amt)){
+      if (arguments.length<2)
+        throw new Error("Currency 'amt' and 'iso' args are required");
+      amt = arguments[0]; 
+      iso = arguments[1];
+    }
+
+    if (isNaN(amt)) throw new Error("Currency 'amt' isNaN");
+    if (!iso) throw new Error("Currency 'iso' is required");
+    if (!culture) culture = CULTURE_INVARIANT;
+    const symbols = this.getCurrencySymbols(culture);
+    const neg = amt < 0;
+
+    amt = Math.floor(amt * Math.pow(10, precision));
+    const amts = amt.toString();
+    let amtw = amts.slice(0, amts.length-precision);//whole
+    let amtf = amts.slice(-precision);//fraction
+
+    if (thousands){
+      let whole = "";
+      for(let i=1; amtw.length-i>=0; i++){
+        if (i>1 && (i-1)%3===0) whole = symbols.ts + whole;
+        whole = amtw[amtw.length-i] + whole;
+      }
+      amtw = whole; 
+    }
+
+    let result = neg ? (sign ? "-" : "(") : "";//  - or (
+    
+    result += symbol ? symbols.sym : "";// $
+
+    result += amtw + symbols.ds + amtf; // whole.fraction
+    
+    if (neg && !sign) result += ")";
+    return result;
   }
 
 

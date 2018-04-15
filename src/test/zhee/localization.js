@@ -162,8 +162,10 @@ describe("Localization", function() {
 
 
     describe("#formatCurrency()", function() {
-      it("works", function(){ dloc.formatCurrency(500);  });
-      //it("false for empty()",   function() { aver.isFalse( sut.isAssigned()           );});
+      it("works", function(){
+        let got = dloc.formatCurrency(9123750000, "rub");
+        console.log(got);
+      });
     }); 
 
   });
