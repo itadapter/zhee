@@ -76,7 +76,7 @@ export class Localizer{
   get isInvariant() { return true; }
 
   /**
-   * Formats the date and time
+   * Formats the date and time value as string per culture
    * @param {Object} args
    * @param {Date} args.dt Datetime argument, it may be supplied without an args object as a sole argument
    * @param {string} args.culture Localization culture id
@@ -178,7 +178,14 @@ export class Localizer{
 
   /**
    * Formats currency per supplied culture
-   * @param {Object|number} amount Amount object or number for defaults
+   * @param {Object|number}args 
+   * @param {number} args.amt Amount to format - required
+   * @param {string} args.iso Currency iso code such as 'usd' - required
+   * @param {string} args.culture Formatting culture id
+   * @param {int} args.precision Number of decimal places
+   * @param {boolean} args.symbol True to add the currency symbol
+   * @param {boolean} args.sign  True to add minus sign, otheriwse culture accounting format is used (such as paranthesis in the US)
+   * @param {boolean} args.thousands True to add thousands separator
    */
   formatCurrency({amt = NaN, iso = null, culture = null,  precision = 2, symbol = true, sign = true, thousands = true} = {}){
     if (isNaN(amt)){
