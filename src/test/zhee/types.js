@@ -14,7 +14,9 @@ describe("Types", function() {
     it("true for []",   function() { aver.isTrue( sut.isAssigned([])    );});
     it("true for {}",   function() { aver.isTrue( sut.isAssigned({})    );});
     it("true for true",   function() { aver.isTrue( sut.isAssigned(true)    );});
+    it("true for false",   function() { aver.isTrue( sut.isAssigned(false)    );});
     it("true for 123",   function() { aver.isTrue( sut.isAssigned(123)    );});
+    it("true for Date",   function() { aver.isTrue( sut.isAssigned(new Date(1980,1, 21))    );});
     
   }); 
 
@@ -31,6 +33,8 @@ describe("Types", function() {
 
     it("true for ''",       function() { aver.isTrue( sut.isString("")       );});
     it("true for 'abc'",   function() { aver.isTrue( sut.isString("abc")    );});
+
+    it("true for new String('abc')",   function() { aver.isTrue( sut.isString( new String("abc") )) ;});
   }); 
 
 

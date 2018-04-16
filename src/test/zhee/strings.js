@@ -26,13 +26,75 @@ describe("Strings", function() {
   });
   
   describe("#truncate()", function() {
-    it("passthrough undef",   function() { aver.areEqual(undefined, sut.truncate() );});
-    it("passthrough null",    function() { aver.areEqual(null, sut.truncate(null) );});
+    it("'' ()",   function() { aver.areEqual("", sut.truncate() );});
+    it("'' undef",   function() { aver.areEqual("", sut.truncate(undefined) );});
+    it("'' null",    function() { aver.areEqual("", sut.truncate(null) );});
     it("coerce to string",    function() { aver.areEqual("12345", sut.truncate(12345) );});
     it("coerce to string and truncate",    function() { aver.areEqual("123", sut.truncate(12345, 3) );});
     it("truncate",    function() { aver.areEqual("123", sut.truncate("12345", 3) );});
     it("ellipsis",    function() { aver.areEqual("1234..", sut.truncate("1234567890", 6, "..") );});
   });
+
+  describe("#trim()", function() {
+    it("'' ()",   function() { aver.areEqual("", sut.trim() );});
+    it("'' undef",   function() { aver.areEqual("", sut.trim(undefined) );});
+    it("'' null",    function() { aver.areEqual("", sut.trim(null) );});
+
+    it("coerce int to string",    function() { aver.areEqual("12345", sut.trim(12345) );});
+    it("coerce bool to string",    function() { aver.areEqual("true", sut.trim(true) );});
+
+    it("case 1",    function() { aver.areEqual("abc", sut.trim(" abc") );});
+    it("case 2",    function() { aver.areEqual("abc", sut.trim(" abc ") );});
+    it("case 3",    function() { aver.areEqual("abc", sut.trim("\n abc\r ") );});
+    it("case 4",    function() { aver.areEqual("a bc", sut.trim("\n a bc\r ") );});
+    it("case 5",    function() { aver.areEqual("a\n\n   bc", sut.trim("\n a\n\n   bc\r ") );});
+  });
+
+  describe("#trimLeft()", function() {
+    it("'' ()",   function() { aver.areEqual("", sut.trimLeft() );});
+    it("'' undef",   function() { aver.areEqual("", sut.trimLeft(undefined) );});
+    it("'' null",    function() { aver.areEqual("", sut.trimLeft(null) );});
+
+    it("coerce int to string",    function() { aver.areEqual("12345", sut.trimLeft(12345) );});
+    it("coerce bool to string",    function() { aver.areEqual("true", sut.trimLeft(true) );});
+
+    it("case 1",    function() { aver.areEqual("abc", sut.trimLeft(" abc") );});
+    it("case 2",    function() { aver.areEqual("abc ", sut.trimLeft(" abc ") );});
+    it("case 3",    function() { aver.areEqual("abc\r ", sut.trimLeft("\n abc\r ") );});
+    it("case 4",    function() { aver.areEqual("a bc\r ", sut.trimLeft("\n a bc\r ") );});
+    it("case 5",    function() { aver.areEqual("a\n\n   bc\r ", sut.trimLeft("\n a\n\n   bc\r ") );});
+  });
+
+  describe("#trimRight()", function() {
+    it("'' ()",   function() { aver.areEqual("", sut.trimRight() );});
+    it("'' undef",   function() { aver.areEqual("", sut.trimRight(undefined) );});
+    it("'' null",    function() { aver.areEqual("", sut.trimRight(null) );});
+
+    it("coerce int to string",    function() { aver.areEqual("12345", sut.trimRight(12345) );});
+    it("coerce bool to string",    function() { aver.areEqual("true", sut.trimRight(true) );});
+
+    it("case 1",    function() { aver.areEqual(" abc", sut.trimRight(" abc") );});
+    it("case 2",    function() { aver.areEqual(" abc", sut.trimRight(" abc ") );});
+    it("case 3",    function() { aver.areEqual("\n abc", sut.trimRight("\n abc\r ") );});
+    it("case 4",    function() { aver.areEqual("\n a bc", sut.trimRight("\n a bc\r ") );});
+    it("case 5",    function() { aver.areEqual("\n a\n\n   bc", sut.trimRight("\n a\n\n   bc\r ") );});
+  });
+
+
+  describe("#asString()", function() {
+    it("()",          function() { aver.areEqual("",    sut.asString()      );});
+    it("undefined",   function() { aver.areEqual("",    sut.asString(undefined));});
+    it("null",        function() { aver.areEqual("",    sut.asString(null)  );});
+    it("-1",          function() { aver.areEqual("-1",  sut.asString(-1)    );});
+    it("'abcd'",      function() { aver.areEqual("abcd", sut.asString("abcd") );});
+
+    it("true",    function() { aver.areEqual("true",  sut.asString(true) );});
+    it("false",   function() { aver.areEqual("false", sut.asString(false) );});
+
+    it("'defg'",   function() { aver.areEqual("defg", sut.asString(new String("defg")) );});
+
+    it("date",   function() { aver.isTrue( sut.asString(new Date(1980, 1, 18)).indexOf("1980")>0 );});
+  }); 
 
 
   describe("#describe()", function() {

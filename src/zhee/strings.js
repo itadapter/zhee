@@ -13,6 +13,46 @@ export function isEmpty(str){
 }
 
 /**
+ * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
+ * Non-string values are coerced using v.toString(), objects are NOT JSONized
+ * @param {Object} v Value 
+ */
+export function asString(v){
+  if (!types.isAssigned(v)) return "";
+  if ( typeof(v) === "string") return v;//do not use types.isString as new String("abc")!=="abc" :)
+  return v.toString();
+}
+
+
+/**
+ * Trims whitespace and CR LF from string ends. The non-string values are coerced to string
+ * @param {string} str to trim
+ */
+export function trim(str){
+  str = asString(str);
+  if (str.trim) return str.trim();
+  return str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+}
+
+/**
+ * Trims whitespace and CR LF from the left side of the string. The non-string values are coerced to string
+ * @param {string} str to trim
+ */
+export function trimLeft(str){
+  str = asString(str);
+  return str.replace(/^\s+/, "");
+}
+
+/**
+ * Trims whitespace and CR LF from the right side of the string.  The non-string values are coerced to string
+ * @param {string} str to trim
+ */
+export function trimRight(str){
+  str = asString(str);
+  return str.replace(/\s+$/, "");
+}
+
+/**
  * Truncates/caps a string at the specified maxLen optionally adding ellipsis at the end.
  * The non-string input values are coerced to string
  * @param {string} str Original string source
@@ -20,9 +60,8 @@ export function isEmpty(str){
  * @param {string} [ending] The ending of the capped string, ellipsis is used by default
  */
 export function truncate(str, maxLen, ending){
-  if (!str) return str;
-  str = str.toString();
-  if (!(maxLen>0)) return str;//!!!not the same maxLength<=0
+  str = asString(str);
+  if (!(maxLen>0)) return str;// not the same maxLength<=0
   let len = str.length;
   if (len <= maxLen) return str;
   ending = ending || "";
