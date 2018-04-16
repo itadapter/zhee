@@ -193,11 +193,18 @@ export class Localizer{
     if (!culture) culture = CULTURE_INVARIANT;
     const symbols = this.getCurrencySymbols(culture);
     const neg = amt < 0;
+    if (precision<0) precision = 0;
 
-    amt = Math.floor(amt * Math.pow(10, precision));
+    amt = Math.floor(Math.abs(amt) * Math.pow(10, precision));
     const amts = amt.toString();
-    let amtw = amts.slice(0, amts.length-precision);//whole
-    let amtf = amts.slice(-precision);//fraction
+    let amtw, amtf;
+    if (precision>0){
+      amtw = amts.slice(0, amts.length-precision);//whole
+      amtf = amts.slice(-precision);//fraction
+    }else{
+      amtw = amts;
+      amtf = "";
+    }
 
     if (thousands){
       let whole = "";
@@ -212,7 +219,7 @@ export class Localizer{
     
     result += symbol ? symbols.sym : "";// $
 
-    result += amtw + symbols.ds + amtf; // whole.fraction
+    result += precision>0 ? amtw + symbols.ds + amtf : amtw; // whole.fraction
     
     if (neg && !sign) result += ")";
     return result;
