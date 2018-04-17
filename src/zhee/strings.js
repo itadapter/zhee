@@ -29,7 +29,7 @@ export function dflt(str, ...dflt){
 /**
  * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
  * Non-string values are coerced using v.toString(), objects are NOT JSONized
- * @param {Object} v Value 
+ * @param {any} v Value 
  */
 export function asString(v){
   if (!types.isAssigned(v)) return "";
@@ -68,7 +68,7 @@ export function trimRight(str){
 /**
  * Returns true if the string equals one of the strings in the list of values supplied either as an array or '|' or ';' separated string
  * @param {string} str string to test. other types are coerced to string
- * @param {[string]|string} values array of values to test against, or a '|' or ';' delimited string of values
+ * @param {string[]|string} values array of values to test against, or a '|' or ';' delimited string of values
  */
 export function isOneOf(str, values, senseCase = false){
   if (!types.isAssigned(str)) return false;
@@ -110,7 +110,7 @@ export function truncate(str, maxLen, ending){
 
 /**
  * Provides a textual representation of a value, suitable for report in error logs, exceptions, etc.
- * @param {string} v value to describe
+ * @param {any} v value to describe
  * @param {int} [maxLen=64] impose maximum length on the resulting description 
  */
 export function describe(v, maxLen = 64){

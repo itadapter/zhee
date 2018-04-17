@@ -3,7 +3,7 @@ import * as str from "./strings";
 
 /**
  * Makes an Error() initialized with message
- * @param { String } m
+ * @param {string} m message
  */
 export function AVERMENT_FAILURE(m){
   return Error(`Averment failure: ${m}`);
@@ -14,7 +14,7 @@ const dv = (v) => str.describe(v);//shortcut
 
 /**
  * Performs strict test for undefined
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isUndefined(a){
   if (a===undefined) return;
@@ -23,7 +23,7 @@ export function isUndefined(a){
 
 /**
  * Performs strict test for not undefined
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isDefined(a){
   if (a!==undefined) return;
@@ -32,7 +32,7 @@ export function isDefined(a){
 
 /**
  * Performs strict test for being defined null
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isNull(a){
   if (a!==undefined && a===null) return;
@@ -41,7 +41,7 @@ export function isNull(a){
 
 /**
  * Performs strict test for being defined not-null
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isNotNull(a){
   if (a!==undefined && a!==null) return;
@@ -50,7 +50,7 @@ export function isNotNull(a){
 
 /**
  * Performs strict test for object (not a primitive, array or function)
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isObject(a){
   if (types.isObject(a)) return;
@@ -59,7 +59,7 @@ export function isObject(a){
 
 /**
  * Performs strict test for array (not a primitive, object or function)
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isArray(a){
   if (types.isArray(a)) return;
@@ -68,7 +68,7 @@ export function isArray(a){
 
 /**
  * Performs strict test for function (not a primitive, object or array)
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isFunction(a){
   if (types.isFunction(a)) return;
@@ -77,7 +77,7 @@ export function isFunction(a){
 
 /**
  * Performs strict test for date
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isDate(a){
   if (types.isDate(a)) return;
@@ -86,7 +86,7 @@ export function isDate(a){
 
 /**
  * Performs strict test for number
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isNumber(a){
   if (types.isNumber(a)) return;
@@ -95,7 +95,7 @@ export function isNumber(a){
 
 /**
  * Performs strict test for string
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isString(a){
   if (types.isString(a)) return;
@@ -104,15 +104,12 @@ export function isString(a){
 
 /**
  * Performs strict test for bool
- * @param {Object} a 
+ * @param {any} a 
  */
 export function isBool(a){
   if (types.isBool(a)) return;
   throw AVERMENT_FAILURE(`isBool(${dv(a)})`);
 }
-
-
-
 
 /**
  * Performs strict test for false
@@ -134,8 +131,8 @@ export function isTrue(a){
 
 /**
  * Performs strict equality check using ===
- * @param {Object} a 
- * @param {Object} b 
+ * @param {any} a 
+ * @param {any} b 
  */
 export function areEqual(a, b){
   if (a===b) return;
@@ -144,8 +141,8 @@ export function areEqual(a, b){
 
 /**
  * Performs strict inequality check using !==
- * @param {Object} a 
- * @param {Object} b 
+ * @param {any} a 
+ * @param {any} b 
  */
 export function areNotEqual(a, b){
   if (a!==b) return;
@@ -181,7 +178,7 @@ export function throws(f, msg){
 /**
  * Performs strict instanceof check on object and function args
  * @param {Object} o 
- * @param {type} t 
+ * @param {type-function} t 
  */
 export function isOf(o, t){
   if (types.isObject(o) && types.isFunction(t))
@@ -194,7 +191,7 @@ export function isOf(o, t){
 /**
  * Performs strict !instanceof check on object and function args
  * @param {Object} o 
- * @param {type} t 
+ * @param {type-function} t 
  */
 export function isNotOf(o, t){
   if (types.isObject(o) && types.isFunction(t))

@@ -3,7 +3,7 @@ import * as strings from "./strings";
 
 /**
  * Returns true if the argument is assigned - not undefined non-null value, even an empty string is assigned
- * @param { Object } v
+ * @param {any} v value
  */
 export function isAssigned(v){
   return v !== undefined && v !== null;//warning:  if (!v) is not the same test!
@@ -18,7 +18,7 @@ export function hown(obj, prop){
 
 /**
  * Returns true if the argument is a non null string
- * @param { Object } v
+ * @param {any} v
  */
 export function isString(v){
   return Object.prototype.toString.call(v) === "[object String]";
@@ -26,7 +26,7 @@ export function isString(v){
 
 /**
  * Returns true if the argument is a non null date
- * @param { Object } v
+ * @param {any} v
  */
 export function isDate(v){
   return Object.prototype.toString.call(v) === "[object Date]";
@@ -34,7 +34,7 @@ export function isDate(v){
 
 /**
  * Returns true when the passed parameter is an array, not a map or function
- * @param { Object } v
+ * @param {any} v
  */
 export function isArray(v){
   return Object.prototype.toString.call(v) === "[object Array]";
@@ -42,7 +42,7 @@ export function isArray(v){
 
 /**
  * Returns true when the passed parameter is an object, not an array or function
- * @param { Object } v
+ * @param {any} v
  */
 export function isObject(v){
   return v === Object(v) && !isArray(v) && !isFunction(v);
@@ -50,7 +50,7 @@ export function isObject(v){
 
 /**
  * Returns true when the passed parameter is an array, or object but not a function
- * @param { Object } v
+ * @param {any} v
  */
 export function isObjectOrArray(v){
   return  v === Object(v)  && !isFunction(v);
@@ -58,7 +58,7 @@ export function isObjectOrArray(v){
 
 /**
  * Returns true when poassed parameter is a function, not a map object or an array
- * @param { Object } v
+ * @param {any} v
  */
 export function isFunction(v){
   return Object.prototype.toString.call(v) === "[object Function]";
@@ -67,7 +67,7 @@ export function isFunction(v){
 
 /**
  * Returns true if the argument is an int32 value
- * @param {int32} v 
+ * @param {any} v 
  */
 export function isInt32(v){
   if (Number.isInteger) return Number.isInteger(v);
@@ -86,7 +86,7 @@ export function isIntValue(v){
 
 /**
  * Return true if the value is a Number
- * @param {Object} v Value to check 
+ * @param {any} v Value to check 
  */
 export function isNumber(v){
   return Object.prototype.toString.call(v) === "[object Number]";
@@ -95,7 +95,7 @@ export function isNumber(v){
 
 /**
  * Return true if the value is a boolean
- * @param {Object} v Value to check 
+ * @param {any} v Value to check 
  */
 export function isBool(v){
   return Object.prototype.toString.call(v) === "[object Boolean]";
@@ -104,7 +104,7 @@ export function isBool(v){
 
 /**
  * Describes the type of value returning the string description, not type moniker
- * @param {Object} v 
+ * @param {any} v 
  */
 export function describeTypeOf(v){
   if(v === undefined) return CC.UNDEFINED;
@@ -157,8 +157,8 @@ export function mixin(obj, ext, keepExisting = false){
 /**
  * Tries to navigate the path as fas a s possible starting at root object 
  * @param {Object|Array} obj Required root object of navigation
- * @param {String|Array} path Rquired path as '.' delimited segments, or array of strings
- * @param {Object} org Optional origin of the chain, used by chain nav() calls
+ * @param {string|string[]} path Rquired path as '.' delimited segments, or array of strings
+ * @param {Object|Array} org Optional origin of the chain, used by chain nav() calls
  * @returns {NavResult} Navigation result object
  */
 export function nav(obj, path, org){
@@ -199,19 +199,19 @@ export function nav(obj, path, org){
 /**
  * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
  * Non-string values are coerced using v.toString(), objects are NOT JSONized
- * @param {Object} v Value 
+ * @param {any} v Value 
  */
 export function asString(v){ return strings.asString(v); }
 
 /**
  * Converts primitives into bool. Uses asBoolean() on objects
- * @param {Object} v object to test 
+ * @param {any} v object to test 
  */
 export function asBoolean(v){ return asBool(v); }
 
 /**
  * Converts primitives into bool. Uses asBoolean() on objects
- * @param {Object} v object to test 
+ * @param {any} v object to test 
  */
 export function asBool(v){
   if (!isAssigned(v)) return false;

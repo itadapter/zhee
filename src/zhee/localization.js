@@ -167,7 +167,7 @@ export class Localizer{
   }
 
   /**
-   * Returns an array of languages in the order of imporatnce for the specified culture
+   * Returns an array of languages in the order of importance for the specified culture
    * @param {string} culture 
    */
   getLanguageIsos(culture){
@@ -231,7 +231,6 @@ export class Localizer{
     if (neg && !sign) result += ")";
     return result;
   }
-
 
   /**
    * Returns an array of all language ISOs supported by the instance
