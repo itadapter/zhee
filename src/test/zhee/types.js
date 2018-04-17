@@ -414,6 +414,7 @@ describe("Types", function() {
       aver.isFalse(got.full);
       aver.isObject( got.value  );
       aver.areEqual(98,  got.value.q  );
+      aver.areEqual(undefined,  got.result  );
     });
 
     it("3 level object path",   function() {
@@ -428,6 +429,7 @@ describe("Types", function() {
       aver.areEqual(obj, got.root  );
       aver.isTrue(got.full);
       aver.areEqual("def",  got.value  );
+      aver.areEqual("def",  got.result );
     });
 
     it("3 level object/array path",   function() {
@@ -442,6 +444,7 @@ describe("Types", function() {
       aver.areEqual(obj, got.root  );
       aver.isTrue(got.full);
       aver.areEqual("def123",  got.value  );
+      aver.areEqual("def123",  got.result );
     });
 
     it("3 level chain",   function() {
@@ -459,6 +462,41 @@ describe("Types", function() {
       aver.areEqual(obj.a[2], got.root  );
       aver.isTrue(got.full);
       aver.areEqual("def123",  got.value  );
+      aver.areEqual("def123",  got.result  );
+    });
+
+    it("inherit",   function() {
+      
+      function MyClass(a){ this.A = a; } 
+      MyClass.prototype = {B: {c: 1589, d: 2}};
+
+      let obj = new MyClass(1234);
+
+      let got = sut.nav(obj, "B.c");// B is inherited via prototype
+
+      aver.isNotNull(got);
+      aver.areEqual(obj, got.orig  );
+      aver.areEqual(obj, got.root  );
+      aver.isTrue(got.full);
+      aver.areEqual(1589,  got.value  );
+      aver.areEqual(1589,  got.result );
+    });
+
+    it("inherit partial",   function() {
+      
+      function MyClass(a){ this.A = a; } 
+      MyClass.prototype = {B: {c: 1589, d: 2}};
+
+      let obj = new MyClass(1234);
+
+      let got = sut.nav(obj, "B.Z");// B is inherited via prototype
+
+      aver.isNotNull(got);
+      aver.areEqual(obj, got.orig  );
+      aver.areEqual(obj, got.root  );
+      aver.isFalse(got.full);
+      aver.areEqual(1589,  got.value.c  );
+      aver.areEqual(undefined,  got.result );
     });
 
   });
