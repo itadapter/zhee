@@ -9,15 +9,14 @@ describe("Types", function() {
     it("false for undefined", function() { aver.isFalse( sut.isAssigned(undefined)  );});
     it("false for null",      function() { aver.isFalse( sut.isAssigned(null)       );});
 
-    it("true for ''",       function() { aver.isTrue( sut.isAssigned("")       );});
-    it("true for 'abc'",   function() { aver.isTrue( sut.isAssigned("abc")    );});
-    it("true for []",   function() { aver.isTrue( sut.isAssigned([])    );});
-    it("true for {}",   function() { aver.isTrue( sut.isAssigned({})    );});
-    it("true for true",   function() { aver.isTrue( sut.isAssigned(true)    );});
-    it("true for false",   function() { aver.isTrue( sut.isAssigned(false)    );});
+    it("true for ''",    function() { aver.isTrue( sut.isAssigned("")       );});
+    it("true for 'abc'", function() { aver.isTrue( sut.isAssigned("abc")    );});
+    it("true for []",    function() { aver.isTrue( sut.isAssigned([])    );});
+    it("true for {}",    function() { aver.isTrue( sut.isAssigned({})    );});
+    it("true for true",  function() { aver.isTrue( sut.isAssigned(true)    );});
+    it("true for false", function() { aver.isTrue( sut.isAssigned(false)    );});
     it("true for 123",   function() { aver.isTrue( sut.isAssigned(123)    );});
-    it("true for Date",   function() { aver.isTrue( sut.isAssigned(new Date(1980,1, 21))    );});
-    
+    it("true for Date",  function() { aver.isTrue( sut.isAssigned(new Date(1980,1, 21))    );});
   }); 
 
   describe("#hown()", function() {
@@ -25,12 +24,12 @@ describe("Types", function() {
     it("false for undefined", function() { aver.isFalse( sut.hown(undefined)  );});
     it("false for null",      function() { aver.isFalse( sut.hown(null)       );});
 
-    it("{}",   function() { aver.isFalse( sut.hown({})  );});
-    it("{}, null", function() { aver.isFalse( sut.hown({}, null)  );});
-    it("null, 'a'",      function() { aver.isFalse( sut.hown(null, "a")  );});
-    it("{}, 'a'",      function() { aver.isFalse( sut.hown({}, "a")  );});
+    it("{}",        function() { aver.isFalse( sut.hown({})  );});
+    it("{}, null",  function() { aver.isFalse( sut.hown({}, null)  );});
+    it("null, 'a'", function() { aver.isFalse( sut.hown(null, "a")  );});
+    it("{}, 'a'",   function() { aver.isFalse( sut.hown({}, "a")  );});
 
-    it("{a: undefined}, 'a'",      function() { aver.isTrue( sut.hown({a: undefined}, "a")  );});
+    it("{a: undefined}, 'a'", function() { aver.isTrue( sut.hown({a: undefined}, "a")  );});
 
     it("inherit", function() {
       function MyClass() {this.A = 1;}
