@@ -96,6 +96,42 @@ describe("Strings", function() {
     it("date",   function() { aver.isTrue( sut.asString(new Date(1980, 1, 18)).indexOf("1980")>0 );});
   }); 
 
+  describe("#isOneOf()", function() {
+    it("()",          function() { aver.isFalse(  sut.isOneOf()    );});
+    it("(aaa,)",          function() { aver.isFalse(  sut.isOneOf("aaa")    );});
+    
+    it("(aaa,bbb)",          function() { aver.isFalse(  sut.isOneOf("aaa","bbb")    );});
+    it("(aaa,aaa)",          function() { aver.isTrue(  sut.isOneOf("aaa","aaa")    );});
+    it("(aaa,aAA)",          function() { aver.isTrue(  sut.isOneOf("aaa","aAA")    );});
+    it("(aaa,aAA, true)",          function() { aver.isFalse(  sut.isOneOf("aaa","aAA", true)    );});
+
+
+    it(" case 1 ",          function() { aver.isFalse(  sut.isOneOf("bbb","a;b;c;d;e;f;aaa;ddd")    );});
+    it(" case 2 ",          function() { aver.isTrue(  sut.isOneOf("ddd","a;b;c;d;e;f;aaa;ddd")    );});
+    it(" case 3 ",          function() { aver.isTrue(  sut.isOneOf("ddd","a;b;c;d;e;f;aaa;dDD", false)    );});
+    it(" case 4 ",          function() { aver.isFalse(  sut.isOneOf("ddd","a;b;c;d;e;f;aaa;dDD", true)    );});
+
+    it(" case 5 ",          function() { aver.isTrue(  sut.isOneOf(1,"a;b;c;1;e;f;aaa;ddd")    );});
+    it(" case 6 ",          function() { aver.isTrue(  sut.isOneOf(false,"a;b;c;1;false;f;2aaa;ddd")    );});
+    it(" case 7 ",          function() { aver.isTrue(  sut.isOneOf(false,"a|b|c|1|false|f|2aaa|ddd")    );});
+
+    it("flags 1 ",          function() { aver.isTrue(  sut.isOneOf("rich","a| b | RICH |  TIMID")    );});
+    it("flags 2 ",          function() { aver.isTrue(  sut.isOneOf("tImiD","a| b| RICH | TIMID ")    );});
+    it("flags 3 ",          function() { aver.isTrue(  sut.isOneOf("a","a|b| RICH|TIMID")    );});
+    it("flags 4 ",          function() { aver.isFalse(  sut.isOneOf("hue","a|b|RICH|TIMID")    );});
+
+    it("flags 1 arr",          function() { aver.isTrue(  sut.isOneOf("rich",["a  "," b", " RICH ", " TIMID"])    );});
+    it("flags 2 arr",          function() { aver.isTrue(  sut.isOneOf("tImiD",["a  "," b", " RICH ", " TIMID"])    );});
+    it("flags 3 arr",          function() { aver.isTrue(  sut.isOneOf("a", ["a  "," b", " RICH ", " TIMID"])    );});
+    it("flags 4 arr",          function() { aver.isFalse(  sut.isOneOf("hue",["a  "," b", " RICH ", " TIMID"])    );});
+
+    it("mix of types 1",          function() { aver.isTrue(  sut.isOneOf(true,[ 1, true," 23", "goOD"])    );});
+    it("mix of types 2",          function() { aver.isTrue(  sut.isOneOf(23,[ 1, true," 23", "goOD"])    );});
+    it("mix of types 3",          function() { aver.isTrue(  sut.isOneOf("23",[ 1, true, 23, "goOD"])    );});
+    it("mix of types 4",          function() { aver.isTrue(  sut.isOneOf("good",[ 1, true, 23, "goOD"])    );});
+    it("mix of types 5",          function() { aver.isFalse(  sut.isOneOf("good",[ 1, true, 23, "goOD"],true)    );});
+  }); 
+
 
   describe("#describe()", function() {
 

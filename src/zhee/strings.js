@@ -53,6 +53,31 @@ export function trimRight(str){
 }
 
 /**
+ * Returns true if the string equals one of the strings in array
+ * @param {string} str string to test. other types are coerced to string
+ * @param {[string]|string} values array of strings to test against, or a | or ; -delimited string of values
+ */
+export function isOneOf(str, values, senseCase = false){
+  if (!types.isAssigned(str)) return false;
+  if (!types.isAssigned(values)) return false;
+
+  str = trim(str);
+
+  if (types.isString(values)){
+    values = values.split(/[|,;]/).filter(s => s.length>0);
+  }
+  
+  if (!senseCase) str = str.toLowerCase();
+  
+  for(let i in values){
+    var e = senseCase ? trim(values[i]) : trim(values[i]).toLowerCase();
+    if (str===e) return true;
+  }
+
+  return false;
+}
+
+/**
  * Truncates/caps a string at the specified maxLen optionally adding ellipsis at the end.
  * The non-string input values are coerced to string
  * @param {string} str Original string source

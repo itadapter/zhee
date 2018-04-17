@@ -1,4 +1,5 @@
 import * as CC from "./coreconsts";
+import * as strings from "./strings";
 
 /**
  * Returns true if the argument is assigned - not undefined non-null value, even an empty string is assigned
@@ -56,7 +57,7 @@ export function isObjectOrArray(v) {
  * @param { Object } v
  */
 export function isFunction(v) {
-  return typeof v === "function";
+  return Object.prototype.toString.call(v) === "[object Function]";
 }
 
 
@@ -84,7 +85,7 @@ export function isIntValue(v){
  * @param {Object} v Value to check 
  */
 export function isNumber(v){
-  return typeof(v) === "number";
+  return Object.prototype.toString.call(v) === "[object Number]";
 }
 
 
@@ -93,7 +94,7 @@ export function isNumber(v){
  * @param {Object} v Value to check 
  */
 export function isBool(v){
-  return typeof(v) === "boolean";
+  return Object.prototype.toString.call(v) === "[object Boolean]";
 }
 
 
@@ -135,6 +136,33 @@ export function mixin(obj, ext, keepExisting = false){
         obj[prop] = ext[prop];
   }
   return obj;
+}
+
+
+/**
+ * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
+ * Non-string values are coerced using v.toString(), objects are NOT JSONized
+ * @param {Object} v Value 
+ */
+export function asString(v){ return strings.asString(v); }
+
+/**
+ * Converts primitives into bool. Uses asBoolean() on objects
+ * @param {Object} v object to test 
+ */
+export function asBoolean(v){ return asBool(v); }
+
+/**
+ * Converts primitives into bool. Uses asBoolean() on objects
+ * @param {Object} v object to test 
+ */
+export function asBool(v){
+  if (!isAssigned(v)) return false;
+  if (isBool(v)) return v;
+  if (v.asBoolean) return v.asBoolean();
+  if (isNumber(v)) return v!==0;
+  var s = strings.asString(v);
+  return strings.isOneOf(s, ["true", "t", "yes", "1", "ok"]);
 }
 
 
