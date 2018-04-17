@@ -236,4 +236,31 @@ describe("Types", function() {
 
   });
 
+
+  describe("#asBool()", function() {
+    it("()",   function() { aver.areEqual( false, sut.asBool() );});
+    it("undefined",   function() { aver.areEqual( false, sut.asBool(undefined) );});
+    it("null",   function() { aver.areEqual( false, sut.asBool(null) );});
+
+    it("1",   function() { aver.areEqual( true, sut.asBool(1) );});
+    it("0",   function() { aver.areEqual( false, sut.asBool(0) );});
+
+    it("'1'",   function() { aver.areEqual( true, sut.asBool("1") );});
+    it("' 1'",   function() { aver.areEqual( true, sut.asBool(" 1   ") );});
+    it("ok",   function() { aver.areEqual( true, sut.asBool("  ok  ") );});
+    it("yes",   function() { aver.areEqual( true, sut.asBool("yes") );});
+    it("YES",   function() { aver.areEqual( true, sut.asBool("YES") );});
+    it("TrUE",   function() { aver.areEqual( true, sut.asBool("TrUE") );});
+
+    function Custom(state){
+      this.state = state;
+      this.asBoolean = function(){ return state; };
+    }
+
+    it("Custom(true)",   function() { aver.areEqual( true, sut.asBoolean(new Custom(true)) );});
+    it("Custom(false)",   function() { aver.areEqual( false, sut.asBoolean(new Custom(false)) );});
+    
+  });
+
+
 });

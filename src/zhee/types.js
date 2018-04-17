@@ -149,11 +149,6 @@ export function asString(v){ return strings.asString(v); }
  */
 export function asBoolean(v){ return asBool(v); }
 
-
-
-
-//todo:  TEST!!!!
-
 /**
  * Converts primitives into bool. Uses asBoolean() on objects
  * @param {Object} v object to test 
