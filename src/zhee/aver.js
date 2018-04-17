@@ -11,8 +11,9 @@ export function AVERMENT_FAILURE(m){
 
 const dv = (v) => str.describe(v);//shortcut
 
+
 /**
- * Performs strict test undefined
+ * Performs strict test for undefined
  * @param {Object} a 
  */
 export function isUndefined(a){
@@ -21,7 +22,7 @@ export function isUndefined(a){
 }
 
 /**
- * Performs strict test not undefined
+ * Performs strict test for not undefined
  * @param {Object} a 
  */
 export function isDefined(a){

@@ -137,6 +137,59 @@ export function mixin(obj, ext, keepExisting = false){
 
 
 /**
+  * @typedef {Object} NavResult
+  * @property {Object} orig origin, the first object in a chain of navigation
+  * @property {Object} root the root to which this path is applied
+  * @property {boolean} full True if full path match was made
+  * @property {Object} value the value of navigation, may be undefined and is set to however far the func could navigate
+  * @property {Object} result only sett on full path match, may be undefined if that is what was matched, check .full
+  * @property {Object} nav chain call function does curries the current object
+  */
+
+
+/**
+ * Tries to navigate the path as fas a s possible starting at root object 
+ * @param {Object|Array} obj Required root object of navigation
+ * @param {String|Array} path Rquired path as '.' delimited segments, or array of strings
+ * @param {Object} org Optional origin of the chain, used by chain nav() calls
+ * @returns {NavResult} Navigation result object
+ */
+export function nav(obj, path, org){
+  let result = {
+    orig: isAssigned(org) ? org : obj,
+    root: obj,
+    full: undefined, 
+    value: undefined,
+    result: undefined,
+    nav: (p) => nav(result.value, p, result.orig)
+  };
+
+  if (!isAssigned(obj)) return result;
+  if (!isAssigned(path)) return result;
+  
+  if (isString(path)){
+    path = path.split(".").filter(s => s.length>0);
+  }
+  
+  result.full = false;
+  result.value = obj;
+  for(let i in path){
+    if (!isObjectOrArray(result.value)) return result;
+   
+    let seg = path[i];
+    if (!(seg in result.value)) return result;
+    let sub = result.value[seg];
+   
+    result.value = sub;
+  }
+
+  result.full = true;
+  result.result = result.value;
+  return result;
+}
+
+
+/**
  * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
  * Non-string values are coerced using v.toString(), objects are NOT JSONized
  * @param {Object} v Value 

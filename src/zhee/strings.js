@@ -37,7 +37,6 @@ export function asString(v){
   return v.toString();
 }
 
-
 /**
  * Trims whitespace and CR LF from string ends. The non-string values are coerced to string
  * @param {string} str to trim

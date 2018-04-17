@@ -173,7 +173,295 @@ describe("Types", function() {
     
   });
 
+  describe("#nav()", function() {
 
+    it("()",   function() { 
+      let got = sut.nav();
+      aver.isNotNull(got);
+      aver.isUndefined( got.orig  );
+      aver.isUndefined( got.root  );
+      aver.isUndefined( got.full  );
+      aver.isUndefined( got.value );
+      aver.isUndefined( got.result );
+    });
+
+    it("({})",   function() { 
+      let got = sut.nav({});
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isUndefined( got.full  );
+      aver.isUndefined( got.value );
+      aver.isUndefined( got.result );
+    });
+
+    it("({},'a')",   function() { 
+      let obj = {};
+      let got = sut.nav(obj,"a");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isFalse( got.full  );
+      aver.areEqual(obj, got.value );
+      aver.isUndefined(got.result);
+    });
+
+    it("({a: 1},'a')",   function() { 
+      let obj = {a: 1};
+      let got = sut.nav(obj,"a");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isTrue  ( got.full  );
+      aver.areEqual(1, got.value );
+      aver.areEqual(1, got.result);
+    });
+
+    it("({a: undefined},'a')",   function() { 
+      let obj = {a: undefined};
+      let got = sut.nav(obj,"a");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isTrue  ( got.full  ); // ATTENTION: full = true, but result is 100% match to undefined
+      aver.areEqual(undefined, got.value );
+      aver.areEqual(undefined, got.result);// undefined is a 100% match (because full=true)
+    });
+
+    it("({a: undefined},'a.b.c')",   function() { 
+      let obj = {a: undefined};
+      let got = sut.nav(obj,"a.b.c");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isFalse  ( got.full  ); // ATTENTION: full = false because there is no a.b.c
+      aver.areEqual(undefined, got.value );
+      aver.areEqual(undefined, got.result);
+    });
+
+
+    it("([123, undefined, true],'1')",   function() { 
+      let obj = [123, undefined, true ];
+      let got = sut.nav(obj,"1");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isTrue   ( got.full  ); // ATTENTION: full = true obj[1]==undefined
+      aver.areEqual(undefined, got.value );
+      aver.areEqual(undefined, got.result);
+    });
+
+    it("([123, {a: {b: 567}}, true ],'1.a.b')",   function() { 
+      let obj = [123, {a: {b: 567}}, true ];
+      let got = sut.nav(obj,"1.a.b");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isTrue   ( got.full  ); 
+      aver.areEqual(567, got.value );
+      aver.areEqual(567, got.result);
+    });
+
+    it("([123, {a: {b: 567}, q: -9}, true],'1.z.b')",   function() { 
+      let obj = [123, {a: {b: 567}, q: -9}, true ];
+      let got = sut.nav(obj,"1.z.b");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isFalse   ( got.full  ); 
+      aver.areEqual(-9, got.value.q );
+      aver.areEqual(undefined, got.result);
+    });
+
+    it("([123, {a: {b: 567, xxx: -877}, q: -9}, true ],'1.a.z')",   function() { 
+      let obj = [123, {a: {b: 567, xxx: -877}, q: -9}, true ];
+      let got = sut.nav(obj,"1.a.z");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isFalse   ( got.full  ); 
+      aver.areEqual(-877, got.value.xxx );
+      aver.areEqual(undefined, got.result);
+    });
+
+    it("([123, {a: {b: 567, xxx: -877}, q: -9}, true ],'1.a.xxx')",   function() { 
+      let obj = [123, {a: {b: 567, xxx: -877}, q: -9}, true ];
+      let got = sut.nav(obj,"1.a.xxx");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isTrue   ( got.full  ); 
+      aver.areEqual(-877, got.value );
+      aver.areEqual(-877, got.result);
+    });
+
+
+    it("([123, [[567, 890],-40, -20, [1001, 1002]], true ],'1.0.1')",   function() { 
+      let obj = [123, [[567, 890],-40, -20, [1001, 1002]], true ];
+      let got = sut.nav(obj,"1.0.1");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isTrue   ( got.full  ); 
+      aver.areEqual(890, got.value );
+      aver.areEqual(890, got.result);
+    });
+
+    it("([123, [[567, 890],-40, -20, [1001, 1002]], true ],'1.0.111')",   function() { 
+      let obj = [123, [[567, 890],-40, -20, [1001, 1002]], true ];
+      let got = sut.nav(obj,"1.0.111");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isFalse   ( got.full  ); 
+      aver.areEqual(567, got.value[0] );
+      aver.areEqual(undefined, got.result);
+    });
+
+    it("([123, [[567, 890],-40, -20, [1001, 1002]], true ],'1.2')",   function() { 
+      let obj = [123, [[567, 890],-40, -20, [1001, 1002]], true ];
+      let got = sut.nav(obj,"1.2");
+      aver.isNotNull(got);
+      aver.isNotNull( got.orig  );
+      aver.isNotNull( got.root  );
+      aver.isTrue   ( got.full  ); 
+      aver.areEqual(-20, got.value );
+      aver.areEqual(-20, got.result);
+    });
+
+
+    it("simple [] path",   function() {
+      let obj = { 
+        a: 2,
+        b: true
+      };
+
+      let got1 = sut.nav(obj, ["a"]);
+      aver.isNotNull(got1);
+      aver.areEqual(obj, got1.orig  );
+      aver.areEqual(obj, got1.root  );
+      aver.isTrue(got1.full);
+      aver.areEqual(2, got1.value  );
+
+      let got2 = sut.nav(obj, ["b"]);
+      aver.isNotNull(got2);
+      aver.areEqual(obj, got2.orig  );
+      aver.areEqual(obj, got2.root  );
+      aver.isTrue(got2.full);
+      aver.areEqual(true, got2.value  );
+    });
+
+    it("simple string path",   function() {
+      let obj = { 
+        a: 2,
+        b: true
+      };
+
+      let got1 = sut.nav(obj, "a");
+      aver.isNotNull(got1);
+      aver.areEqual(obj, got1.orig  );
+      aver.areEqual(obj, got1.root  );
+      aver.isTrue(got1.full);
+      aver.areEqual(2, got1.value  );
+
+      let got2 = sut.nav(obj, "b");
+      aver.isNotNull(got2);
+      aver.areEqual(obj, got2.orig  );
+      aver.areEqual(obj, got2.root  );
+      aver.isTrue(got2.full);
+      aver.areEqual(true, got2.value  );
+    });
+
+
+    it("2 level object path",   function() {
+      let obj = { 
+        a: {x: 2, y: 3},
+        b: "Hello!"
+      };
+
+      let got1 = sut.nav(obj, "a.x");
+      aver.isNotNull(got1);
+      aver.areEqual(obj, got1.orig  );
+      aver.areEqual(obj, got1.root  );
+      aver.isTrue(got1.full);
+      aver.areEqual(2, got1.value  );
+
+      let got2 = sut.nav(obj, "a.y");
+      aver.isNotNull(got2);
+      aver.areEqual(obj, got2.orig  );
+      aver.areEqual(obj, got2.root  );
+      aver.isTrue(got2.full);
+      aver.areEqual(3, got2.value  );
+
+      let got3 = sut.nav(obj, "b");
+      aver.isNotNull(got3);
+      aver.areEqual(obj, got3.orig  );
+      aver.areEqual(obj, got3.root  );
+      aver.isTrue(got3.full);
+      aver.areEqual("Hello!", got3.value  );
+    });
+
+    it("2 level object path partial",   function() {
+      let obj = { 
+        a: {x: 2, y: 3, q: 98},
+        b: "Hello!"
+      };
+
+      let got = sut.nav(obj, "a.z");//there is no "z"
+      aver.isNotNull(got);
+      aver.areEqual(obj, got.orig  );
+      aver.areEqual(obj, got.root  );
+      aver.isFalse(got.full);
+      aver.isObject( got.value  );
+      aver.areEqual(98,  got.value.q  );
+    });
+
+    it("3 level object path",   function() {
+      let obj = { 
+        a: {x: 2, y: 3, q: { name: "abc", descr: "def" }},
+        b: "Hello!"
+      };
+
+      let got = sut.nav(obj, "a.q.descr");
+      aver.isNotNull(got);
+      aver.areEqual(obj, got.orig  );
+      aver.areEqual(obj, got.root  );
+      aver.isTrue(got.full);
+      aver.areEqual("def",  got.value  );
+    });
+
+    it("3 level object/array path",   function() {
+      let obj = { 
+        a: [232, 323, { name: "abc", descr: "def123" }],
+        b: "Hello!"
+      };
+
+      let got = sut.nav(obj, "a.2.descr");
+      aver.isNotNull(got);
+      aver.areEqual(obj, got.orig  );
+      aver.areEqual(obj, got.root  );
+      aver.isTrue(got.full);
+      aver.areEqual("def123",  got.value  );
+    });
+
+    it("3 level chain",   function() {
+      let obj = { 
+        a: [232, 323, { name: "abc", descr: "def123" }],
+        b: "Hello!"
+      };
+
+      let got = sut.nav(obj, "a")
+        .nav("2")
+        .nav("descr");
+
+      aver.isNotNull(got);
+      aver.areEqual(obj, got.orig  );
+      aver.areEqual(obj.a[2], got.root  );
+      aver.isTrue(got.full);
+      aver.areEqual("def123",  got.value  );
+    });
+
+  });
 
   describe("#mixin()", function() {
     it("null for (undef, undef)",   function() { aver.isNull( sut.mixin(undefined));  });
@@ -262,5 +550,6 @@ describe("Types", function() {
     
   });
 
+  
 
 });
