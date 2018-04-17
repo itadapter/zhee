@@ -20,6 +20,30 @@ describe("Types", function() {
     
   }); 
 
+  describe("#hown()", function() {
+    it("false for empty()",   function() { aver.isFalse( sut.hown()  );});
+    it("false for undefined", function() { aver.isFalse( sut.hown(undefined)  );});
+    it("false for null",      function() { aver.isFalse( sut.hown(null)       );});
+
+    it("{}",   function() { aver.isFalse( sut.hown({})  );});
+    it("{}, null", function() { aver.isFalse( sut.hown({}, null)  );});
+    it("null, 'a'",      function() { aver.isFalse( sut.hown(null, "a")  );});
+    it("{}, 'a'",      function() { aver.isFalse( sut.hown({}, "a")  );});
+
+    it("{a: undefined}, 'a'",      function() { aver.isTrue( sut.hown({a: undefined}, "a")  );});
+
+    it("inherit", function() {
+      function MyClass() {this.A = 1;}
+      MyClass.prototype = {B: 2};
+
+      let obj = new MyClass();
+
+      aver.isTrue( sut.hown(obj, "A")  );
+      aver.isTrue( "B" in obj  );
+      aver.isFalse( sut.hown(obj, "B")  );
+    });
+  }); 
+
 
   describe("#isString()", function() {
     it("false for empty()",   function() { aver.isFalse( sut.isString()           );});

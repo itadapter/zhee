@@ -5,15 +5,22 @@ import * as strings from "./strings";
  * Returns true if the argument is assigned - not undefined non-null value, even an empty string is assigned
  * @param { Object } v
  */
-export function isAssigned(v) {
+export function isAssigned(v){
   return v !== undefined && v !== null;//warning:  if (!v) is not the same test!
+}
+
+/**
+ * Shortcut to hasOwnProperty()
+ */
+export function hown(obj, prop){
+  return obj ? hasOwnProperty.call(obj, prop) : false;
 }
 
 /**
  * Returns true if the argument is a non null string
  * @param { Object } v
  */
-export function isString(v) {
+export function isString(v){
   return Object.prototype.toString.call(v) === "[object String]";
 }
 
@@ -21,7 +28,7 @@ export function isString(v) {
  * Returns true if the argument is a non null date
  * @param { Object } v
  */
-export function isDate(v) {
+export function isDate(v){
   return Object.prototype.toString.call(v) === "[object Date]";
 }
 
@@ -29,7 +36,7 @@ export function isDate(v) {
  * Returns true when the passed parameter is an array, not a map or function
  * @param { Object } v
  */
-export function isArray(v) {
+export function isArray(v){
   return Object.prototype.toString.call(v) === "[object Array]";
 }
 
@@ -37,7 +44,7 @@ export function isArray(v) {
  * Returns true when the passed parameter is an object, not an array or function
  * @param { Object } v
  */
-export function isObject(v) {
+export function isObject(v){
   return v === Object(v) && !isArray(v) && !isFunction(v);
 }
 
@@ -45,7 +52,7 @@ export function isObject(v) {
  * Returns true when the passed parameter is an array, or object but not a function
  * @param { Object } v
  */
-export function isObjectOrArray(v) {
+export function isObjectOrArray(v){
   return  v === Object(v)  && !isFunction(v);
 }
 
@@ -53,7 +60,7 @@ export function isObjectOrArray(v) {
  * Returns true when poassed parameter is a function, not a map object or an array
  * @param { Object } v
  */
-export function isFunction(v) {
+export function isFunction(v){
   return Object.prototype.toString.call(v) === "[object Function]";
 }
 
@@ -125,11 +132,11 @@ export function mixin(obj, ext, keepExisting = false){
 
   if (!keepExisting) {
     for (let prop in ext)
-      if (ext.hasOwnProperty(prop))
+      if (hown(ext, prop))
         obj[prop] = ext[prop];
   } else {
     for (let prop in ext)
-      if (ext.hasOwnProperty(prop) && !obj.hasOwnProperty(prop))
+      if (hown(ext, prop) && !hown(obj, prop))
         obj[prop] = ext[prop];
   }
   return obj;

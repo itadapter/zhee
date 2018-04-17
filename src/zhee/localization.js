@@ -263,20 +263,20 @@ export class Localizer{
     if (strings.isEmpty(schema)) schema = ANY_SCHEMA;
   
     var node = this.m_Strings;
-    if (!node.hasOwnProperty(iso)) return value;
+    if (!types.hown(node, iso)) return value;
     node = node[iso];
   
-    if (!node.hasOwnProperty(schema)){
-      if (!node.hasOwnProperty(ANY_SCHEMA)) return value;
+    if (!types.hown(node, schema)){
+      if (!types.hown(node, ANY_SCHEMA)) return value;
       node = node[ANY_SCHEMA];
     } else node = node[schema];
   
-    if (!node.hasOwnProperty(field)){
-      if (!node.hasOwnProperty(ANY_FIELD)) return value;
+    if (!types.hown(node, field)){
+      if (!types.hown(node, ANY_FIELD)) return value;
       node = node[ANY_FIELD];
     } else node = node[field];
   
-    if (!node.hasOwnProperty(value)) return value;
+    if (!types.hown(node, value)) return value;
     return node[value];
   }
 
