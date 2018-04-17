@@ -53,9 +53,9 @@ export function trimRight(str){
 }
 
 /**
- * Returns true if the string equals one of the strings in array
+ * Returns true if the string equals one of the strings in the list of values supplied either as an array or '|' or ';' separated string
  * @param {string} str string to test. other types are coerced to string
- * @param {[string]|string} values array of strings to test against, or a | or ; -delimited string of values
+ * @param {[string]|string} values array of values to test against, or a '|' or ';' delimited string of values
  */
 export function isOneOf(str, values, senseCase = false){
   if (!types.isAssigned(str)) return false;
