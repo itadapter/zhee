@@ -31,9 +31,7 @@ export function isDate(v) {
  * @param { Object } v
  */
 export function isArray(v) {
-  return Array.isArray
-    ? Array.isArray(v)
-    : Object.prototype.toString.call(v) === "[object Array]";
+  return Object.prototype.toString.call(v) === "[object Array]";
 }
 
 /**
