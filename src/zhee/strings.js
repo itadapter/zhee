@@ -70,7 +70,8 @@ export function isOneOf(str, values, senseCase = false){
   if (!senseCase) str = str.toLowerCase();
   
   for(let i in values){
-    var e = senseCase ? trim(values[i]) : trim(values[i]).toLowerCase();
+    let e = trim(values[i]);
+    if (!senseCase) e = e.toLowerCase();
     if (str===e) return true;
   }
 
