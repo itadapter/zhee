@@ -25,7 +25,6 @@ export function isDate(v) {
   return Object.prototype.toString.call(v) === "[object Date]";
 }
 
-
 /**
  * Returns true when the passed parameter is an array, not a map or function
  * @param { Object } v
