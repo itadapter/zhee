@@ -13,6 +13,20 @@ export function isEmpty(str){
 }
 
 /**
+ * Returns either a string or dflt if empty. Coerces other types
+ */
+export function dflt(str, ...dflt){
+  str = asString(str);
+  if (isEmpty(str)){
+    for(let i in dflt){
+      var d = asString(dflt[i]);
+      if (!isEmpty(d)) return d;
+    }
+  }
+  return str;
+}
+
+/**
  * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
  * Non-string values are coerced using v.toString(), objects are NOT JSONized
  * @param {Object} v Value 

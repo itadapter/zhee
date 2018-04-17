@@ -81,6 +81,32 @@ describe("Strings", function() {
   });
 
 
+  describe("#dflt()", function() {
+    it("()",     function()    { aver.areEqual("", sut.dflt() );});
+    it("undef",  function() { aver.areEqual("", sut.dflt(undefined) );});
+    it("null",   function() { aver.areEqual("", sut.dflt(null) );});
+
+    it("1",   function() { aver.areEqual("abc", sut.dflt(undefined, "abc") );});
+    it("2",   function() { aver.areEqual("abc", sut.dflt(null, "abc") );});
+
+    it("1 2",   function() { aver.areEqual("def", sut.dflt(undefined, undefined, "def") );});
+    it("2 2",   function() { aver.areEqual("def", sut.dflt(null, null, "def") );});
+
+    it("3",   function() { aver.areEqual("abc", sut.dflt("abc", undefined, "def") );});
+    it("4",   function() { aver.areEqual("cba", sut.dflt("cba", null, "def") );});
+    it("5",   function() { aver.areEqual("cba", sut.dflt("cba", "   ", "def") );});
+    it("6",   function() { aver.areEqual("123", sut.dflt(123, "   ", "def") );});
+
+    it("6",   function() { aver.areEqual("true", sut.dflt(true, "   ", "def") );});
+    it("7",   function() { aver.areEqual("false", sut.dflt(false, "   ", "def") );});
+
+    let x = " \r\n    ";
+    let y = "anyway";
+    it("8",   function() { aver.areEqual(y, sut.dflt(x, y) );});
+    it("9",   function() { aver.areEqual(x, sut.dflt(x) );});
+  });
+
+
   describe("#asString()", function() {
     it("()",          function() { aver.areEqual("",    sut.asString()      );});
     it("undefined",   function() { aver.areEqual("",    sut.asString(undefined));});
