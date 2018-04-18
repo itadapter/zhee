@@ -61,19 +61,26 @@ export class EventEmitter{
 
 }
 
+
+class MakakaEvent extends Event{}
+
+
 class TeztEvent extends Event{
-  constructor(sender, happy, age){
-    super(sender, {happy: happy, age: age, marked: false});
-  }
+  constructor(sender, happy, age){ super(sender, {happy: happy, age: age, marked: false}); }
 }
 
 function tezt(){
+
+  this.emitter.emit("EVT_JJJ", {e: "aaa", s: "w", m: 12, e: 12});//  12, 25, true);
+
+// ---------------------------------------------------------------------------
+
 
   let evt = new TeztEvent(this, true, 234);
   this.emitter.emit(evt);
   if (evt.bag.marked) doSomething();
 
-  recordModel.eventSubscribe(uiHandler, DataEvent, UIEvent );
+  recordModel.eventSubscribe(uiHandler, DataEvent, UIEvent);
 }
 
 

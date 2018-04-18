@@ -156,6 +156,8 @@ describe("Strings", function() {
     it("mix of types 3",          function() { aver.isTrue(  sut.isOneOf("23",[ 1, true, 23, "goOD"])    );});
     it("mix of types 4",          function() { aver.isTrue(  sut.isOneOf("good",[ 1, true, 23, "goOD"])    );});
     it("mix of types 5",          function() { aver.isFalse(  sut.isOneOf("good",[ 1, true, 23, "goOD"],true)    );});
+
+    it("mix of types 6",          function() { aver.isTrue(  sut.isOneOf(7 , [ 1, 2, 7, "go"])  );});
   }); 
 
 
