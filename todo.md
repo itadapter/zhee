@@ -10,7 +10,7 @@
 
 ### Next
 
-- record model
+- Model (record model)
 - markup
 
 

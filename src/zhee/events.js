@@ -57,7 +57,80 @@ export class Event{
   }
 }
 
+export const EVENT_HANDLER_FUNCTION = "eventHandler";
+
 export class EventEmitter{
+  constructor(ctx){
+    this.m_ctx = ctx===undefined ? null : ctx;
+    this.m_map = new Map();
+  }
+
+  /** Event call context, such as an object that owns the emitter. It is
+   * passed as this to function subscribers. May be null
+   */
+  get context(){ return this.m_ctx; }
+
+  //get listeners(){ return this.m_listeners; }
+
+
+  /**
+   * Emits the event synchronously - the call returns after all handlers have processed.
+   * The handlers are processed in the order of specificity - the more specific handlers get processed first
+   * @param {Event} event to emit
+   * @returns {boolean} true if emit matched at least one listener
+   */
+  emit(event){
+
+    let result = false;
+    let etp = types.getClass(event);
+
+    while(etp != null){
+      
+      let subs = this.m_map.get(etp);
+
+      if (subs!==undefined){
+        //got through all subscribers
+        for(let i=0, len=subs.length; i<len; i++){
+          result = true;
+          let sub = subs[i];
+          //--- Call event ---   //tyt nujen try catch???
+          if (types.isFunction(sub))
+            sub.call(this.m_ctx, event);
+          else{
+            const fhandler = sub[EVENT_HANDLER_FUNCTION];
+            if (types.isFunction(fhandler))
+              fhandler.call(sub, event);
+          }
+          //------------------
+          if (event.handled) return true; 
+        }
+      }
+
+      etp = types.getClassParent(etp);//get to more generic type
+    }
+
+    return result;
+  }
+
+  /**
+   * Subscribes a listener to this emitter
+   * @param {function|object} listener a function that takes an event or object with eventHandler(event) function
+   * @param {*} types subscribed-to event class types
+   * @returns {boolean} true if at least one was subscribed, false if the listener was already subscribed
+   */
+  subscribe(listener, ...types){
+
+  }
+
+  /**
+   * Unsubscribes a listener from this emitter
+   * @param {function|object} listener a function that takes an event or object with eventHandler(event) function
+   * @param {*} types subscribed-to event class types
+   * @returns {boolean} true if at least one was found and unsubscribed, otherwise false
+   */
+  unsubscribe(listener, ...types){
+
+  }
 
 }
 
