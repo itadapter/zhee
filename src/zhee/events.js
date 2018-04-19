@@ -186,6 +186,9 @@ function tezt(){
   recordModel.eventSubscribe(uiHandler, DataEvent, UIEvent);
 }
 
+//eto nado ubrat voobshe
+// emitter pramo v classe pishetsya rukami eti dve funzkii na pirvate this.m_emitter.subscribe(listener, events);....
+
 
 /**
  * Listeners are either functions of "function(event)" or objects 
