@@ -64,7 +64,6 @@ export function isFunction(v){
   return Object.prototype.toString.call(v) === "[object Function]";
 }
 
-
 /**
  * Returns true if the argument is an int32 value
  * @param {any} v 
@@ -117,6 +116,27 @@ export function describeTypeOf(v){
   if (isNumber(v)) return "number";
   if (isBool(v)) return "boolean";
   return typeof(v);
+}
+
+/**
+ * Returns the class function(constructor) of the instance or null if not an object
+ * @param {Object} obj object instance to get a class function from
+ * @returns Constructor function of the object or null
+ */
+export function classOf(obj){
+  if (!isObject(obj)) return null;
+  let result = obj.constructor;
+  return result;
+}
+
+/**
+ * Returns the parent class (prototype) of the specified class (function) or null if the class is the top-most class
+ * @param {function} cls class to get parent of
+ */
+export function parentOfClass(cls){
+  if (!isFunction(cls)) return null;
+  let result = Object.getPrototypeOf(cls);
+  return result.name === "" ? null : result;
 }
 
 

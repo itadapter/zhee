@@ -230,11 +230,8 @@ export class MockA extends MockBase{
   virt(){ return "MockA"; }
 }
 
-/**
- * Used for internal derivation testing
- */
-export class MockB extends MockBase{
-  constructor(a,b){
-    super(a, b);
-  }
-}
+/** Used for internal derivation testing */
+export class MockB extends MockBase{ constructor(a,b){ super(a, b); } }
+
+/** Used for internal derivation testing */
+export class MockBC extends MockB{ constructor(a,b){ super(a, b); } }

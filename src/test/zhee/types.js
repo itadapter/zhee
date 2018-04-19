@@ -611,6 +611,41 @@ describe("Types", function() {
     
   });
 
+
+  describe("#classOf()", function() {
+    it("()",   function() { aver.areEqual( null, sut.classOf() );});
+    it("null",   function() { aver.areEqual( null, sut.classOf(null) );});
+    it("undef",   function() { aver.areEqual( null, sut.classOf(undefined) );});
+    it("123",   function() { aver.areEqual( null, sut.classOf(123) );});
+    it("str",   function() { aver.areEqual( null, sut.classOf(true) );});
+
+    it("[]",   function() { aver.areEqual( null, sut.classOf([]) );});
+
+    it("{}",   function() { aver.areEqual( Object, sut.classOf({ }) );});
+
+    it("MockA",   function() { aver.areEqual( aver.MockA, sut.classOf( new aver.MockA()) );});
+    it("MockB",   function() { aver.areEqual( aver.MockB, sut.classOf( new aver.MockB()) );});
+    it("MockBase",   function() { aver.areEqual( aver.MockBase, sut.classOf( new aver.MockBase()) );});
+
+  });
+
+  describe("#parentOfClass()", function() {
+    it("()",   function() { aver.areEqual( null, sut.parentOfClass() );});
+    it("null",   function() { aver.areEqual( null, sut.parentOfClass(null) );});
+    it("undef",   function() { aver.areEqual( null, sut.parentOfClass(undefined) );});
+    it("123",   function() { aver.areEqual( null, sut.parentOfClass(123) );});
+    it("str",   function() { aver.areEqual( null, sut.parentOfClass(true) );});
+
+    it("[]",   function() { aver.areEqual( null, sut.parentOfClass([]) );});
+
+    it("{}",   function() { aver.areEqual( null, sut.parentOfClass({ }) );});
+
+    it("MockA",    function() { aver.areEqual( aver.MockBase, sut.parentOfClass( aver.MockA));});
+    it("MockB",    function() { aver.areEqual( aver.MockBase, sut.parentOfClass( aver.MockB)   );});
+    it("MockBC",    function() { aver.areEqual( aver.MockB, sut.parentOfClass( aver.MockBC)   );});
+    it("MockBase", function() { aver.areEqual( null, sut.parentOfClass( aver.MockBase)      );});
+  });
+
   
 
 });

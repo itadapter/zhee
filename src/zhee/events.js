@@ -63,6 +63,7 @@ export class EventEmitter{
   constructor(ctx){
     this.m_ctx = ctx===undefined ? null : ctx;
     this.m_map = new Map();
+    this.m_emitSet = new Set();
   }
 
   /** Event call context, such as an object that owns the emitter. It is
@@ -72,41 +73,70 @@ export class EventEmitter{
 
   //get listeners(){ return this.m_listeners; }
 
+  /**
+   * Starts anew by unsubscribing all subscriptions
+   */
+  clear(){
+    this.m_map.clear();//remove all event mappings
+  }
+
+
+//mojet li odin i totoje event processirovatsya >1 raza odnim i tem je handlerom naprimer,
+// subscribe(h1,   UIDataChange, DataChange)
+// togda  ControlDataChange(UIDataChange) vizovet oba matcha na h1 a doljebn vizvat 1 raz
 
   /**
    * Emits the event synchronously - the call returns after all handlers have processed.
-   * The handlers are processed in the order of specificity - the more specific handlers get processed first
+   * The handlers are processed in the order of specificity - the more specific handlers get processed first.
+   * The system ensures that per every emit() call, every handler is called only once with the most specific match, even if
+   * multiple matches could be made
    * @param {Event} event to emit
    * @returns {boolean} true if emit matched at least one listener
    */
   emit(event){
 
     let result = false;
-    let etp = types.getClass(event);
+    let etp = types.classOf(event);
 
-    while(etp != null){
-      
-      let subs = this.m_map.get(etp);
+    const map = this.m_map;
+    const set = this.m_emitSet;
+    const ctx = this.m_ctx;
 
-      if (subs!==undefined){
-        //got through all subscribers
-        for(let i=0, len=subs.length; i<len; i++){
-          result = true;
-          let sub = subs[i];
-          //--- Call event ---   //tyt nujen try catch???
-          if (types.isFunction(sub))
-            sub.call(this.m_ctx, event);
-          else{
-            const fhandler = sub[EVENT_HANDLER_FUNCTION];
-            if (types.isFunction(fhandler))
-              fhandler.call(sub, event);
+    try
+    {
+      while(etp != null){
+        
+        let subs = map.get(etp);
+
+        if (subs!==undefined){
+          //got through all subscribers
+          for(let i=0, len=subs.length; i<len; i++){
+            result = true;
+            
+            const sub = subs[i];
+
+            if (set.has(sub)) continue;
+            set.add(sub);
+
+            //--- Call event ---   //tyt nujen try catch??? or shall we surface the error
+            if (types.isFunction(sub))
+              sub.call(ctx, event);
+            else{
+              const fhandler = sub[EVENT_HANDLER_FUNCTION];
+              if (types.isFunction(fhandler))
+                fhandler.call(sub, event);
+            }
+            //------------------
+            if (event.handled) return true; 
           }
-          //------------------
-          if (event.handled) return true; 
         }
-      }
 
-      etp = types.getClassParent(etp);//get to more generic type
+        etp = types.parentOfClass(etp);//get to more generic type
+      }
+    }
+    finally
+    {
+      set.clear();
     }
 
     return result;
