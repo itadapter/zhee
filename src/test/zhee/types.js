@@ -644,6 +644,8 @@ describe("Types", function() {
     it("MockB",    function() { aver.areEqual( aver.MockBase, sut.parentOfClass( aver.MockB)   );});
     it("MockBC",    function() { aver.areEqual( aver.MockB, sut.parentOfClass( aver.MockBC)   );});
     it("MockBase", function() { aver.areEqual( null, sut.parentOfClass( aver.MockBase)      );});
+
+    it("Chained",    function() { aver.areEqual( aver.MockBase, sut.parentOfClass(sut.parentOfClass( aver.MockBC))  );});
   });
 
   
