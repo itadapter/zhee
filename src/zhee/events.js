@@ -1,4 +1,5 @@
 import * as types from "./types";
+import { isArray } from "./aver";
 
 /*
  DESIGN NOTES:
@@ -99,7 +100,7 @@ export class EventEmitter{
         let subs = map.get(etp);
 
         if (subs!==undefined){
-          //got through all subscribers
+          //go through all subscribers
           for(let i=0, len=subs.length; i<len; i++){
             result = true;
             
@@ -108,7 +109,7 @@ export class EventEmitter{
             if (set.has(sub)) continue;
             set.add(sub);
 
-            //--- Call event ---   //tyt nujen try catch??? or shall we surface the error
+            //--- Call event ---  By design: shall surface the exception and terminate the event processing
             if (types.isFunction(sub))
               sub.call(ctx, event);
             else{
@@ -135,11 +136,29 @@ export class EventEmitter{
   /**
    * Subscribes a listener to this emitter
    * @param {function|object} listener a function that takes an event or object with eventHandler(event) function
-   * @param {*} types subscribed-to event class types
+   * @param {function} types subscribed-to event class types
    * @returns {boolean} true if at least one was subscribed, false if the listener was already subscribed
    */
   subscribe(listener, ...types){
+    if (!listener || !types || types.length===0) return false;
+    if (!types.isFunction(listener) && !types.isObject(listener)) return false;
 
+    let result = false;
+    types.forEach( type => {
+      let subs = this.m_map.get(type);
+      if (subs===undefined){
+        subs = [listener];
+        this.m_map.set(type, subs);
+        result = true;
+      }else{
+        const idx = subs.indexOf(listener);
+        if (idx===-1){
+          subs.push(listener);
+          result = true;
+        }
+      }
+    });
+    return result;
   }
 
   /**
