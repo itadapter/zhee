@@ -234,9 +234,9 @@ export function asBoolean(v){ return asBool(v); }
  * @param {any} v object to test 
  */
 export function asBool(v){
-  if (!isAssigned(v)) return false;
-  if (isBool(v)) return v;
-  if (v.asBoolean) return v.asBoolean();
+  if (!v) return false;
+  if (v===true) return true;
+  if (v.asBoolean) return v.asBoolean() === true;
   if (isNumber(v)) return v!==0;
   var s = strings.asString(v);
   return strings.isOneOf(s, ["true", "t", "yes", "1", "ok"]);

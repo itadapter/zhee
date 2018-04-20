@@ -591,6 +591,9 @@ describe("Types", function() {
     it("undefined",   function() { aver.areEqual( false, sut.asBool(undefined) );});
     it("null",   function() { aver.areEqual( false, sut.asBool(null) );});
 
+    it("true",   function() { aver.areEqual( true, sut.asBool(true) );});
+    it("false",   function() { aver.areEqual( false, sut.asBool(false) );});
+
     it("1",   function() { aver.areEqual( true, sut.asBool(1) );});
     it("0",   function() { aver.areEqual( false, sut.asBool(0) );});
 

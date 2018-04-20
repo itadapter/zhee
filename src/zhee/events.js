@@ -45,16 +45,6 @@ export class Event{
   
   /** Sets event handled property. Once set to true the event propagation stops */
   set handled(v){ this.m_handled = types.asBool(v); }
-
-  /** 
-   * Override to return true if this event matches the specified listener.
-   * The EventEmitter tries to match an event to every listener registered to its 
-   * type then calls this function. Used to limit the event dipatching to some sub-system/type;
-   * @returns {boolean} True if match is made
-   */
-  match(listener){
-    return true;  //zachem eto voobshe nado??
-  }
 }
 
 export const EVENT_HANDLER_FUNCTION = "eventHandler";
@@ -185,21 +175,3 @@ function tezt(){
 
   recordModel.eventSubscribe(uiHandler, DataEvent, UIEvent);
 }
-
-//eto nado ubrat voobshe
-// emitter pramo v classe pishetsya rukami eti dve funzkii na pirvate this.m_emitter.subscribe(listener, events);....
-
-
-/**
- * Listeners are either functions of "function(event)" or objects 
- * that have "eventHandler(event)" function
- */
-export const EventEmitterFacadeMixin = {
-
-  eventSubscribe: function(listener, ...events){
-  },
-
-  eventUnsubscribe: function(listener, ...events){
-
-  }
-};
