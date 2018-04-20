@@ -72,11 +72,6 @@ export class EventEmitter{
     this.m_map.clear();//remove all event mappings
   }
 
-
-//mojet li odin i totoje event processirovatsya >1 raza odnim i tem je handlerom naprimer,
-// subscribe(h1,   UIDataChange, DataChange)
-// togda  ControlDataChange(UIDataChange) vizovet oba matcha na h1 a doljebn vizvat 1 raz
-
   /**
    * Emits the event synchronously - the call returns after all handlers have processed.
    * The handlers are processed in the order of specificity - the more specific handlers get processed first.
