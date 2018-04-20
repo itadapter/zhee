@@ -102,6 +102,15 @@ export function isObjectOrFunction(v){
 }
 
 /**
+ * Returns true when the passed value implements Iterable protocol
+ * @param {any} v 
+ */
+export function isIterable(v){
+  return isAssigned(v) && isFunction(v[Symbol.iterator]);
+}
+
+
+/**
  * Returns true if the argument is an int32 value
  * @param {any} v 
  */

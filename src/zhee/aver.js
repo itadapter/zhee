@@ -84,7 +84,6 @@ export function isFunction(a){
   throw AVERMENT_FAILURE(`isFunction(${dv(a)})`);
 }
 
-
 /**
  * Performs strict test for function or object (not a primitive or array)
  * @param {any} a 
@@ -92,6 +91,15 @@ export function isFunction(a){
 export function isObjectOrFunction(a){
   if (types.isObjectOrFunction(a)) return;
   throw AVERMENT_FAILURE(`isObjectOrFunction(${dv(a)})`);
+}
+
+/**
+ * Performs strict test for Iterable protocol
+ * @param {any} a 
+ */
+export function isIterable(a){
+  if (types.isIterable(a)) return;
+  throw AVERMENT_FAILURE(`isIterable(${dv(a)})`);
 }
 
 /**

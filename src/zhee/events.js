@@ -138,19 +138,21 @@ export class EventEmitter{
   /**
    * Subscribes a listener to this emitter
    * @param {function|object} listener a function that takes an event or object with eventHandler(event) function
-   * @param {function} types subscribed-to event class types
+   * @param {Iterable<function>} etypes subscribed-to event class types
    * @returns {boolean} true if at least one was subscribed, false if the listener was already subscribed
    */
-  subscribe(listener, ...types){
+  subscribe(listener, ...etypes){
     aver.isObjectOrFunction(listener);
-    aver.isArray(types);
+    aver.isIterable(etypes);
     
+    const map = this.m_map;
+
     let result = false;
-    types.forEach( type => {
-      let subs = this.m_map.get(type);
+    for(let type of etypes){
+      let subs = map.get(type);
       if (subs===undefined){
         subs = [listener];
-        this.m_map.set(type, subs);
+        map.set(type, subs);
         result = true;
       }else{
         const idx = subs.indexOf(listener);
@@ -159,18 +161,31 @@ export class EventEmitter{
           result = true;
         }
       }
-    });
+    }
     return result;
   }
 
   /**
    * Unsubscribes a listener from this emitter
    * @param {function|object} listener a function that takes an event or object with eventHandler(event) function
-   * @param {*} types subscribed-to event class types
+   * @param {Iterable<function>} [etypes] subscribed-to event class types
    * @returns {boolean} true if at least one was found and unsubscribed, otherwise false
    */
-  unsubscribe(listener, ...types){
+  unsubscribe(listener, ...etypes){
+    aver.isObjectOrFunction(listener);
+    
+    const map = this.m_map;
 
+    if (!types.isIterable(etypes)) etypes = map.keys();
+
+    let result = false;
+    for(let type of etypes){
+      const subs = map.get(type);
+      if (subs)
+        if (types.arrayDelete(subs, listener)) 
+          result = true;
+    }
+    return result;
   }
 
 }

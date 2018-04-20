@@ -275,6 +275,20 @@ describe("Types", function() {
   });
 
 
+  describe("#isIterable()", function() {
+    it("false for empty()",   function() { aver.isFalse( sut.isIterable()          );});
+    it("false for undefined", function() { aver.isFalse( sut.isIterable(undefined) );});
+    it("false for null",      function() { aver.isFalse( sut.isIterable(null)      );});
+    it("false for 3",      function() { aver.isFalse( sut.isIterable(3)      );});
+    it("false for {}",      function() { aver.isFalse( sut.isIterable({ })       );});
+
+    it("true for string",   function() { aver.isTrue( sut.isIterable("")        );});
+    it("true for []",       function() { aver.isTrue( sut.isIterable([])        );});
+    it("true for Map",      function() { aver.isTrue( sut.isIterable(new Map()) );});
+    it("true for Set",      function() { aver.isTrue( sut.isIterable(new Set()) );});
+  });
+
+
 
 
   describe("#describeTypeOf()", function() {
