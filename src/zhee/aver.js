@@ -67,12 +67,31 @@ export function isArray(a){
 }
 
 /**
+ * Performs strict test for object or array (not a primitive or function)
+ * @param {any} a 
+ */
+export function isObjectOrArray(a){
+  if (types.isObjectOrArray(a)) return;
+  throw AVERMENT_FAILURE(`isObjectOrArray(${dv(a)})`);
+}
+
+/**
  * Performs strict test for function (not a primitive, object or array)
  * @param {any} a 
  */
 export function isFunction(a){
   if (types.isFunction(a)) return;
   throw AVERMENT_FAILURE(`isFunction(${dv(a)})`);
+}
+
+
+/**
+ * Performs strict test for function or object (not a primitive or array)
+ * @param {any} a 
+ */
+export function isObjectOrFunction(a){
+  if (types.isObjectOrFunction(a)) return;
+  throw AVERMENT_FAILURE(`isObjectOrFunction(${dv(a)})`);
 }
 
 /**

@@ -94,6 +94,14 @@ export function isFunction(v){
 }
 
 /**
+ * Returns true when the passed parameter is a function, or object but not an array
+ * @param {any} v
+ */
+export function isObjectOrFunction(v){
+  return  v === Object(v)  && !isArray(v);
+}
+
+/**
  * Returns true if the argument is an int32 value
  * @param {any} v 
  */

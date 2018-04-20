@@ -1,5 +1,5 @@
 import * as types from "./types";
-import { isArray } from "./aver";
+import * as aver from "./aver";
 
 /*
  DESIGN NOTES:
@@ -85,9 +85,9 @@ export class EventEmitter{
    * @returns {boolean} true if emit matched at least one listener
    */
   emit(event){
+    aver.isOf(event, Event);
 
     let result = false;
-    let etp = types.classOf(event);
 
     const map = this.m_map;
     const set = this.m_emitSet;
@@ -95,6 +95,8 @@ export class EventEmitter{
 
     try
     {
+      let etp = types.classOf(event);
+
       while(etp != null){
         
         let subs = map.get(etp);
@@ -140,9 +142,9 @@ export class EventEmitter{
    * @returns {boolean} true if at least one was subscribed, false if the listener was already subscribed
    */
   subscribe(listener, ...types){
-    if (!listener || !types || types.length===0) return false;
-    if (!types.isFunction(listener) && !types.isObject(listener)) return false;
-
+    aver.isObjectOrFunction(listener);
+    aver.isArray(types);
+    
     let result = false;
     types.forEach( type => {
       let subs = this.m_map.get(type);

@@ -184,6 +184,8 @@ describe("Types", function() {
     it("false for string",    function() { aver.isFalse( sut.isArray("zaza")    );});
     it("false for {}",        function() { aver.isFalse( sut.isArray({})        );});
 
+    it("false for function{}",        function() { aver.isFalse( sut.isArray(function(){}) );});
+
     it("true for []",            function() { aver.isTrue( sut.isArray([])           );});
     it("true for [null, null]",  function() { aver.isTrue( sut.isArray([null, null]) );});
     it("true for [1,2,3]",       function() { aver.isTrue( sut.isArray([1,2,3])      );});
@@ -199,6 +201,8 @@ describe("Types", function() {
     it("false for int",       function() { aver.isFalse( sut.isObject(123)       );});
     it("false for string",    function() { aver.isFalse( sut.isObject("zaza")    );});
     it("false for []",        function() { aver.isFalse( sut.isObject([])    );});
+
+    it("false for function{}",        function() { aver.isFalse( sut.isObject(function(){}) );});
 
     it("true for {}",        function() { aver.isTrue( sut.isObject({})        );});
     it("true for {a:1...}",  function() { aver.isTrue( sut.isObject({a: 2, b: 3}) );});
@@ -217,6 +221,8 @@ describe("Types", function() {
     it("false for string",    function() { aver.isFalse( sut.isFunction("zaza")    );});
     it("false for []",        function() { aver.isFalse( sut.isFunction([])    );});
 
+    it("false for {}",        function() { aver.isFalse( sut.isFunction({})    );});
+
     it("true for function{}", function() { aver.isTrue( sut.isFunction( function(){}) );});
     it("true for ()=>true", function() { aver.isTrue( sut.isFunction( () => true ) );});
     it("true for new Function()",  function() { aver.isTrue( sut.isFunction( new Function("a", "return a*a")) );});
@@ -231,6 +237,8 @@ describe("Types", function() {
     it("false for true",      function() { aver.isFalse( sut.isObjectOrArray(true)      );});
     it("false for int",       function() { aver.isFalse( sut.isObjectOrArray(123)       );});
     it("false for string",    function() { aver.isFalse( sut.isObjectOrArray("zaza")    );});
+
+    it("false for function{}",        function() { aver.isFalse( sut.isObjectOrArray(function(){}) );});
     
     it("true for []",        function() { aver.isTrue( sut.isObjectOrArray([]) );});
     it("true for {}",        function() { aver.isTrue( sut.isObjectOrArray({})  );});
@@ -241,6 +249,29 @@ describe("Types", function() {
     it("true for new Car()",  function()    { aver.isTrue( sut.isObjectOrArray(new Car())    );});
     it("true for [null, null]",  function() { aver.isTrue( sut.isObjectOrArray([null, null]) );});
     it("true for [1,2,3]",       function() { aver.isTrue( sut.isObjectOrArray([1,2,3])      );});
+  });
+
+  describe("#isObjectOrFunction()", function() {
+    it("false for empty()",   function() { aver.isFalse( sut.isObjectOrFunction()          );});
+    it("false for undefined", function() { aver.isFalse( sut.isObjectOrFunction(undefined) );});
+    it("false for null",      function() { aver.isFalse( sut.isObjectOrFunction(null)      );});
+    it("false for true",      function() { aver.isFalse( sut.isObjectOrFunction(true)      );});
+    it("false for int",       function() { aver.isFalse( sut.isObjectOrFunction(123)       );});
+    it("false for string",    function() { aver.isFalse( sut.isObjectOrFunction("zaza")    );});
+    it("false for []",        function() { aver.isFalse( sut.isObjectOrFunction([]) );});
+
+    it("true for {}",        function() { aver.isTrue( sut.isObjectOrFunction({})  );});
+    it("true for {a:1...}",  function() { aver.isTrue( sut.isObjectOrFunction({a: 2, b: 3}) );});
+
+    function Car(){ this.a=1; }
+
+    it("true for new Car()",      function() { aver.isTrue( sut.isObjectOrFunction(new Car())    );});
+    it("false for [null, null]",  function() { aver.isFalse( sut.isObjectOrFunction([null, null]) );});
+
+    it("true for function{}",     function() { aver.isTrue( sut.isObjectOrFunction( function(){}) );});
+    it("true for ()=>true",       function() { aver.isTrue( sut.isObjectOrFunction( () => true ) );});
+    it("true for new Function()", function() { aver.isTrue( sut.isObjectOrFunction( new Function("a", "return a*a")) );});
+
   });
 
 
