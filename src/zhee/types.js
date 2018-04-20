@@ -230,16 +230,15 @@ export function asString(v){ return strings.asString(v); }
 export function asBoolean(v){ return asBool(v); }
 
 /**
- * Converts primitives into bool. Uses asBoolean() on objects
+ * Converts primitives into bool. Uses asBoolean() on objects.
+ * Yields true only on (bool)true, 1, or ["true", "t", "yes", "1", "ok"]
  * @param {any} v object to test 
  */
 export function asBool(v){
   if (!v) return false;
-  if (v===true) return true;
+  if (v===true || v===1) return true;
   if (v.asBoolean) return v.asBoolean() === true;
-  if (isNumber(v)) return v!==0;
-  var s = strings.asString(v);
-  return strings.isOneOf(s, ["true", "t", "yes", "1", "ok"]);
+  return strings.isOneOf(v, ["true", "t", "yes", "1", "ok"]);
 }
 
 
