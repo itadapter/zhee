@@ -174,6 +174,21 @@ describe("Types", function() {
     it("true for new Boolean()",    function() { aver.isTrue( sut.isBool( new Boolean(true) )); });
   });
 
+  describe("#isSymbol()", function() {
+    it("false for empty()",   function() { aver.isFalse( sut.isSymbol()           );});
+    it("false for undefined", function() { aver.isFalse( sut.isSymbol(undefined)  );});
+    it("false for null",      function() { aver.isFalse( sut.isSymbol(null)       );});
+
+    it("false for {}",      function() { aver.isFalse( sut.isSymbol({})       );});
+    it("false for 'abc'",   function() { aver.isFalse( sut.isSymbol("abc") );});
+    it("false for 1",       function() { aver.isFalse( sut.isSymbol( 1 )); });
+    it("false for '1'",     function() { aver.isFalse( sut.isSymbol( "1" )); });
+
+
+    it("true for Sym 123",    function() { aver.isTrue( sut.isSymbol( Symbol(123) )); });
+    it("true for Sym xyz",    function() { aver.isTrue( sut.isSymbol( Symbol("xyz"))); });
+  });
+
 
   describe("#isArray()", function() {
     it("false for empty()",   function() { aver.isFalse( sut.isArray()          );});

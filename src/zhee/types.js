@@ -137,13 +137,20 @@ export function isNumber(v){
   return Object.prototype.toString.call(v) === "[object Number]";
 }
 
-
 /**
  * Return true if the value is a boolean
  * @param {any} v Value to check 
  */
 export function isBool(v){
   return Object.prototype.toString.call(v) === "[object Boolean]";
+}
+
+/**
+ * Return true if the value is a symbol
+ * @param {any} v Value to check 
+ */
+export function isSymbol(v){
+  return Object.prototype.toString.call(v) === "[object Symbol]";
 }
 
 
@@ -155,6 +162,11 @@ export function isBool(v){
 export function describeTypeOf(v){
   if(v === undefined) return CC.UNDEFINED;
   if(v === null) return CC.NULL;
+
+  // typeof( Boolean(true)) === 'boolean' 
+  // typeof( new Boolean(true)) === 'object'
+  // same for Date, Number, String, [] === object etc
+
 
   if (isDate(v))     return "date";
   if (isFunction(v)) return "function";

@@ -139,6 +139,15 @@ export function isBool(a){
 }
 
 /**
+ * Performs strict test for symbol
+ * @param {any} a 
+ */
+export function isSymbol(a){
+  if (types.isSymbol(a)) return;
+  throw AVERMENT_FAILURE(`isSymbol(${dv(a)})`);
+}
+
+/**
  * Performs strict test for false
  * @param {bool} a 
  */
