@@ -784,7 +784,7 @@ describe("Types", function() {
     it("null",   function() { aver.areEqual( null, sut.parentOfClass(null) );});
     it("undef",   function() { aver.areEqual( null, sut.parentOfClass(undefined) );});
     it("123",   function() { aver.areEqual( null, sut.parentOfClass(123) );});
-    it("str",   function() { aver.areEqual( null, sut.parentOfClass(true) );});
+    it("bool",   function() { aver.areEqual( null, sut.parentOfClass(true) );});
 
     it("[]",   function() { aver.areEqual( null, sut.parentOfClass([]) );});
 
@@ -798,6 +798,39 @@ describe("Types", function() {
     it("Chained",    function() { aver.areEqual( aver.MockBase, sut.parentOfClass(sut.parentOfClass( aver.MockBC))  );});
   });
 
-  
+
+  describe("#isEmptyIterable()", function() {
+    it("()",    function()    { aver.isTrue( sut.isEmptyIterable() );});
+    it("null",  function()  { aver.isTrue( sut.isEmptyIterable(null) );});
+    it("undef", function() { aver.isTrue(  sut.isEmptyIterable(undefined) );});
+    it("123",   function()   { aver.isTrue( sut.isEmptyIterable(123) );});
+    it("bool",  function()   { aver.isTrue( sut.isEmptyIterable(true) );});
+
+    it("[]",    function() { aver.isTrue( sut.isEmptyIterable([]) );});
+
+    it("{}",    function() { aver.isTrue( sut.isEmptyIterable({ }) );});
+
+    it("[1]",   function() { aver.isFalse( sut.isEmptyIterable([1]) );});
+    it("Set(123)",   function() { aver.isFalse( sut.isEmptyIterable(new Set([1,2,3])) );});
+   
+  });
+
+
+
+  describe("#ZZZ()", function() {
+    function z(a, ...p){
+      console.log("p is "+sut.describeTypeOf(p));
+      for(let i of p)
+        console.log(i);
+    }
+    
+    let todo = ["da","net", true, 890];
+
+    it("1",    function() { z(1, ...todo);  });
+    it("2",    function() { z(1, 1, "da", false, "dizel");  });
+    it("3",    function() { z(1);  });
+
+  });
+
 
 });

@@ -172,7 +172,7 @@ export class EventEmitter{
     
     const map = this.m_map;
 
-    if (!types.isIterable(etypes)) etypes = map.keys();
+    if (types.isEmptyIterable(etypes)) etypes = map.keys();
 
     let result = false;
     for(let type of etypes){

@@ -276,6 +276,16 @@ export function nav(obj, path, org){
   return result;
 }
 
+/**
+ * Returns false only if an iterable was supplied and it yields at least one value, true in all other cases
+ */
+export function isEmptyIterable(iterable){
+  if (!isIterable(iterable)) return true;
+  const iterator = iterable[Symbol.iterator]();
+  return iterator.next().done === true;
+}
+
+
 
 /**
  * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
@@ -301,5 +311,3 @@ export function asBool(v){
   if (v.asBoolean) return v.asBoolean() === true;
   return strings.isOneOf(v, ["true", "t", "yes", "1", "ok"]);
 }
-
-
