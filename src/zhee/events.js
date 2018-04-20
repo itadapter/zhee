@@ -48,7 +48,8 @@ export class Event{
   set handled(v){ this.m_handled = types.asBool(v); }
 }
 
-export const EVENT_HANDLER_FUNCTION = "eventHandler";
+/** Defines a function symbol for event handlers attached to objects*/
+export const EVENT_HANDLER_FUNCTION = Symbol("eventHandler");
 
 export class EventEmitter{
   constructor(ctx){
@@ -188,26 +189,4 @@ export class EventEmitter{
     return result;
   }
 
-}
-
-
-class MakakaEvent extends Event{}
-
-
-class TeztEvent extends Event{
-  constructor(sender, happy, age){ super(sender, {happy: happy, age: age, marked: false}); }
-}
-
-function tezt(){
-
-  this.emitter.emit("EVT_JJJ", {e: "aaa", s: "w", m: 12, e: 12});//  12, 25, true);
-
-// ---------------------------------------------------------------------------
-
-
-  let evt = new TeztEvent(this, true, 234);
-  this.emitter.emit(evt);
-  if (evt.bag.marked) doSomething();
-
-  recordModel.eventSubscribe(uiHandler, DataEvent, UIEvent);
 }

@@ -229,6 +229,14 @@ describe("Strings", function() {
       aver.areEqual("(object){\"a\":[1,2,3,true,-34.2],\"b\":\"abc\"}", got);
     });
 
+    it("symbol",   function() {
+      let v = Symbol(123);
+
+      let got = sut.describe(v);
+      console.log( got );
+      aver.areEqual("(symbol)Symbol(123)", got);
+    });
+
 
   }); 
 

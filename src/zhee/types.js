@@ -148,19 +148,22 @@ export function isBool(v){
 
 
 /**
- * Describes the type of value returning the string description, not type moniker
+ * Describes the type of value returning the string description, not type moniker.
+ * Keep in mind that in JS typeof(new String|Date|Number|Boolean(x)) is object, not the actual type, hence this method :)
  * @param {any} v 
  */
 export function describeTypeOf(v){
   if(v === undefined) return CC.UNDEFINED;
   if(v === null) return CC.NULL;
 
-  if (isDate(v)) return "date";
+  if (isDate(v))     return "date";
   if (isFunction(v)) return "function";
-  if (isString(v)) return "string";
-  if (isArray(v)) return "array";
-  if (isNumber(v)) return "number";
-  if (isBool(v)) return "boolean";
+  if (isString(v))   return "string";
+  if (isArray(v))    return "array";
+  if (isNumber(v))   return "number";
+  if (isBool(v))     return "boolean";
+  if (isIterable(v)) return typeof(v)+"+Iterable";
+
   return typeof(v);
 }
 

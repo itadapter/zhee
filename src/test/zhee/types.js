@@ -279,7 +279,7 @@ describe("Types", function() {
     it("false for empty()",   function() { aver.isFalse( sut.isIterable()          );});
     it("false for undefined", function() { aver.isFalse( sut.isIterable(undefined) );});
     it("false for null",      function() { aver.isFalse( sut.isIterable(null)      );});
-    it("false for 3",      function() { aver.isFalse( sut.isIterable(3)      );});
+    it("false for 3",       function() { aver.isFalse( sut.isIterable(3)      );});
     it("false for {}",      function() { aver.isFalse( sut.isIterable({ })       );});
 
     it("true for string",   function() { aver.isTrue( sut.isIterable("")        );});
@@ -297,15 +297,34 @@ describe("Types", function() {
     it("for null",   function() { aver.areEqual( "<null>", sut.describeTypeOf(null) );});
 
     it("for 1",   function() { aver.areEqual( "number", sut.describeTypeOf(1) );});
+    it("for new Number()",   function() { aver.areEqual( "number", sut.describeTypeOf(new Number(1)) );});
     it("for 1.3",   function() { aver.areEqual( "number", sut.describeTypeOf(1.3) );});
     it("for true",   function() { aver.areEqual( "boolean", sut.describeTypeOf(true) );});
     it("for false",   function() { aver.areEqual( "boolean", sut.describeTypeOf(false) );});
+
+    it("for new Boolean()",   function() { aver.areEqual( "boolean", sut.describeTypeOf(new Boolean(false)) );});
+    it("for ''",   function() { aver.areEqual( "string", sut.describeTypeOf("") );});
+    it("for new String()",   function() { aver.areEqual( "string", sut.describeTypeOf(new String("")) );});
 
     it("for Date",   function() { aver.areEqual( "date", sut.describeTypeOf(new Date()) );});
     it("for []",   function() { aver.areEqual( "array", sut.describeTypeOf([]) );});
     it("for [1,2,3]",   function() { aver.areEqual( "array", sut.describeTypeOf([1,2,3]) );});
     it("for {}",   function() { aver.areEqual( "object", sut.describeTypeOf({}) );});
     it("for {a: 1}",   function() { aver.areEqual( "object", sut.describeTypeOf({a: 1}) );});
+
+
+    it("for Symbol",   function() { 
+      let x = Symbol(9990);
+      aver.areEqual( "symbol", sut.describeTypeOf(x) );
+    });
+
+    it("for {Iterable}",   function() { 
+      let x = {
+        a: 1, b: true,
+        [Symbol.iterator]: function(){ return null; } 
+      };
+      aver.areEqual( "object+Iterable", sut.describeTypeOf(x) );
+    });
     
   });
 
