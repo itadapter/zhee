@@ -44,6 +44,74 @@ describe("Types", function() {
   }); 
 
 
+  describe("#arrayDelete()", function() {
+    it("deletes int",   function() { 
+      let a = [1,2,3];
+      aver.isTrue( sut.arrayDelete(a, 2)  );
+      aver.areEqual(2, a.length );
+      aver.areEqual(1, a[0] );
+      aver.areEqual(3, a[1] );
+    });
+
+    it("deletes int once",   function() { 
+      let a = [1,2,3,2];
+      aver.isTrue( sut.arrayDelete(a, 2)  );
+      aver.areEqual(3, a.length );
+      aver.areEqual(1, a[0] );
+      aver.areEqual(3, a[1] );
+      aver.areEqual(2, a[2] );
+    });
+
+    it("deletes undefined",   function() { 
+      let a = [1,2,undefined];
+      aver.isTrue( sut.arrayDelete(a, undefined)  );
+      aver.areEqual(2, a.length );
+      aver.areEqual(1, a[0] );
+      aver.areEqual(2, a[1] );
+    });
+
+    it("does not delete absent",   function() { 
+      let a = [1, 2, 3];
+      aver.isFalse( sut.arrayDelete(a, 5)  );
+      aver.areEqual(3, a.length );
+      aver.areEqual(1, a[0] );
+      aver.areEqual(2, a[1] );
+      aver.areEqual(3, a[2] );
+    });
+
+    it("deletes objects",   function() { 
+      let o = {c: 3};
+      let a = [{a: 1}, {b: 2}, o];
+      aver.isTrue( sut.arrayDelete(a, o)  );
+      aver.areEqual(2, a.length );
+      aver.areEqual(1, a[0].a );
+      aver.areEqual(2, a[1].b );
+    });
+  });
+
+
+  describe("#arrayCopy()", function() {
+    it("copies",   function() { 
+      let a = [1,2,3];
+      let b = sut.arrayCopy(a);
+
+      aver.areNotEqual(a, b );
+      aver.areEqual(a.length, b.length );
+      aver.areEqual(a[0], b[0] );
+      aver.areEqual(a[1], b[1] );
+      aver.areEqual(a[2], b[2] );
+    });
+  }); 
+  
+  describe("#arrayClear()", function() {
+    it("clears",   function() { 
+      const a = [1,2,3];
+      let b = sut.arrayClear(a);
+      aver.areEqual(a, b );
+      aver.areEqual(0, a.length);
+    });
+  }); 
+
   describe("#isString()", function() {
     it("false for empty()",   function() { aver.isFalse( sut.isString()           );});
     it("false for undefined", function() { aver.isFalse( sut.isString(undefined)  );});

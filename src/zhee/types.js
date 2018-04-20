@@ -17,6 +17,35 @@ export function hown(obj, prop){
 }
 
 /**
+ * Deletes the first occurence of the element in array
+ * @param {Array} array to delete from
+ * @param {any} elm element to delete 
+ * @returns {boolean} true if element was found and deleted
+ */
+export function arrayDelete(array, elm){
+  const idx = array.indexOf(elm);
+  if (idx === -1) return false;
+  array.splice(idx, 1);
+  return true;
+}
+
+/**
+ * Creates a shallow copy of the array
+ */
+export function arrayCopy(array){
+  return array.slice();
+}
+
+/**
+ * Clears the array contents in-place
+ * @param {Array} array to clear
+ */
+export function arrayClear(array){
+  array.length=0;
+  return array;
+}
+
+/**
  * Returns true if the argument is a non null string
  * @param {any} v
  */
