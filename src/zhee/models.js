@@ -44,6 +44,9 @@ export class Base{
     if (resetVal===true){
       this.m_isValidated = false;
     }
+
+    if (this.m_parent) 
+     thi.m_parent.touch(resetVal);
   }
 
   /** True when this was validated after last change */
@@ -73,7 +76,7 @@ export class Base{
    * @returns {boolean} Never returns undefined
    */
   get isEnabled( ) { 
-    return this.m_enabled!==undefined ? this.m_enabled : this.m_parent!==null ? this.m_parent.isEnabled() : true;
+    return this.m_enabled!==undefined ? this.m_enabled : this.m_parent ? this.m_parent.isEnabled() : true;
   }
 
   /** Returns visible for this entitiy
@@ -87,7 +90,7 @@ export class Base{
    * @returns {boolean} Never returns undefined
    */
   get isVisible( ) { 
-    return this.m_visible!==undefined ? this.m_visible : this.m_parent!==null ? this.m_parent.isVisible() : true;
+    return this.m_visible!==undefined ? this.m_visible : this.m_parent ? this.m_parent.isVisible() : true;
   }
 
   /** Returns required for this entitiy
@@ -101,9 +104,11 @@ export class Base{
    * @returns {boolean} Never returns undefined
    */
   get isRequired( ) { 
-    return this.m_required!==undefined ? this.m_required : this.m_parent!==null ? this.m_parent.isRequired() : true;
+    return this.m_required!==undefined ? this.m_required : this.m_parent ? this.m_parent.isRequired() : true;
   }
 }
+
+nado proverit na set chto to chto stavim ne izmenilos, esli poenyalos, call touch()
 
 zachem cascading?   Na urovne modeli ustanovka doljna touchat vsex detei, i ustanavliavt u vsex version++
 mojet ostavit cascading tolko na visible, enable, required, readonly? 
