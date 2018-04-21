@@ -31,6 +31,18 @@ describe("Types", function() {
 
     it("{a: undefined}, 'a'", function() { aver.isTrue( sut.hown({a: undefined}, "a")  );});
 
+    it("{[symbol1]: 1}, symbol1", function() {
+      const s1 = Symbol("1");
+      aver.isTrue( sut.hown({[s1]: 1}, s1)  );
+    });
+
+    it("{[symbol2]: 1}, symbol1", function() {
+      const s1 = Symbol("111111");
+      const s2 = Symbol("222222");
+      aver.isTrue( sut.hown({[s1]: 1}, s1)  );
+      aver.isFalse( sut.hown({[s1]: 1}, s2)  );
+    });
+
     it("inherit", function() {
       function MyClass() {this.A = 1;}
       MyClass.prototype = {B: 2};
@@ -753,7 +765,7 @@ describe("Types", function() {
 
     function Custom(state){
       this.state = state;
-      this.asBoolean = function(){ return state; };
+      this[sut.AS_BOOLEAN_FUN] = function(){ return state; };
     }
 
     it("Custom(true)",   function() { aver.areEqual( true, sut.asBoolean(new Custom(true)) );});
@@ -798,7 +810,6 @@ describe("Types", function() {
     it("Chained",    function() { aver.areEqual( aver.MockBase, sut.parentOfClass(sut.parentOfClass( aver.MockBC))  );});
   });
 
-
   describe("#isEmptyIterable()", function() {
     it("()",    function()    { aver.isTrue( sut.isEmptyIterable() );});
     it("null",  function()  { aver.isTrue( sut.isEmptyIterable(null) );});
@@ -813,23 +824,6 @@ describe("Types", function() {
     it("[1]",   function() { aver.isFalse( sut.isEmptyIterable([1]) );});
     it("Set(123)",   function() { aver.isFalse( sut.isEmptyIterable(new Set([1,2,3])) );});
    
-  });
-
-
-
-  describe("#ZZZ()", function() {
-    function z(a, ...p){
-      console.log("p is "+sut.describeTypeOf(p));
-      for(let i of p)
-        console.log(i);
-    }
-    
-    let todo = ["da","net", true, 890];
-
-    it("1",    function() { z(1, ...todo);  });
-    it("2",    function() { z(1, 1, "da", false, "dizel");  });
-    it("3",    function() { z(1);  });
-
   });
 
 

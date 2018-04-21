@@ -23,7 +23,7 @@ import * as aver from "./aver";
 
 
 /**
- * An archetype of all events dispatched via EventEmitter
+ * An archetype for all events dispatched via EventEmitter
  */
 export class Event{
   constructor(sender, bag){ 
@@ -32,7 +32,7 @@ export class Event{
     this.m_bag = bag===undefined ? null : bag;
   }
 
-  /** Returns the sender of this event. Once set to true the event propagation stops */
+  /** Returns the sender of this event */
   get sender(){ return this.m_sender; }
 
   /** Gets data bag of this event or null */
@@ -49,8 +49,17 @@ export class Event{
 }
 
 /** Defines a function symbol for event handlers attached to objects*/
-export const EVENT_HANDLER_FUNCTION = Symbol("eventHandler");
+export const EVENT_HANDLER_FUN = Symbol("eventHandler");
 
+/**
+ * Emits event objects to subscribers, having all events derive from Event class.
+ * Subscribers/handlers attach to specified event classes. Subscribers are either functions or 
+ * objects with [EVENT_HANDLER_FUN](Event) function.
+ * The event propagation stops once 'event.handled' is set to true.
+ * The system ensures that if a handler is subscribed to more than one type which are derived,
+ * the system will only call the handler once per emit() using the most specific event type match.
+ * Attention: you must unsubscribe from EventEmitter to prevent memory leaks.
+ */
 export class EventEmitter{
   constructor(ctx){
     this.m_ctx = ctx===undefined ? null : ctx;
@@ -62,8 +71,6 @@ export class EventEmitter{
    * passed as this to function subscribers. May be null
    */
   get context(){ return this.m_ctx; }
-
-  //get listeners(){ return this.m_listeners; }
 
   /**
    * Starts anew by unsubscribing all subscriptions
@@ -111,7 +118,7 @@ export class EventEmitter{
             if (types.isFunction(sub))
               sub.call(ctx, event);
             else{
-              const fhandler = sub[EVENT_HANDLER_FUNCTION];
+              const fhandler = sub[EVENT_HANDLER_FUN];
               if (types.isFunction(fhandler))
                 fhandler.call(sub, event);
             }
@@ -177,9 +184,15 @@ export class EventEmitter{
     let result = false;
     for(let type of etypes){
       const subs = map.get(type);
-      if (subs)
+      if (subs){
         if (types.arrayDelete(subs, listener)) 
+        {
           result = true;
+          if (subs.length===0){
+            map.delete(type);
+          }
+        }
+      }
     }
     return result;
   }

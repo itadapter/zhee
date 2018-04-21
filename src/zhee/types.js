@@ -3,7 +3,7 @@ import * as strings from "./strings";
 
 /**
  * Returns true if the argument is assigned - not undefined non-null value, even an empty string is assigned
- * @param {any} v value
+ * @param {*} v value
  */
 export function isAssigned(v){
   return v !== undefined && v !== null;//warning:  if (!v) is not the same test!
@@ -11,15 +11,18 @@ export function isAssigned(v){
 
 /**
  * Shortcut to hasOwnProperty()
+ * @param {*} obj object to test
+ * @param {string|symbol} prop property to test
  */
 export function hown(obj, prop){
   return obj ? hasOwnProperty.call(obj, prop) : false;
 }
 
 /**
- * Deletes the first occurence of the element in array
+ * Deletes the first occurence of the element in array.
+ * Warning: this is an "unsafe" method as it does not do any args checks for speed
  * @param {Array} array to delete from
- * @param {any} elm element to delete 
+ * @param {*} elm element to delete 
  * @returns {boolean} true if element was found and deleted
  */
 export function arrayDelete(array, elm){
@@ -30,14 +33,16 @@ export function arrayDelete(array, elm){
 }
 
 /**
- * Creates a shallow copy of the array
+ * Creates a shallow copy of the array.
+ * Warning: this is an "unsafe" method as it does not do any args checks for speed
  */
 export function arrayCopy(array){
   return array.slice();
 }
 
 /**
- * Clears the array contents in-place
+ * Clears the array contents in-place.
+ * Warning: this is an "unsafe" method as it does not do any args checks for speed
  * @param {Array} array to clear
  */
 export function arrayClear(array){
@@ -47,7 +52,7 @@ export function arrayClear(array){
 
 /**
  * Returns true if the argument is a non null string
- * @param {any} v
+ * @param {*} v
  */
 export function isString(v){
   return Object.prototype.toString.call(v) === "[object String]";
@@ -55,7 +60,7 @@ export function isString(v){
 
 /**
  * Returns true if the argument is a non null date
- * @param {any} v
+ * @param {*} v
  */
 export function isDate(v){
   return Object.prototype.toString.call(v) === "[object Date]";
@@ -63,7 +68,7 @@ export function isDate(v){
 
 /**
  * Returns true when the passed parameter is an array, not a map or function
- * @param {any} v
+ * @param {*} v
  */
 export function isArray(v){
   return Object.prototype.toString.call(v) === "[object Array]";
@@ -71,7 +76,7 @@ export function isArray(v){
 
 /**
  * Returns true when the passed parameter is an object, not an array or function
- * @param {any} v
+ * @param {*} v
  */
 export function isObject(v){
   return v === Object(v) && !isArray(v) && !isFunction(v);
@@ -79,7 +84,7 @@ export function isObject(v){
 
 /**
  * Returns true when the passed parameter is an array, or object but not a function
- * @param {any} v
+ * @param {*} v
  */
 export function isObjectOrArray(v){
   return  v === Object(v)  && !isFunction(v);
@@ -87,15 +92,15 @@ export function isObjectOrArray(v){
 
 /**
  * Returns true when poassed parameter is a function, not a map object or an array
- * @param {any} v
+ * @param {*} v
  */
 export function isFunction(v){
   return Object.prototype.toString.call(v) === "[object Function]";
 }
 
 /**
- * Returns true when the passed parameter is a function, or object but not an array
- * @param {any} v
+ * Returns true when the passed parameter is a function, or object but not an array or primitive
+ * @param {*} v
  */
 export function isObjectOrFunction(v){
   return  v === Object(v)  && !isArray(v);
@@ -103,7 +108,7 @@ export function isObjectOrFunction(v){
 
 /**
  * Returns true when the passed value implements Iterable protocol
- * @param {any} v 
+ * @param {*} v 
  */
 export function isIterable(v){
   return isAssigned(v) && isFunction(v[Symbol.iterator]);
@@ -112,7 +117,7 @@ export function isIterable(v){
 
 /**
  * Returns true if the argument is an int32 value
- * @param {any} v 
+ * @param {*} v 
  */
 export function isInt32(v){
   if (Number.isInteger) return Number.isInteger(v);
@@ -131,7 +136,7 @@ export function isIntValue(v){
 
 /**
  * Return true if the value is a Number
- * @param {any} v Value to check 
+ * @param {*} v Value to check 
  */
 export function isNumber(v){
   return Object.prototype.toString.call(v) === "[object Number]";
@@ -139,7 +144,7 @@ export function isNumber(v){
 
 /**
  * Return true if the value is a boolean
- * @param {any} v Value to check 
+ * @param {*} v Value to check 
  */
 export function isBool(v){
   return Object.prototype.toString.call(v) === "[object Boolean]";
@@ -147,7 +152,7 @@ export function isBool(v){
 
 /**
  * Return true if the value is a symbol
- * @param {any} v Value to check 
+ * @param {*} v Value to check 
  */
 export function isSymbol(v){
   return Object.prototype.toString.call(v) === "[object Symbol]";
@@ -157,7 +162,7 @@ export function isSymbol(v){
 /**
  * Describes the type of value returning the string description, not type moniker.
  * Keep in mind that in JS typeof(new String|Date|Number|Boolean(x)) is object, not the actual type, hence this method :)
- * @param {any} v 
+ * @param {*} v 
  */
 export function describeTypeOf(v){
   if(v === undefined) return CC.UNDEFINED;
@@ -192,7 +197,7 @@ export function classOf(obj){
 
 /**
  * Returns the parent class (prototype) of the specified class (function) or null if the class is the top-most class
- * @param {function} cls class to get parent of
+ * @param {function} cls class to get a parent of
  */
 export function parentOfClass(cls){
   if (!isFunction(cls)) return null;
@@ -236,7 +241,7 @@ export function mixin(obj, ext, keepExisting = false){
 
 
 /**
- * Tries to navigate the path as fas a s possible starting at root object 
+ * Tries to navigate the path as far a s possible starting at the root object 
  * @param {Object|Array} obj Required root object of navigation
  * @param {string|string[]} path Rquired path as '.' delimited segments, or array of strings
  * @param {Object|Array} org Optional origin of the chain, used by chain nav() calls
@@ -285,20 +290,21 @@ export function isEmptyIterable(iterable){
   return iterator.next().done === true;
 }
 
-
-
 /**
  * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
  * Non-string values are coerced using v.toString(), objects are NOT JSONized
- * @param {any} v Value 
+ * @param {*} v Value 
  */
 export function asString(v){ return strings.asString(v); }
 
 /**
  * Converts primitives into bool. Uses asBoolean() on objects
- * @param {any} v object to test 
+ * @param {*} v object to test 
  */
 export function asBoolean(v){ return asBool(v); }
+
+
+export const AS_BOOLEAN_FUN = Symbol("asBoolean");
 
 /**
  * Converts primitives into bool. Uses asBoolean() on objects.
@@ -308,6 +314,6 @@ export function asBoolean(v){ return asBool(v); }
 export function asBool(v){
   if (!v) return false;
   if (v===true || v===1) return true;
-  if (v.asBoolean) return v.asBoolean() === true;
+  if (isFunction(v[AS_BOOLEAN_FUN])) return v[AS_BOOLEAN_FUN]() === true;
   return strings.isOneOf(v, ["true", "t", "yes", "1", "ok"]);
 }

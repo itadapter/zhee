@@ -11,8 +11,10 @@ export const ISO_LANG_FRA = "fra";
 export const ISO_LANG_RUS = "rus";
 export const ISO_LANG_ESP = "esp";
 
-export const ANY_SCHEMA = "--ANY-SCHEMA--";
-export const ANY_FIELD  = "--ANY-FIELD--";
+//SCHEMA/FIELD: do not use Symbols - these values may need to be hard-coded in 3rd party
+//translation files
+export const ANY_SCHEMA = "ANY-SCHEMA--";
+export const ANY_FIELD  = "ANY-FIELD--";
 
 export const FIELD_DAY   = "day";
 export const FIELD_MONTH = "month";
@@ -25,12 +27,12 @@ export const DATE_FORMAT = {
   SHORT_DATE:       "ShortDate",     //  30 Aug 2018 
   NUM_DATE:         "NumDate",       //  08/30/2018
 
-  LONG_MONTH:      "LongMonth",      // August 2018
-  SHORT_MONTH:     "ShortMonth",     // Aug 2018
-  NUM_MONTH:       "NumMonth",       // 10/2018
+  LONG_MONTH:       "LongMonth",     // August 2018
+  SHORT_MONTH:      "ShortMonth",    // Aug 2018
+  NUM_MONTH:        "NumMonth",      // 10/2018
 
-  LONG_DAY_MONTH: "LongDayMonth",    //  12 August
-  SHORT_DAY_MONTH: "ShortDayMonth",  //  12 Aug
+  LONG_DAY_MONTH:   "LongDayMonth",  //  12 August
+  SHORT_DAY_MONTH:  "ShortDayMonth"  //  12 Aug
 };
 
 export const TIME_DETAILS = {
@@ -54,8 +56,6 @@ export const INVARIANT_DAY_LONG_NAMES =
 export const INVARIANT_DAY_SHORT_NAMES = INVARIANT_DAY_LONG_NAMES.map( v => strings.truncate(v, 3) );
 
 
-
-
 /**
  * Provides default implementation of invariant localizer.
  * Other localizer shall extend this class and inject their instance using
@@ -73,6 +73,7 @@ export class Localizer{
     };
   }
 
+  get name () { return "Localizer('Invariant')"; }
   get isInvariant() { return true; }
 
   /**

@@ -18,8 +18,8 @@ export function isEmpty(str){
 export function dflt(str, ...dflt){
   str = asString(str);
   if (isEmpty(str)){
-    for(let i in dflt){
-      var d = asString(dflt[i]);
+    for(let ds of dflt){
+      const d = asString(ds);
       if (!isEmpty(d)) return d;
     }
   }
@@ -29,7 +29,7 @@ export function dflt(str, ...dflt){
 /**
  * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
  * Non-string values are coerced using v.toString(), objects are NOT JSONized
- * @param {any} v Value 
+ * @param {*} v Value 
  */
 export function asString(v){
   if (!types.isAssigned(v)) return "";
@@ -39,7 +39,7 @@ export function asString(v){
 
 /**
  * Trims whitespace and CR LF from string ends. The non-string values are coerced to string
- * @param {string} str to trim
+ * @param {*} str to trim
  */
 export function trim(str){
   str = asString(str);
@@ -49,7 +49,7 @@ export function trim(str){
 
 /**
  * Trims whitespace and CR LF from the left side of the string. The non-string values are coerced to string
- * @param {string} str to trim
+ * @param {*} str to trim
  */
 export function trimLeft(str){
   str = asString(str);
@@ -58,7 +58,7 @@ export function trimLeft(str){
 
 /**
  * Trims whitespace and CR LF from the right side of the string.  The non-string values are coerced to string
- * @param {string} str to trim
+ * @param {*} str to trim
  */
 export function trimRight(str){
   str = asString(str);
@@ -94,23 +94,23 @@ export function isOneOf(str, values, senseCase = false){
 /**
  * Truncates/caps a string at the specified maxLen optionally adding ellipsis at the end.
  * The non-string input values are coerced to string
- * @param {string} str Original string source
+ * @param {*} str Original string source
  * @param {int} maxLen The maximum length
- * @param {string} [ending] The ending of the capped string, ellipsis is used by default
+ * @param {*} [ending] The ending of the capped string, ellipsis is used by default
  */
 export function truncate(str, maxLen, ending){
   str = asString(str);
   if (!(maxLen>0)) return str;// not the same maxLength<=0
   let len = str.length;
   if (len <= maxLen) return str;
-  ending = ending || "";
+  ending = asString(ending);
   return str.substr(0, maxLen - ending.length) + ending;
 }
 
 
 /**
  * Provides a textual representation of a value, suitable for report in error logs, exceptions, etc.
- * @param {any} v value to describe
+ * @param {*} v value to describe
  * @param {int} [maxLen=64] impose maximum length on the resulting description 
  */
 export function describe(v, maxLen = 64){
