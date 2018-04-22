@@ -297,17 +297,13 @@ export function isEmptyIterable(iterable){
  */
 export function asString(v){ return strings.asString(v); }
 
-/**
- * Converts primitives into bool. Uses asBoolean() on objects
- * @param {*} v object to test 
- */
-export function asBoolean(v){ return asBool(v); }
 
 
 export const AS_BOOLEAN_FUN = Symbol("asBoolean");
+const TRUISMS = ["true", "t", "yes", "1", "ok"];
 
 /**
- * Converts primitives into bool. Uses asBoolean() on objects.
+ * Converts primitives into bool. Uses AS_BOOLEAN_FUN on objects.
  * Yields true only on (bool)true, 1, or ["true", "t", "yes", "1", "ok"]
  * @param {any} v object to test 
  */
@@ -315,5 +311,23 @@ export function asBool(v){
   if (!v) return false;
   if (v===true || v===1) return true;
   if (isFunction(v[AS_BOOLEAN_FUN])) return v[AS_BOOLEAN_FUN]() === true;
-  return strings.isOneOf(v, ["true", "t", "yes", "1", "ok"]);
+  return strings.isOneOf(v, TRUISMS);
+}
+
+/**
+ * Converts primitives into a tri-state bool. Tri state bool values are {undefined|false|true}
+ * Uses AS_BOOLEAN_FUN on objects, respecting undefined value.
+ * Yields true only on (bool)true, 1, or ["true", "t", "yes", "1", "ok"]. Undefined input is returned as-is
+ * @param {any} v object to test 
+ */
+export function asTriBool(v){
+  if (v===undefined) return undefined;
+  if (!v) return false;
+  if (v===true || v===1) return true;
+  if (isFunction(v[AS_BOOLEAN_FUN])){
+    const r = v[AS_BOOLEAN_FUN]();
+    if (r===undefined) return undefined;
+    return r===true;
+  }
+  return strings.isOneOf(v, TRUISMS);
 }

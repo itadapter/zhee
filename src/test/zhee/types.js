@@ -768,8 +768,38 @@ describe("Types", function() {
       this[sut.AS_BOOLEAN_FUN] = function(){ return state; };
     }
 
-    it("Custom(true)",   function() { aver.areEqual( true, sut.asBoolean(new Custom(true)) );});
-    it("Custom(false)",   function() { aver.areEqual( false, sut.asBoolean(new Custom(false)) );});
+    it("Custom(true)",   function() { aver.areEqual( true, sut.asBool(new Custom(true)) );});
+    it("Custom(false)",   function() { aver.areEqual( false, sut.asBool(new Custom(false)) );});
+    it("Custom(undefined)",   function() { aver.areEqual( false, sut.asBool(new Custom(undefined)) );});
+    
+  });
+
+  describe("#asTriBool()", function() {
+    it("()",   function() { aver.areEqual( undefined, sut.asTriBool() );});
+    it("undefined",   function() { aver.areEqual( undefined, sut.asTriBool(undefined) );});
+    it("null",   function() { aver.areEqual( false, sut.asTriBool(null) );});
+
+    it("true",   function() { aver.areEqual( true, sut.asTriBool(true) );});
+    it("false",   function() { aver.areEqual( false, sut.asTriBool(false) );});
+
+    it("1",   function() { aver.areEqual( true, sut.asTriBool(1) );});
+    it("0",   function() { aver.areEqual( false, sut.asTriBool(0) );});
+
+    it("'1'",   function() { aver.areEqual( true, sut.asTriBool("1") );});
+    it("' 1'",   function() { aver.areEqual( true, sut.asTriBool(" 1   ") );});
+    it("ok",   function() { aver.areEqual( true, sut.asTriBool("  ok  ") );});
+    it("yes",   function() { aver.areEqual( true, sut.asTriBool("yes") );});
+    it("YES",   function() { aver.areEqual( true, sut.asTriBool("YES") );});
+    it("TrUE",   function() { aver.areEqual( true, sut.asTriBool("TrUE") );});
+
+    function Custom(state){
+      this.state = state;
+      this[sut.AS_BOOLEAN_FUN] = function(){ return state; };
+    }
+
+    it("Custom(true)",   function() { aver.areEqual( true, sut.asTriBool(new Custom(true)) );});
+    it("Custom(false)",   function() { aver.areEqual( false, sut.asTriBool(new Custom(false)) );});
+    it("Custom(undefined)",   function() { aver.areEqual( undefined, sut.asTriBool(new Custom(undefined)) );});
     
   });
 
