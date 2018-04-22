@@ -12,7 +12,7 @@ export class ValidationError{
 
 
 /**
- * Provides base for models: Objects, Arrays, and Fields
+ * Provides base for models: Models and Fields
  */
 export class Base{
 
@@ -25,15 +25,19 @@ export class Base{
     this.m_valError = null;
 
     if (parent===null){
+      this.m_title = "";
+      this.m_description = "";
       this.m_enabled  = true;
       this.m_visible  = true;
       this.m_required = false;
       this.m_readOnly = false;
     } else {
-      this.m_enabled  = undefined;
-      this.m_visible  = undefined;
-      this.m_required = undefined;
-      this.m_readOnly = undefined;
+      this.m_title       = undefined;
+      this.m_description = undefined;
+      this.m_enabled     = undefined;
+      this.m_visible     = undefined;
+      this.m_required    = undefined;
+      this.m_readOnly    = undefined;
     }
   }
 
@@ -58,7 +62,7 @@ export class Base{
     this.m_updated = false;
 
     if (this.m_parent)
-      thi.m_parent.touch();//propagate up the tree to parent
+      this.m_parent.touch();//propagate up the tree to parent
   }
 
   /** True when this was validated after last changes */
@@ -113,6 +117,48 @@ export class Base{
   }
 
 
+
+  /** Returns title for this entity
+   * @returns {string|undefined} Undefined is returned if parameter is not set on this level
+   */
+  get title( ){ return this.m_title;}
+  set title(v){
+    v = types.asString(v);
+    if (v===this.m_title) return;
+    this.m_title = v;
+    this.touch();
+  }
+
+  /** 
+   *  Returns the factual enabled, if the setting is not defined on this level, 
+   *  the parent chain will be consulted
+   * @returns {string} Never returns undefined
+   */
+  get factTitle( ) { 
+    return this.m_title!==undefined ? this.m_title : this.m_parent ? this.m_parent.factTitle() : true;
+  }
+
+  /** Returns description for this entity
+   * @returns {string|undefined} Undefined is returned if parameter is not set on this level
+   */
+  get description( ){ return this.m_description;}
+  set description(v){
+    v = types.asString(v);
+    if (v===this.m_description) return;
+    this.m_description = v;
+    this.touch();
+  }
+
+  /** 
+   *  Returns the factual description, if the setting is not defined on this level, 
+   *  the parent chain will be consulted
+   * @returns {string} Never returns undefined
+   */
+  get factDescription( ) { 
+    return this.m_description!==undefined ? this.m_description : this.m_parent ? this.m_parent.factDescription() : true;
+  }
+
+
   /** Returns enabled for this entity
    * @returns {boolean|undefined} Undefined is returned if parameter is not set on this level
    */
@@ -125,12 +171,12 @@ export class Base{
   }
 
   /** 
-   *  Returns the effective enabled, if the setting is not defined on this level, 
+   *  Returns the factual enabled, if the setting is not defined on this level, 
    *  the parent chain will be consulted
    * @returns {boolean} Never returns undefined
    */
-  get isEnabled( ) { 
-    return this.m_enabled!==undefined ? this.m_enabled : this.m_parent ? this.m_parent.isEnabled() : true;
+  get factEnabled( ) { 
+    return this.m_enabled!==undefined ? this.m_enabled : this.m_parent ? this.m_parent.factEnabled() : true;
   }
 
   /** Returns visible for this entity
@@ -145,12 +191,12 @@ export class Base{
   }
 
   /** 
-   *  Returns the effective visible, if the setting is not defined on this level, 
+   *  Returns the factual visible, if the setting is not defined on this level, 
    *  the parent chain will be consulted
    * @returns {boolean} Never returns undefined
    */
-  get isVisible( ) { 
-    return this.m_visible!==undefined ? this.m_visible : this.m_parent ? this.m_parent.isVisible() : true;
+  get factVisible( ) { 
+    return this.m_visible!==undefined ? this.m_visible : this.m_parent ? this.m_parent.factVisible() : true;
   }
 
   /** Returns required for this entity
@@ -165,12 +211,12 @@ export class Base{
   }
 
   /** 
-   *  Returns the effective required, if the setting is not defined on this level, 
+   *  Returns the factual required, if the setting is not defined on this level, 
    *  the parent chain will be consulted
    * @returns {boolean} Never returns undefined
    */
-  get isRequired( ) { 
-    return this.m_required!==undefined ? this.m_required : this.m_parent ? this.m_parent.isRequired() : false;
+  get factRequired( ) { 
+    return this.m_required!==undefined ? this.m_required : this.m_parent ? this.m_parent.factRequired() : false;
   }
 
   /** Returns readOnly for this entity
@@ -185,12 +231,12 @@ export class Base{
   }
 
   /** 
-   *  Returns the effective readOnly, if the setting is not defined on this level, 
+   *  Returns the factual readOnly, if the setting is not defined on this level, 
    *  the parent chain will be consulted
    * @returns {boolean} Never returns undefined
    */
-  get isReadOnly( ) { 
-    return this.m_readOnly!==undefined ? this.m_readOnly : this.m_parent ? this.m_parent.isReadOnly() : false;
+  get factReadOnly( ) { 
+    return this.m_readOnly!==undefined ? this.m_readOnly : this.m_parent ? this.m_parent.factReadOnly() : false;
   }
 }
 
@@ -239,7 +285,20 @@ export class Field extends Base{
   constructor(parent, name){
     super(parent, name);
     
+    this.m_placeholder = "";
+
+    this.m_key = false;
+    this.m_type = "string";
     this.m_value = null;
+    this.m_dfltValue = null;
+    this.m_kind = "text";
+    this.m_case = "asis";
+    this.m_password = false;
+    this.m_minSize = 0;
+    this.m_maxSize = 0;
+    this.m_ctlType = "auto";
+
+    this.m_lookup = null;
 
     parent.__addField(this);
   }
@@ -249,4 +308,125 @@ export class Field extends Base{
   set value(v){ this.m_value = v; } //nado proverit na change, takje preformat value from gui gde budet (phone, dates etc?)
 
   onValueChange(event){ this.m_model.emitter.emit(event); }
+
+
+  /** Paceholder text
+   * @returns {string} Placeholder aka "watermark" usually displyed in text fields
+   */
+  get placeholder( ){ return this.m_placeholder;}
+  set placeholder(v){
+    v = types.asString(v);
+    if (v===this.m_placeholder) return;
+    this.m_placeholder = v;
+    this.touch();
+  }
+
+  /** True when this field is a key field
+   * @returns {boolean}
+   */
+  get key( ){ return this.m_key;}
+  set key(v){
+    v = types.asBool(v);
+    if (v===this.m_key) return;
+    this.m_key = v;
+    this.touch();
+  }
+
+  /** Field data type
+   * @returns {type_moniker}
+   */
+  get type( ){ return this.m_type;}
+  set type(v){
+    v = types.asTypeMoniker(v);
+    if (v===this.m_type) return;
+    this.m_type = v;
+    this.value = types.cast(this.value, v);//typecast value to new type
+    this.touch();
+  }
+
+  /** Default value for field
+   * @returns {*}
+   */
+  get dfltValue( ){ return this.m_dfltValue;}
+  set dfltValue(v){
+    v = types.cast(v, this.type);
+    if (v===this.m_dfltValue) return;
+    this.m_dfltValue = v;
+    this.touch();
+  }
+
+  /** Field data kind, such as: phone, zip etc.
+   * @returns {string}
+   */
+  get kind( ){ return this.m_kind;}
+  set kind(v){
+    v = types.asDataKind(v);
+    if (v===this.m_kind) return;
+    this.m_kind = v;
+    this.touch();
+  }
+
+  /** Field char case, such as: asis, upper...
+   * @returns {string}
+   */
+  get case( ){ return this.m_case;}
+  set case(v){
+    v = types.asCharCase(v);
+    if (v===this.m_case) return;
+    this.m_case = v;
+    this.touch();
+  }
+
+  /** Whether this is a password field
+   * @returns {bool}
+   */
+  get password( ){ return this.m_password;}
+  set password(v){
+    v = types.asBool(v);
+    if (v===this.m_password) return;
+    this.m_password = v;
+    this.touch();
+  }
+
+  /** Imposes a minimum size constraint on data when >0
+   * @returns {int}
+   */
+  get minSize( ){ return this.m_minSize;}
+  set minSize(v){
+    v = types.asInt(v);
+    if (v===this.m_minSize) return;
+    this.m_minSize = v;
+    this.touch();
+  }
+
+
+  /** Imposes a maximum size constraint on data when >0
+   * @returns {int}
+   */
+  get maxSize( ){ return this.m_maxSize;}
+  set maxSize(v){
+    v = types.asInt(v);
+    if (v===this.m_maxSize) return;
+    this.m_maxSize = v;
+    this.touch();
+  }
+
+  /** Suggests a type of a view control that should be used
+   * @returns {string}
+   */
+  get ctlType( ){ return this.m_ctlType;}
+  set ctlType(v){
+    v = types.asString(v);
+    if (v===this.m_ctlType) return;
+    this.m_ctlType = v;
+    this.touch();
+  }
+
+  //...
+  //todo 
+  // lookup prop
+  // asInt
+  // asDataKind
+  // asCharCase
+
 }
