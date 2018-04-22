@@ -6,7 +6,7 @@ export class ValidationError{
 
   }
 
-  get code ()
+  get code (){ return 0;}
 }
 
 
