@@ -19,6 +19,15 @@ export function hown(obj, prop){
 }
 
 /**
+ * Returns all object values as an array. Empty array for undefined or null.
+ * Note: object.values() is not widely supported yet
+ */
+export function allObjectValues(o){
+  if (!isAssigned(o)) return [];
+  return Object.keys(o).map(k => o[k]);
+}
+
+/**
  * Deletes the first occurence of the element in array.
  * Warning: this is an "unsafe" method as it does not do any args checks for speed
  * @param {Array} array to delete from
@@ -298,6 +307,54 @@ export function isEmptyIterable(iterable){
 export function asString(v){ return strings.asString(v); }
 
 
+/** Character cases */
+export const CHAR_CASE = { ASIS:  "asis", UPPER: "upper", LOWER: "lower", CAPS: "caps", CAPSNORM: "capsnorm"};
+const ALL_CHAR_CASES = allObjectValues(CHAR_CASE);
+
+/** Data Entry field kinds */
+export const DATA_KIND = {
+  TEXT:          "text", 
+  SCREENNAME:    "screenname", 
+  COLOR:         "color", 
+  DATE:          "date", 
+  DATETIME:      "datetime",
+  DATETIMELOCAL: "datetime-local", 
+  EMAIL:   "email", 
+  MONTH:   "month", 
+  NUMBER:  "number", 
+  RANGE:   "range", 
+  SEARCH:  "search", 
+  TEL:     "tel", 
+  TIME:    "time", 
+  URL:     "url", 
+  WEEK:    "week", 
+  MONEY:   "money"
+};
+const ALL_DATA_KINDS = allObjectValues(DATA_KIND);
+
+/**
+ * Converts value to CHAR_CASE coercing it to lowercase string if needed
+ * @param {*} v value to convert
+ * @returns {CHAR_CASE}
+ */
+export function asCharCase(v){
+  v = strings.asString(v).toLowerCase();
+  if (strings.isOneOf(v, ALL_CHAR_CASES, true)) return v;
+  return CHAR_CASE.ASIS;
+}
+
+
+/**
+ * Converts value to DATA_KIND coercing it to lowercase string if needed
+ * @param {*} v value to convert
+ * @returns {DATA_KIND}
+ */
+export function asDataKind(v){
+  v = strings.asString(v).toLowerCase();
+  if (strings.isOneOf(v, ALL_DATA_KINDS, true)) return v;
+  return DATA_KIND.TEXT;
+}
+
 
 export const AS_BOOLEAN_FUN = Symbol("asBoolean");
 const TRUISMS = ["true", "t", "yes", "1", "ok"];
@@ -331,3 +388,4 @@ export function asTriBool(v){
   }
   return strings.isOneOf(v, TRUISMS);
 }
+

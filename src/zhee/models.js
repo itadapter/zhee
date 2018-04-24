@@ -428,5 +428,6 @@ export class Field extends Base{
   // asInt
   // asDataKind
   // asCharCase
+  // allObject Values <--- needs test  does it return prototype?
 
 }
