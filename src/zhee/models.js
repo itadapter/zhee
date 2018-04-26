@@ -119,16 +119,16 @@ export class Base{
   get updated() { return this.m_updated; }
 
   /** Override to perform actions on the model, such as ensure business invariants.
-   * This method is to be called before validate(). Return Promise IF your update override performs service calls.
+   * This method is to be called before validate(). This is an async method because it may perform lengthy service calls.
    * Do not forget to call super(); to set updated to true
    * @example 
    *  Suppose that field "age" is required if the field "alcohol_sale" is set to true
    *  this method is where the code is set to ensure this business invariant condition:
    *   this.fldAge.required = this.fldAlcoholSale.boolValue;
-   * @param {symbol} cause The cause of the change to the model, such as CAUSE_DATA
-   * @returns {void|Promise} returns nothing or Promise that resolves on update completion
+   * @async
+   * @returns {Promise} Promise that resolves on update
    */
-  update(){
+  async update(){
     this.m_updated = true;
   }
 
@@ -290,10 +290,10 @@ export class Model extends Base{
     return this.m_fields[name];
   }
 
-  _doValidate(target, force){
+  async _doValidate(target, force){
     let errors = null;
     for(var fld of this.fields){
-      fld.validate(target, force);
+      await fld.validate(target, force);
       const fve = fld.validationError;
       if (fve!=null){
         if (errors==null)
@@ -305,7 +305,6 @@ export class Model extends Base{
 
     if (errors!=null) throw new ValidationError("Invalid", this, errors);
   }
-
 }
 
 
