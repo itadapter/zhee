@@ -300,11 +300,12 @@ export function isEmptyIterable(iterable){
 }
 
 /**
- * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
+ * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined (unless canUndef is true).
  * Non-string values are coerced using v.toString(), objects are NOT JSONized
- * @param {*} v Value 
+ * @param {*} v Value
+ * @param {boolean} canUndef True to preserve undefined
  */
-export function asString(v){ return strings.asString(v); }
+export function asString(v, canUndef = false){ return strings.asString(v, canUndef); }
 
 
 /** Character cases */

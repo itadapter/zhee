@@ -2,12 +2,13 @@
   "name": "zhee",
   "version": "0.0.1",
   "scripts": {
-    "wpk":  "webpack --config webpack.config.js",
+    "wpk": "webpack --config webpack.config.js",
     "test": "webpack --config webpack.config.js  &&  mocha \"./test/**/*.js\"",
     "trun": "webpack --config webpack.config.js  &&  mocha \"./test/**/*.js\" -g"
   },
   "devDependencies": {
     "babel-loader": "^7.1.4",
+    "babel-preset-es2017": "^6.24.1",
     "eslint": "^4.19.1",
     "mocha": "^5.0.5",
     "webpack": "^4.5.0",

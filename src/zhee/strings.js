@@ -27,12 +27,14 @@ export function dflt(str, ...dflt){
 }
 
 /**
- * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined.
+ * Ensures that the result is always a string representation of a primitive v, an empty one for null or undefined (unless canUndef is true).
  * Non-string values are coerced using v.toString(), objects are NOT JSONized
- * @param {*} v Value 
+ * @param {*} v Value
+ * @param {boolean} canUndef True to preserve undefined
  */
-export function asString(v){
-  if (!types.isAssigned(v)) return "";
+export function asString(v, canUndef = false){
+  if (v===undefined) return canUndef ? undefined : "";
+  if (v===null) return "";
   if ( typeof(v) === "string") return v;//do not use types.isString as new String("abc")!=="abc" :)
   return v.toString();
 }

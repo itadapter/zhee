@@ -1,6 +1,12 @@
 import * as types from "./types";
 import * as str from "./strings";
 
+
+export async function AAA(x){
+  return x*10;
+}
+
+
 /**
  * Makes an Error() initialized with message
  * @param {string} m message

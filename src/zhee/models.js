@@ -1,15 +1,24 @@
 import * as types from "./types";
+import * as aver from "./aver";
 
 
-export class ValidationError{
-  constructor(){
-
+/**
+ * Thrown by model validation logic
+ */
+export class ValidationError extends Error{
+  constructor(msg, model, ...details){
+    aver.isNotNull(msg);
+    aver.isOf(model, Base);
+    super(msg);
+    this.m_model = model;
+    this.m_details = details;
   }
+  /** Model that this error was generated from */
+  get model   (){ return this.m_model; }
 
-  get code (){ return 0;}
+  /** Detail errors, such as fields that generated errors */
+  get details (){ return this.m_details; }
 }
-
-
 
 /**
  * Provides base for models: Models and Fields
@@ -74,14 +83,19 @@ export class Base{
   /** True when this model is valid: it was validated after last changes and does not have any errors*/
   get valid(){ return this.m_validated && this.m_valError===null; }
 
+
   /**
    * Validates the model state
+   * @async
    * @param {*} [target] Optional validation context passed down the chain
-   * @returns {boolean} True if model was validates without errors
+   * @param {boolean} [force=false] True to force validation evgen if the model has not changed
+   * @returns {Promise<boolean>} True if valid
    */
-  validate(target){
+  async validate(target, force = false){
+    if (this.m_validated && !force) return this.valid();
+
     try{
-      this._doValidate(target);
+      await this._doValidate(target, force);
       this.m_validated = true;
       this.m_valError = null;
       return true;
@@ -93,10 +107,10 @@ export class Base{
   }
 
   /**
-   * Protected: override to perform actual validation. Throw exceptions throw ValidationError()
+   * Protected: override to perform actual validation. Throw  ValidationError()
    * @param {*} target 
    */
-  _doValidate(target){
+  async _doValidate(target, force){
     //does nothing on this level
   }
 
@@ -105,12 +119,14 @@ export class Base{
   get updated() { return this.m_updated; }
 
   /** Override to perform actions on the model, such as ensure business invariants.
-   * This method is to be called before validate()
+   * This method is to be called before validate(). Return Promise IF your update override performs service calls.
+   * Do not forget to call super(); to set updated to true
    * @example 
    *  Suppose that field "age" is required if the field "alcohol_sale" is set to true
    *  this method is where the code is set to ensure this business invariant condition:
    *   this.fldAge.required = this.fldAlcoholSale.boolValue;
    * @param {symbol} cause The cause of the change to the model, such as CAUSE_DATA
+   * @returns {void|Promise} returns nothing or Promise that resolves on update completion
    */
   update(){
     this.m_updated = true;
@@ -123,7 +139,7 @@ export class Base{
    */
   get title( ){ return this.m_title;}
   set title(v){
-    v = types.asString(v);
+    v = types.asString(v, true);
     if (v===this.m_title) return;
     this.m_title = v;
     this.touch();
@@ -143,7 +159,7 @@ export class Base{
    */
   get description( ){ return this.m_description;}
   set description(v){
-    v = types.asString(v);
+    v = types.asString(v, true);
     if (v===this.m_description) return;
     this.m_description = v;
     this.touch();
@@ -258,7 +274,7 @@ export class Model extends Base{
   }
 
   /** Returns all fields */
-  get fields(){ return Object.values(this.m_fields); }
+  get fields(){ return types.allObjectValues(this.m_fields); }
 
   /** Internal method that registers a field with model*/
   __addField(field){
@@ -270,8 +286,24 @@ export class Model extends Base{
   }
 
   fieldByName(name){
-    name = strings.asString(name);
+    name = types.asString(name);
     return this.m_fields[name];
+  }
+
+  _doValidate(target, force){
+    let errors = null;
+    for(var fld of this.fields){
+      fld.validate(target, force);
+      const fve = fld.validationError;
+      if (fve!=null){
+        if (errors==null)
+          errors = [fve];
+        else 
+          errors.push(fve);
+      }
+    }
+
+    if (errors!=null) throw new ValidationError("Invalid", this, errors);
   }
 
 }
@@ -429,5 +461,6 @@ export class Field extends Base{
   // asDataKind
   // asCharCase
   // allObject Values <--- needs test  does it return prototype?
+  //  fact* properties doljni propuskat UNDEFINED cherez asString()
 
 }

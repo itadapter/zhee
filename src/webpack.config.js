@@ -8,7 +8,7 @@ var cfgBase = {
             test: /\.js$/,
             loader: 'babel-loader',
             query: {
-                presets: ['es2015']
+                presets: ['es2017'] //es2017 for async/await / was es2015
             }
         }
     ]

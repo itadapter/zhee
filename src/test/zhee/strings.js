@@ -114,11 +114,14 @@ describe("Strings", function() {
     it("-1",          function() { aver.areEqual("-1",  sut.asString(-1)    );});
     it("'abcd'",      function() { aver.areEqual("abcd", sut.asString("abcd") );});
 
+    it("undefined, true",   function() { aver.areEqual(undefined,    sut.asString(undefined, true));});
+    it("null, true",        function() { aver.areEqual("",    sut.asString(null, true)  );});
+    it("-1, true",          function() { aver.areEqual("-1",  sut.asString(-1, true)    );});
+    it("'abcd', true",      function() { aver.areEqual("abcd", sut.asString("abcd", true) );});
+
     it("true",    function() { aver.areEqual("true",  sut.asString(true) );});
     it("false",   function() { aver.areEqual("false", sut.asString(false) );});
-
     it("'defg'",   function() { aver.areEqual("defg", sut.asString(new String("defg")) );});
-
     it("date",   function() { aver.isTrue( sut.asString(new Date(1980, 1, 18)).indexOf("1980")>0 );});
   }); 
 
