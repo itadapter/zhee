@@ -853,7 +853,25 @@ describe("Types", function() {
 
     it("[1]",   function() { aver.isFalse( sut.isEmptyIterable([1]) );});
     it("Set(123)",   function() { aver.isFalse( sut.isEmptyIterable(new Set([1,2,3])) );});
-   
+  });
+
+
+  describe("#asCharCase", function() {
+    it("()",    function()    { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase() );});
+    it("(undef)",    function()    { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase(undefined) );});
+    it("(null)",    function()    { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase(null) );});
+
+    it("(upper)",    function()    { aver.areEqual(sut.CHAR_CASE.UPPER,  sut.asCharCase("UppEr") );});
+
+  });
+
+  describe("#asDataKind", function() {
+    it("()",    function()       { aver.areEqual(sut.DATA_KIND.TEXT,  sut.asDataKind() );});
+    it("(undef)",    function()  { aver.areEqual(sut.DATA_KIND.TEXT,  sut.asDataKind(undefined) );});
+    it("(null)",    function()   { aver.areEqual(sut.DATA_KIND.TEXT,  sut.asDataKind(null) );});
+
+    it("(email)",    function()  { aver.areEqual(sut.DATA_KIND.EMAIL,  sut.asDataKind("EMaIL") );});
+
   });
 
 
