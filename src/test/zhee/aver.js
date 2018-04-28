@@ -385,4 +385,22 @@ describe("Aver", function() {
   });
 
 
+  describe("#areArraysEquivalent()", function() {
+
+    it("()", function(){ sut.throws( () => sut.areArraysEquivalent() , "areArraysEquivalent");  });
+    it("(undefined)", function(){ sut.throws( () => sut.areArraysEquivalent(undefined) , "areArraysEquivalent");  });
+    it("(null, null)", function(){ sut.throws( () => sut.areArraysEquivalent(null, null) , "areArraysEquivalent");  });
+
+    it("1", function(){ sut.areArraysEquivalent([], []);  });
+    it("2", function(){ sut.areArraysEquivalent([1], [1]);  });
+    it("3", function(){ sut.areArraysEquivalent([true, 1], [true, 1]);  });
+    it("4", function(){ sut.areArraysEquivalent(["aaa", 2], ["aaa", 2]);  });
+
+    it("10", function(){ sut.throws( () => sut.areArraysEquivalent(null, []),     "areArraysEquivalent");  });
+    it("20", function(){ sut.throws( () => sut.areArraysEquivalent([1], [2]),     "areArraysEquivalent");  });
+    it("30", function(){ sut.throws( () => sut.areArraysEquivalent([1,2], [2,1]), "areArraysEquivalent");  });
+    it("40", function(){ sut.throws( () => sut.areArraysEquivalent([1], [1,2]),   "areArraysEquivalent");  });
+  });
+
+
 });

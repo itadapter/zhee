@@ -20,6 +20,7 @@ export function hown(obj, prop){
 
 /**
  * Returns all object values as an array. Empty array for undefined or null.
+ * Does NOT return values from prototype, only values on this object itself
  * Note: object.values() is not widely supported yet
  */
 export function allObjectValues(o){

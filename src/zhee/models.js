@@ -457,9 +457,6 @@ export class Field extends Base{
   //todo 
   // lookup prop
   // asInt
-  // asDataKind
-  // asCharCase
-  // allObject Values <--- needs test  does it return prototype?
   //  fact* properties doljni propuskat UNDEFINED cherez asString()
 
 }

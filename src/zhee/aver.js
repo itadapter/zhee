@@ -244,6 +244,25 @@ export function isNotOf(o, t){
 
 
 /**
+ * Checks that both arguments are arrays of equal length running per-element areEqual()
+ * Note: does not do deep comparison
+ */
+export function areArraysEquivalent(a, b){
+  if (types.isArray(a) && types.isArray(b))
+    if (a.length===b.length){
+      let alleq = true;
+      for(let i=0; i<a.length; i++)
+        if (a[i]!==b[i]){
+          alleq = false;
+          break;
+        }
+      if (alleq) return;
+    }
+
+  throw AVERMENT_FAILURE(`areArraysEquivalent(${dv(a)}, ${dv(b)})`);
+}
+
+/**
  * Used for internal derivation testing
  */
 export class MockBase{

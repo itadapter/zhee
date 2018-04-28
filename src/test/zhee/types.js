@@ -55,6 +55,28 @@ describe("Types", function() {
     });
   }); 
 
+  describe("#allObjectValues()", function() {
+    it("()",          () => aver.areArraysEquivalent([], sut.allObjectValues()) );
+    it("(undefined)", () => aver.areArraysEquivalent([], sut.allObjectValues(undefined)) );
+    it("(null)",      () => aver.areArraysEquivalent([], sut.allObjectValues(null)) );
+
+    it("flat",    function(){
+      let o = {a: 1, b: true};
+      aver.areArraysEquivalent([1, true], sut.allObjectValues(o));
+    });
+
+    it("with proto",  function(){
+      function A(){ this.a = 1; this.b = true; this.z = "hello";}
+      A.prototype.c = 123;
+      let o = new A();
+      aver.areEqual(123, o.c);//it is inherited from prototype
+      aver.areArraysEquivalent([1, true, "hello"], sut.allObjectValues(o));//but the allObjectValues does not see it
+    });
+
+
+  });
+
+
 
   describe("#arrayDelete()", function() {
     it("deletes int",   function() { 
@@ -851,27 +873,23 @@ describe("Types", function() {
 
     it("{}",    function() { aver.isTrue( sut.isEmptyIterable({ }) );});
 
-    it("[1]",   function() { aver.isFalse( sut.isEmptyIterable([1]) );});
-    it("Set(123)",   function() { aver.isFalse( sut.isEmptyIterable(new Set([1,2,3])) );});
+    it("[1]",      function() { aver.isFalse( sut.isEmptyIterable([1]) );});
+    it("Set(123)", function() { aver.isFalse( sut.isEmptyIterable(new Set([1,2,3])) );});
   });
 
 
   describe("#asCharCase", function() {
-    it("()",    function()    { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase() );});
-    it("(undef)",    function()    { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase(undefined) );});
-    it("(null)",    function()    { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase(null) );});
-
-    it("(upper)",    function()    { aver.areEqual(sut.CHAR_CASE.UPPER,  sut.asCharCase("UppEr") );});
-
+    it("()",      function()  { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase() );});
+    it("(undef)", function()  { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase(undefined) );});
+    it("(null)",  function()  { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase(null) );});
+    it("(upper)", function()  { aver.areEqual(sut.CHAR_CASE.UPPER,  sut.asCharCase("UppEr") );});
   });
 
   describe("#asDataKind", function() {
-    it("()",    function()       { aver.areEqual(sut.DATA_KIND.TEXT,  sut.asDataKind() );});
-    it("(undef)",    function()  { aver.areEqual(sut.DATA_KIND.TEXT,  sut.asDataKind(undefined) );});
-    it("(null)",    function()   { aver.areEqual(sut.DATA_KIND.TEXT,  sut.asDataKind(null) );});
-
-    it("(email)",    function()  { aver.areEqual(sut.DATA_KIND.EMAIL,  sut.asDataKind("EMaIL") );});
-
+    it("()",      () =>  aver.areEqual(sut.DATA_KIND.TEXT,  sut.asDataKind())  );
+    it("(undef)", () =>  aver.areEqual(sut.DATA_KIND.TEXT,  sut.asDataKind(undefined)) );
+    it("(null)",  () =>  aver.areEqual(sut.DATA_KIND.TEXT,  sut.asDataKind(null)) );
+    it("(email)", () =>  aver.areEqual(sut.DATA_KIND.EMAIL, sut.asDataKind("EMaIL")) );
   });
 
 
