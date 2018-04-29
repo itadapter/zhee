@@ -272,7 +272,13 @@ describe("LINQ", function() {
       aver.isFalse( sut.$().isEquivalentTo(undefined) );
       aver.isFalse( sut.$().isEquivalentTo(null) );
       aver.isTrue( sut.$().isEquivalentTo([]) );
+      aver.isTrue( sut.$([]).isEquivalentTo([]) );
     });
+
+    it("same",   function() { 
+      let a = sut.$([1,2,3]);
+      aver.isTrue( a.isEquivalentTo(a) );
+    });  
 
     it("basic",   function() { 
       aver.isTrue( sut.$([1,2,3]).isEquivalentTo([1,2,3]) );
@@ -284,9 +290,25 @@ describe("LINQ", function() {
       
     });
 
+    it("basic wrapped",   function() { 
+      aver.isTrue( sut.$([1,2,3]).isEquivalentTo(   sut.$([1,2,3])  ));
+      aver.isFalse( sut.$([1,2,33]).isEquivalentTo( sut.$([1,2,3])  ));
+      aver.isFalse( sut.$([1,2,3]).isEquivalentTo(  sut.$([1,2,33]) ));
+
+      aver.isFalse( sut.$([1,2,3]).isEquivalentTo(  sut.$([1,2,3,4]) ));
+      aver.isFalse( sut.$([1,2,3,4]).isEquivalentTo(sut.$([1,2,3])   ));
+    });
+
     it("custom comparer",   function() { 
       aver.isTrue( sut.$([1,2,3]).isEquivalentTo([10,20,30], (a,b) => 10*a === b) );
       aver.isFalse( sut.$([10,20,30]).isEquivalentTo([10,20,30], (a,b) => 10*a === b) );
+    });
+
+    it("chained",   function() { 
+      const a = sut.$([1,2,3,5,7,9]).where(e => e%2!==0);
+      const b = sut.$([1,2,3,4,4,4,4,5,6,7,8,9]).where(e => e%2!==0);
+
+      aver.isTrue( a.isEquivalentTo(b) );
     });
   });
 
