@@ -218,6 +218,28 @@ describe("LINQ", function() {
       aver.areEqual(4, sut.$(a).where(e => e!=1).select(e => e*10).count()  );
     });
 
+  });
+
+
+  describe("#take()", function() {
+
+    it("empty",   function() { 
+      aver.areIterablesEquivalent( [], sut.$().take() );
+      aver.areIterablesEquivalent( [], sut.$(undefined).take() );
+      aver.areIterablesEquivalent( [], sut.$(null).take() );
+    });
+
+    it("basic",   function() {
+      const a = [1,2,3,4,5];
+      aver.areIterablesEquivalent( [1,2], sut.$(a).take(2) );
+      aver.areIterablesEquivalent( [1,2,3], sut.$(a).take(3) );
+    });
+
+    it("select-where-take",   function() {
+      const a = [1,2,3,4,5];
+      aver.areIterablesEquivalent( [12,13,14], sut.$(a).select(e => e+10).where(e=>e>=12).take(3) );
+      aver.areIterablesEquivalent( [12,13], sut.$(a).select(e => e+10).take(3).where(e=>e>=12) );
+    });
 
 
   });

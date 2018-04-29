@@ -167,5 +167,38 @@ export class $LINQ{
     throw Error("LINQ.first() no matching elements");
   }
 
+
+  /**
+   * Returns true if another iterable sequence is of the same size and has equal elements as determined
+   * by the optional equality comparer
+   * @param {*} other Another Sequence
+   * @param {*} [f] Optional equality comparer of form (a,b): bool
+   */
+  isEquivalentTo(other, f = null){
+    if (!types.isIterable(other)) return false;
+   
+    const ass = types.isFunction(f);
+    const it1 = this[Symbol.iterator]();
+    const it2 = other[Symbol.iterator]();
+
+    while(true){
+      const r1 = it1.next();
+      const r2 = it2.next();
+      if (r1.done!=r2.done) break;
+      if (r1.done) return true;
+      
+      const eq = ass ? f(r1.value, r2.value) : r1.value === r2.value;
+      if (!eq) break;
+    }
+
+    return false;
+  }
+
+ 
+  // concat
+  //todo  Distinct(selector) using Set
+  //group by???
+  //   aggregate(seed, f)
+  //test performance in browser
 }
 

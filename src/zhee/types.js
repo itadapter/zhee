@@ -392,3 +392,24 @@ export function asTriBool(v){
   return strings.isOneOf(v, TRUISMS);
 }
 
+export const AS_INTEGER_FUN = Symbol("asInt");
+
+/**
+ * Converts primitives into and integer.
+ * Uses AS_INTEGER_FUN on objects, respecting undefined value.
+ * @param {*} v value to convert.
+ * @param {*} [canUndef=false] Whether undefined is allowed 
+ */
+export function asInt(v, canUndef=false){
+  if (v===undefined) return canUndef ? undefined : 0;
+  if (v===null) return 0;
+  
+  if (isFunction(v[AS_INTEGER_FUN])){
+    const r = v[AS_INTEGER_FUN]();
+    if (r===undefined) return canUndef ? undefined : 0;
+    if (r===null) return 0;
+    return r | 0;
+  }
+
+  return v | 0;
+}

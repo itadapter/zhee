@@ -1,6 +1,6 @@
 import * as types from "./types";
-import * as str from "./strings";
-
+import * as str   from "./strings";
+import * as linq  from "./linq";
 
 export async function AAA(x){
   return x*10;
@@ -248,7 +248,8 @@ export function isNotOf(o, t){
  * Note: does not do deep comparison
  */
 export function areArraysEquivalent(a, b){
-  if (types.isArray(a) && types.isArray(b))
+  if (types.isArray(a) && types.isArray(b)){
+    if (a===b) return;
     if (a.length===b.length){
       let alleq = true;
       for(let i=0; i<a.length; i++)
@@ -258,9 +259,28 @@ export function areArraysEquivalent(a, b){
         }
       if (alleq) return;
     }
+  }
 
   throw AVERMENT_FAILURE(`areArraysEquivalent(${dv(a)}, ${dv(b)})`);
 }
+
+/**
+ * Checks that both arguments are iterable sequences of the same size and content using an optional equality comparer
+ * @param {Iterable<*>} a First sequence
+ * @param {Iterable<*>} b Second sequence
+ * @param {function} [f] Optional equality comparer predicate of (a,b): bool
+ */
+export function areIterablesEquivalent(a, b, f = null){
+  if (types.isIterable(a) && types.isIterable(b)){
+    if (a===b) return;
+    const al = linq.$(a);
+    const bl = linq.$(b);
+    if (al.isEquivalentTo(bl, f)) return;
+  }
+
+  throw AVERMENT_FAILURE(`areSequencesEquivalent(${dv(a)}, ${dv(b)})`);
+}
+
 
 /**
  * Used for internal derivation testing
