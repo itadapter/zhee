@@ -39,6 +39,7 @@ var cfgZhee = {
   entry: {
     zhee: "./zhee/index.js"
   },
+  //entry: ["babel-polyfill", "./zhee/index.js"],
   output: {
     ...cfgOutBase,
     path: path.resolve(__dirname, "../out/zhee"),

@@ -5,6 +5,7 @@ import * as strings       from "./strings";
 import * as localization  from "./localization";
 import * as events        from "./events";
 import * as models        from "./models";
+import * as linq          from "./linq";
 
 export const CoreConsts   = coreconsts;
 export const Aver         = aver;
@@ -13,3 +14,4 @@ export const Strings      = strings;
 export const Localization = localization;
 export const Events       = events;
 export const Models       = models;
+export const Linq         = linq;
