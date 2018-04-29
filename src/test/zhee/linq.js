@@ -264,6 +264,32 @@ describe("LINQ", function() {
     });
   });
 
+
+  describe("#isEquivalentTo()", function() {
+
+    it("empty",   function() { 
+      aver.isFalse( sut.$().isEquivalentTo() );
+      aver.isFalse( sut.$().isEquivalentTo(undefined) );
+      aver.isFalse( sut.$().isEquivalentTo(null) );
+      aver.isTrue( sut.$().isEquivalentTo([]) );
+    });
+
+    it("basic",   function() { 
+      aver.isTrue( sut.$([1,2,3]).isEquivalentTo([1,2,3]) );
+      aver.isFalse( sut.$([1,2,33]).isEquivalentTo([1,2,3]) );
+      aver.isFalse( sut.$([1,2,3]).isEquivalentTo([1,2,33]) );
+
+      aver.isFalse( sut.$([1,2,3]).isEquivalentTo([1,2,3,4]) );
+      aver.isFalse( sut.$([1,2,3,4]).isEquivalentTo([1,2,3]) );
+      
+    });
+
+    it("custom comparer",   function() { 
+      aver.isTrue( sut.$([1,2,3]).isEquivalentTo([10,20,30], (a,b) => 10*a === b) );
+      aver.isFalse( sut.$([10,20,30]).isEquivalentTo([10,20,30], (a,b) => 10*a === b) );
+    });
+  });
+
   
 
 });
