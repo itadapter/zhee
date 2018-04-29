@@ -308,7 +308,9 @@ describe("LINQ", function() {
       const a = sut.$([1,2,3,5,7,9]).where(e => e%2!==0);
       const b = sut.$([1,2,3,4,4,4,4,5,6,7,8,9]).where(e => e%2!==0);
 
+      aver.areNotEqual(a, b);
       aver.isTrue( a.isEquivalentTo(b) );
+      aver.areIterablesEquivalent(a, b); //test aver itself
     });
   });
 

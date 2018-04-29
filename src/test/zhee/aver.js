@@ -403,4 +403,22 @@ describe("Aver", function() {
   });
 
 
+  describe("#areIterablesEquivalent()", function() {
+
+    it("()", function(){ sut.throws( () => sut.areIterablesEquivalent() , "areIterablesEquivalent");  });
+    it("(undefined)", function(){ sut.throws( () => sut.areIterablesEquivalent(undefined) , "areIterablesEquivalent");  });
+    it("(null, null)", function(){ sut.throws( () => sut.areIterablesEquivalent(null, null) , "areIterablesEquivalent");  });
+
+    it("1", function(){ sut.areIterablesEquivalent([], []);  });
+    it("2", function(){ sut.areIterablesEquivalent([1], [1]);  });
+    it("3", function(){ sut.areIterablesEquivalent([true, 1], [true, 1]);  });
+    it("4", function(){ sut.areIterablesEquivalent(["aaa", 2], ["aaa", 2]);  });
+
+    it("10", function(){ sut.throws( () => sut.areIterablesEquivalent(null, []),     "areIterablesEquivalent");  });
+    it("20", function(){ sut.throws( () => sut.areIterablesEquivalent([1], [2]),     "areIterablesEquivalent");  });
+    it("30", function(){ sut.throws( () => sut.areIterablesEquivalent([1,2], [2,1]), "areIterablesEquivalent");  });
+    it("40", function(){ sut.throws( () => sut.areIterablesEquivalent([1], [1,2]),   "areIterablesEquivalent");  });
+  });
+
+
 });
