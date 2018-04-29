@@ -10,7 +10,6 @@ export function $(iterable){
   return new $LINQ(iterable);
 }
 
-
 /**
  * Provides lazy functional enumeration over iterable source a-la LINQ in C#
  */
@@ -30,8 +29,13 @@ export class $LINQ{
   /** Materializes the sequence into an array */
   toArray(){ return [...this.m_src]; }
 
-  /** Maps values */
+  /** 
+   * Maps values 
+   * @param {function} f Mapper, if not a function returns this
+   */
   select(f){
+    if (!types.isFunction(f)) return this;
+
     const self = this;
     const it = {
       [Symbol.iterator]: function* (){
@@ -42,8 +46,13 @@ export class $LINQ{
     return new $LINQ(it);
   }
 
-  /** Filters values */
+  /** 
+   * Filters values 
+   * @param {function} f Predicate, if not a function returns this
+   */
   where(f){
+    if (!types.isFunction(f)) return this;
+
     const self = this;
     const it = {
       [Symbol.iterator]: function* (){
@@ -54,16 +63,56 @@ export class $LINQ{
     return new $LINQ(it);
   }
 
-  /** Only takes N elements */
+  /** Only takes up to N elements */
   take(n){
-    return null;
+    n = types.asInt(n);
+    const self = this;
+    const it = {
+      [Symbol.iterator]: function* (){
+        let cnt = 0;
+        for(let e of self.m_src) {
+          if (cnt===n) break;
+          yield e;
+          cnt++;
+        } 
+      }
+    };
+
+    return new $LINQ(it);
   }
 
-  /** orders by function */
-  order(f){
-    return null;
+  /** skips up to N first elements */
+  skip(n){
+    n = types.asInt(n);
+    const self = this;
+    const it = {
+      [Symbol.iterator]: function* (){
+        let cnt = 0;
+        for(let e of self.m_src) {
+          if (cnt>n) yield e;
+          cnt++;
+        } 
+      }
+    };
+
+    return new $LINQ(it);
   }
 
+  /** 
+   * Orders(sorts) by function. This materializes all data for sorting to take place
+   * @param {function} [f] Optional comparator (a,b): int 
+   * 
+  */
+  orderBy(f){
+    let arr = this.toArray();
+    arr.sort(f);//f may be undefined
+    return new $LINQ(arr);
+  }
+
+  /**
+   * Counts elements optionally applying predicate
+   * @param {function} [f] Optional bool predicate 
+   */
   count(f){
     const ass = types.isFunction(f);
     let result = 0;
@@ -72,6 +121,10 @@ export class $LINQ{
     return result;
   }
 
+  /**
+   * Returns true if sequence has any elemnts optionally applying predicate
+   * @param {function} [f] Optional bool predicate 
+   */
   any(f){
     const ass = types.isFunction(f);
     for(let e of this.m_src)
@@ -79,11 +132,39 @@ export class $LINQ{
     return false;
   }
 
+  /**
+   * Returns true if all sequence elemnts satisfy predicate
+   * @param {function} [f] Optional bool predicate, if not supplied true returned right away 
+   */
   all(f){
     if (!types.isFunction(f)) return true;
     for(let e of this.m_src)
       if (!f(e)) return false;
     return true;
+  }
+
+  /**
+   * Returns the first element matching the optional predicate or undefined if nonthing matched
+   * @param {function} [f] Optional bool predicate, if not supplied takes first element
+   * @returns {match} Object {ok: bool, value: object} ok: true on positive match
+   */
+  firstOrDefault(f){
+    const ass = types.isFunction(f);
+    for(let e of this.m_src)
+      if (!ass || f(e)) return {ok: true, value: e};
+    
+    return {ok: false, value: undefined};
+  }
+
+  /**
+   * Returns the first element matching the optional predicate or throws
+   * @param {function} [f] Optional bool predicate, if not supplied takes first element
+   */
+  first(f){
+    const got = this.firstOrDefault(f);
+    if (got.ok)
+      return got.value;
+    throw Error("LINQ.first() no matching elements");
   }
 
 }
