@@ -392,6 +392,39 @@ describe("LINQ", function() {
       aver.areIterablesEquivalent([3,4,1,2,3,1,2,3,4], a.where(e=>e>=3).concat(a.where(e=>e<4).concat(a))); 
     });
   });
+
+
+  describe("#orderby()", function() {
+
+    it("empty",   function() { 
+
+      const a = sut.$([3,2,1,4]);
+
+      aver.areIterablesEquivalent([1,2,3,4], a.orderBy()); 
+      aver.areIterablesEquivalent([1,2,3,4], a.orderBy(undefined)); 
+      aver.areIterablesEquivalent([1,2,3,4], a.orderBy(null)); 
+    });
+
+    it("basic",   function() { 
+      const a = sut.$([4,2,1,3]);
+
+      aver.areIterablesEquivalent([1,2,3,4], a.orderBy()); 
+      aver.areIterablesEquivalent([4,3,2,1], a.orderBy((a,b) => a>b ? -1 : 1 )); 
+    });
+
+    it("chained",   function() { 
+      const a = sut.$([
+        {id: "SRAY", name: "Sugar Ray", age: 123},
+        {id: "CJON", name: "Captain John", age: 89},
+        {id: "ALX", name: "Alex Simple", age: 45},
+        {id: "BIK", name: "Bike Murdock", age: 19},
+      ]);
+
+      aver.areIterablesEquivalent([19, 45, 89, 123], a.select(e=>e.age).orderBy((a,b)=>a>b?1:-1)); 
+
+      aver.areIterablesEquivalent(["CJON","ALX"], a.orderBy((a,b)=>a.age>b.age?-1:1).select(e=>e.id).skip(1).take(2) ); 
+    });
+  });
   
 
 });
