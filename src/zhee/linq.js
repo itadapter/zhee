@@ -194,11 +194,31 @@ export class $LINQ{
     return false;
   }
 
+  /**
+   * Concatenates other sequence with this one
+   * @param {Iterable<*>} other another sequence to add to this one 
+   */
+  concat(other){
+    if (!types.isIterable(other)) return this;
+
+    const self = this;
+    const it = {
+      [Symbol.iterator]: function* (){
+        for(let e of self.m_src) yield e;
+        for(let e of other) yield e;
+      }
+    };
+
+    return new $LINQ(it);
+  }
+
+
  
   // concat
   //todo  Distinct(selector) using Set
   //group by???
   //   aggregate(seed, f)
   //test performance in browser
+  //test types asInt()
 }
 

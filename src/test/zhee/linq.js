@@ -1,5 +1,6 @@
 const zhee = require("../../../out/zhee/zhee");
 const aver = zhee.Aver;
+const types = zhee.Types;
 const sut = zhee.Linq;
 
 describe("LINQ", function() {
@@ -265,6 +266,55 @@ describe("LINQ", function() {
   });
 
 
+  describe("#any()", function() {
+
+    it("empty",   function() { 
+      aver.isFalse( sut.$().any() );
+      aver.isFalse( sut.$().any(undefined) );
+      aver.isFalse( sut.$().any(null) );
+
+      aver.isFalse( sut.$([]).any() );
+      aver.isFalse( sut.$([]).any(undefined) );
+      aver.isFalse( sut.$([]).any(null) );
+
+      aver.isTrue( sut.$([1,2,3]).any() );
+      aver.isTrue( sut.$([1,2,3]).any(undefined) );
+      aver.isTrue( sut.$([1,2,3]).any(null) );
+    });
+
+    it("basic",   function() {
+      const a = [1,2,3,4,5];
+      aver.isTrue( sut.$(a).any() );
+      aver.isTrue( sut.$(a).any(e=>e>=5) );
+      aver.isFalse( sut.$(a).any(e=>e>15) );
+    });
+  });
+
+  describe("#all()", function() {
+
+    it("empty",   function() { 
+      aver.isTrue( sut.$().all() );
+      aver.isTrue( sut.$().all(undefined) );
+      aver.isTrue( sut.$().all(null) );
+
+      aver.isTrue( sut.$([]).all() );
+      aver.isTrue( sut.$([]).all(undefined) );
+      aver.isTrue( sut.$([]).all(null) );
+
+      aver.isTrue( sut.$([1,2,3]).all() );
+      aver.isTrue( sut.$([1,2,3]).all(undefined) );
+      aver.isTrue( sut.$([1,2,3]).all(null) );
+    });
+
+    it("basic",   function() {
+      const a = [1,2,3,4,5];
+      aver.isTrue( sut.$(a).all() );
+      aver.isFalse( sut.$(a).all(e=>e>3) );
+      aver.isTrue( sut.$(a).any(e=>e>0) );
+    });
+  });
+
+
   describe("#isEquivalentTo()", function() {
 
     it("empty",   function() { 
@@ -302,6 +352,9 @@ describe("LINQ", function() {
     it("custom comparer",   function() { 
       aver.isTrue( sut.$([1,2,3]).isEquivalentTo([10,20,30], (a,b) => 10*a === b) );
       aver.isFalse( sut.$([10,20,30]).isEquivalentTo([10,20,30], (a,b) => 10*a === b) );
+
+      aver.isFalse( sut.$([1,2,3]).isEquivalentTo(["1","2","3"]));
+      aver.isTrue( sut.$([1,2,3]).isEquivalentTo(["1","2","3"], (a,b) => a === types.asInt(b)) );
     });
 
     it("chained",   function() { 
@@ -314,6 +367,31 @@ describe("LINQ", function() {
     });
   });
 
+
+  describe("#concat()", function() {
+
+    it("empty",   function() { 
+
+      const a = sut.$([1,2,3,4]);
+
+      aver.areIterablesEquivalent(a, a.concat()); 
+      aver.areIterablesEquivalent(a, a.concat(undefined)); 
+      aver.areIterablesEquivalent(a, a.concat(null)); 
+    });
+
+    it("basic",   function() { 
+      const a = sut.$([1,2,3,4]);
+
+      aver.areIterablesEquivalent([1,2,3,4,-1,1,9], a.concat([-1,1,9])); 
+      aver.areIterablesEquivalent([1,2,3,4,1,2,3,4], a.concat(a)); 
+    });
+
+    it("chained",   function() { 
+      const a = sut.$([1,2,3,4]);
+
+      aver.areIterablesEquivalent([3,4,1,2,3,1,2,3,4], a.where(e=>e>=3).concat(a.where(e=>e<4).concat(a))); 
+    });
+  });
   
 
 });
