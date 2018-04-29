@@ -175,6 +175,16 @@ describe("LINQ", function() {
   });
 
   describe("#count()", function() {
+
+    it("empty",   function() { 
+      aver.areEqual( 0, sut.$().count() );
+      aver.areEqual( 0, sut.$(undefined).count() );
+      aver.areEqual( 0, sut.$(null).count() );
+      aver.areEqual( 0, sut.$([]).count() );
+      aver.areEqual( 0, sut.$([1,2,3].filter(e=> e<0)).count() );
+    });
+
+
     it("root",   function() { 
       let a = [1,2,3,4,5];
       let cnt = sut.$(a).count();
@@ -209,16 +219,6 @@ describe("LINQ", function() {
     });
 
 
-    it("ZZZ",   function() { 
-      function* x(){
-        yield 1;
-      }
-
-      let v = x;
-      console.log( Object.prototype.toString.call(v)  );
-
-
-    });
 
   });
 
