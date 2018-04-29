@@ -3,15 +3,6 @@ const sut = zhee.Aver;
 
 describe("Aver", function() {
 
-
-  describe("#AAA()", function() {
-    it("aaa", async function(){
-      let z = await sut.AAA(9);
-      console.log(z);
-    }); 
-
-  });
-
   describe("#isUndefined()", function() {
 
     it("pass undefined",   function() {
