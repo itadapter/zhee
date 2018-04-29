@@ -235,13 +235,33 @@ describe("LINQ", function() {
       aver.areIterablesEquivalent( [1,2,3], sut.$(a).take(3) );
     });
 
-    it("select-where-take",   function() {
+    it("chain-take",   function() {
       const a = [1,2,3,4,5];
       aver.areIterablesEquivalent( [12,13,14], sut.$(a).select(e => e+10).where(e=>e>=12).take(3) );
       aver.areIterablesEquivalent( [12,13], sut.$(a).select(e => e+10).take(3).where(e=>e>=12) );
     });
+  });
 
 
+  describe("#skip()", function() {
+
+    it("empty",   function() { 
+      aver.areIterablesEquivalent( [], sut.$().skip() );
+      aver.areIterablesEquivalent( [], sut.$(undefined).skip() );
+      aver.areIterablesEquivalent( [], sut.$(null).skip() );
+    });
+
+    it("basic",   function() {
+      const a = [1,2,3,4,5];
+      aver.areIterablesEquivalent( [3,4,5], sut.$(a).skip(2) );
+      aver.areIterablesEquivalent( [], sut.$(a).skip(6) );
+    });
+
+    it("chain-skip",   function() {
+      const a = [1,2,3,4,5];
+      aver.areIterablesEquivalent( [14,15], sut.$(a).select(e => e+10).where(e=>e>=12).skip(2) );
+      aver.areIterablesEquivalent( [15], sut.$(a).select(e => e+10).skip(4).where(e=>e>=12) );
+    });
   });
 
   

@@ -89,7 +89,7 @@ export class $LINQ{
       [Symbol.iterator]: function* (){
         let cnt = 0;
         for(let e of self.m_src) {
-          if (cnt>n) yield e;
+          if (cnt>=n) yield e;
           cnt++;
         } 
       }

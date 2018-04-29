@@ -278,7 +278,7 @@ export function areIterablesEquivalent(a, b, f = null){
     if (al.isEquivalentTo(bl, f)) return;
   }
 
-  throw AVERMENT_FAILURE(`areSequencesEquivalent(${dv(a)}, ${dv(b)})`);
+  throw AVERMENT_FAILURE(`areIterablesEquivalent(${dv(a)}, ${dv(b)})`);
 }
 
 
