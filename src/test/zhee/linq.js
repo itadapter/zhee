@@ -9,7 +9,7 @@ describe("LINQ", function() {
     it("root single",   function() { 
       let a = [1,2,3];
 
-      let q = new sut.$(a);
+      let q = sut.$(a);
 
       let iterator = q[Symbol.iterator]();
 
@@ -34,7 +34,7 @@ describe("LINQ", function() {
     it("toArray single",   function() { 
       let a = [1,2,3];
 
-      let q = new sut.$(a).toArray();
+      let q = sut.$(a).toArray();
 
       let iterator = q[Symbol.iterator]();
 
@@ -59,7 +59,7 @@ describe("LINQ", function() {
     it("toArray multiple",   function() { 
       let a = [1,2,3];
 
-      let q = new sut.$(a).toArray();
+      let q = sut.$(a).toArray();
 
       let iterator1 = q[Symbol.iterator]();
       let iterator2 = q[Symbol.iterator]();
@@ -95,7 +95,7 @@ describe("LINQ", function() {
     it("select single",   function() { 
       let a = [1,2,3];
 
-      let q = new sut.$(a).select(e => e*10);
+      let q = sut.$(a).select(e => e*10);
 
       let iterator = q[Symbol.iterator]();
 
@@ -120,7 +120,7 @@ describe("LINQ", function() {
     it("select multiple",   function() { 
       let a = [1,2,3];
 
-      let q = new sut.$(a).select(e => e*10);
+      let q = sut.$(a).select(e => e*10);
 
       let iterator1 = q[Symbol.iterator]();
       let iterator2 = q[Symbol.iterator]();
@@ -159,7 +159,7 @@ describe("LINQ", function() {
   describe("#select()", function() {
     it("1",   function() { 
       let a = [1,2,3,4,5];
-      let q = new sut.$(a).select( e => e*10 ).toArray();
+      let q = sut.$(a).select(e => e*10).toArray();
       aver.areArraysEquivalent([10,20,30,40,50], q);
     });
 
@@ -168,8 +168,56 @@ describe("LINQ", function() {
   describe("#select-where()", function() {
     it("1",   function() { 
       let a = [1,2,3,4,5];
-      let q = new sut.$(a).select( e => e*10 ).where( e => e>30 ).toArray();
+      let q = sut.$(a).select(e => e*10).where(e => e>30).toArray();
       aver.areArraysEquivalent([40,50], q);
+    });
+
+  });
+
+  describe("#count()", function() {
+    it("root",   function() { 
+      let a = [1,2,3,4,5];
+      let cnt = sut.$(a).count();
+      aver.areEqual( 5, cnt);
+    });
+
+    it("select",   function() { 
+      let a = [1,2,3,4,5];
+      let cnt = sut.$(a).select(e => e*10).count();
+      aver.areEqual(5, cnt);
+    });
+
+    it("select+filter",   function() { 
+      let a = [1,2,3,4,5];
+      let cnt = sut.$(a).select(e => e*10).count(e => e>30);
+      aver.areEqual( 2, cnt);
+    });
+
+    it("select+where+filter",   function() { 
+      let a = [1,2,3,4,5];
+      let cnt = sut.$(a).select(e => e*10).where(e => e>40).count(e => e>30);
+      aver.areEqual( 1, cnt);
+    });
+
+    it("mixed",   function() { 
+      let a = [1,2,3,4,5];
+      aver.areEqual(1, sut.$(a).select(e => e*10).where(e => e>40).count(e => e>30)  );
+      aver.areEqual(2, sut.$(a).select(e => e*10).where(e => e>10).count(e => e>30)  );
+      aver.areEqual(4, sut.$(a).select(e => e*10).where(e => e!=10).count()  );
+      aver.areEqual(5, sut.$(a).where(e => e!=10).select(e => e*10).count()  );
+      aver.areEqual(4, sut.$(a).where(e => e!=1).select(e => e*10).count()  );
+    });
+
+
+    it("ZZZ",   function() { 
+      function* x(){
+        yield 1;
+      }
+
+      let v = x;
+      console.log( Object.prototype.toString.call(v)  );
+
+
     });
 
   });

@@ -105,7 +105,8 @@ export function isObjectOrArray(v){
  * @param {*} v
  */
 export function isFunction(v){
-  return Object.prototype.toString.call(v) === "[object Function]";
+  const t = Object.prototype.toString.call(v);
+  return t === "[object Function]" || t === "[object GeneratorFunction]";
 }
 
 /**

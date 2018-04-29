@@ -1,10 +1,22 @@
 import * as types from "./types";
 
+
+
+/**
+ * Creates a root iterable $LINQ object
+ * @param {*} iterable if undefined assumes empty array
+ */
+export function $(iterable){
+  return new $LINQ(iterable);
+}
+
+
 /**
  * Provides lazy functional enumeration over iterable source a-la LINQ in C#
  */
-export class ${
+export class $LINQ{
   constructor(iterable){
+    if (!types.isIterable(iterable)) iterable = [];
     this.m_src = iterable;
   }
 
@@ -27,7 +39,7 @@ export class ${
       }
     };
 
-    return new $(it);
+    return new $LINQ(it);
   }
 
   /** Filters values */
@@ -39,7 +51,7 @@ export class ${
       }
     };
 
-    return new $(it);
+    return new $LINQ(it);
   }
 
   /** Only takes N elements */
@@ -56,7 +68,7 @@ export class ${
     const ass = types.isFunction(f);
     let result = 0;
     for(let e of this.m_src)
-      if (!ass || f(e)) return result++;
+      if (!ass || f(e)) result++;
     return result;
   }
 
