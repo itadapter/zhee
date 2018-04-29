@@ -276,6 +276,17 @@ describe("Types", function() {
     it("true for ()=>true", function() { aver.isTrue( sut.isFunction( () => true ) );});
     it("true for new Function()",  function() { aver.isTrue( sut.isFunction( new Function("a", "return a*a")) );});
 
+
+    it("true for generator",  function() { 
+
+      function* gen(){ yield 1; yield 2; }
+
+      const f = gen;
+
+      aver.isTrue( sut.isFunction( gen ) );
+      aver.isTrue( sut.isFunction( f ) );
+    });
+
   });
 
 
