@@ -237,9 +237,7 @@ export class $LINQ{
 
 
  
-  // concat
   // test first.firstOrDefault
-  //todo  Distinct(selector) using Set
   //group by???
   //   aggregate(seed, f)
   //test performance in browser
