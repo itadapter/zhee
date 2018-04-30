@@ -460,4 +460,60 @@ describe("LINQ", function() {
   });
   
 
+  describe("#firstOrDefault()", function() {
+
+    it("empty+basic",   function() { 
+
+      const a = sut.$([3,2,1,4]);
+
+      let match = a.firstOrDefault();
+      aver.isTrue(match.ok);
+      aver.areEqual(3, match.value); 
+
+      match = a.firstOrDefault(undefined);
+      aver.isTrue(match.ok);
+      aver.areEqual(3, match.value);
+    });
+
+    it("with predicate",   function() { 
+      const a = sut.$([3,2,1,4]);
+
+      let match = a.firstOrDefault(e => e>3);
+      aver.isTrue(match.ok);
+      aver.areEqual(4, match.value); 
+
+      match = a.firstOrDefault(e => e<0);
+      aver.isFalse(match.ok);
+      aver.isUndefined(match.value); 
+    });
+
+    it("chained",   function() { 
+      const a = sut.$([1,2,3,4,5,6,7,8,9,0]);
+
+      aver.areEqual( 22, a.where(e => e> 1).select(e => (e*10)+e).firstOrDefault().value); 
+      aver.areEqual( 88, a.where(e => e> 1).select(e => (e*10)+e).firstOrDefault(e => e>80).value); 
+    });
+  });
+
+  describe("#first()", function() {
+
+    it("basic",   function() { 
+
+      const a = sut.$([3,2,1,4]);
+      aver.areEqual(3,a.first()); 
+
+      aver.throws( function(){
+        a.first(e => e<0);
+      }, "no matching elements");
+
+    });
+
+    it("empty sequence",   function() { 
+      const a = sut.$();
+      aver.throws( function(){
+        a.first();
+      }, "no matching elements");
+    });
+  });
+
 });
