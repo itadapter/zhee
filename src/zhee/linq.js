@@ -187,7 +187,7 @@ export class $LINQ{
       if (r1.done!=r2.done) break;
       if (r1.done) return true;
       
-      const eq = ass ? f(r1.value, r2.value) : r1.value === r2.value;
+      const eq = ass ? f(r1.value, r2.value)===true : r1.value === r2.value;
       if (!eq) break;
     }
 
@@ -206,6 +206,29 @@ export class $LINQ{
       [Symbol.iterator]: function* (){
         for(let e of self.m_src) yield e;
         for(let e of other) yield e;
+      }
+    };
+
+    return new $LINQ(it);
+  }
+
+  /**
+   * Returns distinct values - removes repetition, takes optional key selector function
+   * @param {function} [f] Optional selector 
+   */
+  distinct(f){
+    const ass = types.isFunction(f);
+    const self = this;
+    const it = {
+      [Symbol.iterator]: function* (){
+        const set = new Set();
+        for(let e of self.m_src){
+          let key = ass ? f(e) : e;
+          if (set.has(key)) continue;
+          set.add(key);
+          yield e;
+        }
+        
       }
     };
 

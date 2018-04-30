@@ -425,6 +425,20 @@ describe("LINQ", function() {
       aver.areIterablesEquivalent(["CJON","ALX"], a.orderBy((a,b)=>a.age>b.age?-1:1).select(e=>e.id).skip(1).take(2) ); 
     });
   });
+
+
+  describe("#distinct()", function() {
+
+    it("basic",   function() { 
+      const a = sut.$([1,2,2,2,2,3,3,4]);
+      aver.areIterablesEquivalent([1,2,3,4], a.distinct()); 
+    });
+
+    it("basic + selector",   function() { 
+      const a = sut.$([1,2,2,2,2,3,3,4]);
+      aver.areIterablesEquivalent([1,3], a.distinct(e => e<3 ? 1 : 2 )); 
+    });
+  });
   
 
 });
