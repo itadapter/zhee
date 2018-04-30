@@ -438,6 +438,25 @@ describe("LINQ", function() {
       const a = sut.$([1,2,2,2,2,3,3,4]);
       aver.areIterablesEquivalent([1,3], a.distinct(e => e<3 ? 1 : 2 )); 
     });
+
+    const a = sut.$([
+      {id: 1, age: 10, name: "Alex"},
+      {id: 2, age: 12, name: "Doris"},
+      {id: 3, age: 10, name: "Boris"},
+      {id: 4, age: 34, name: "Alex"},
+      {id: 5, age: 35, name: "Alex"}]);
+
+    it("objects + selector",   function() { 
+      aver.areIterablesEquivalent([10,12,34,35], a.distinct(e => e.age).select(e=>e.age));
+      aver.areIterablesEquivalent(["Alex","Doris","Alex","Alex"], a.distinct(e => e.age).select(e=>e.name)); 
+      aver.areIterablesEquivalent([10,12,10], a.distinct(e => e.name).select(e=>e.age));
+      aver.areIterablesEquivalent([1,2,3], a.distinct(e => e.name).select(e=>e.id)); 
+    });
+
+    it("objects + selector + count",   function() { 
+      aver.areEqual( 4, a.distinct(e => e.age).count() ); 
+      aver.areEqual( 3, a.distinct(e => e.name).count() ); 
+    });
   });
   
 
