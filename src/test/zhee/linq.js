@@ -1,7 +1,7 @@
-const zhee = require("../../../out/zhee/zhee");
+if (zhee===undefined) var zhee = require("./out/zhee");
 const aver = zhee.Aver;
 const types = zhee.Types;
-const sut = zhee.Linq;
+const sut = zhee.Linq; 
 
 describe("LINQ", function() {
 

@@ -1,4 +1,4 @@
-const zhee = require("../../../out/zhee/zhee");
+if (zhee===undefined) var zhee = require("./out/zhee");
 const aver = zhee.Aver;
 const sut = zhee.Strings;
 

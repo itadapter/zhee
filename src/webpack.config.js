@@ -47,7 +47,7 @@ var cfgZhee = {
   }
 };
 
-
+/*
 var cfgZheeBro = {
   ...cfgBase,
   entry: {
@@ -72,7 +72,7 @@ var cfgZheeZha = {
     filename: "zhee-zha.js" // or [name.js]
   }
 };
-
+*/
 
 //Tell Webpack what to zhabify
-module.exports = [ cfgZhee, /*cfgZheeBro,*/ cfgZheeZha ];
+module.exports = [ cfgZhee, /*cfgZheeBro, cfgZheeZha */ ];

@@ -2,9 +2,12 @@
   "name": "zhee",
   "version": "0.0.1",
   "scripts": {
-    "wpk": "webpack --config webpack.config.js",
-    "test": "webpack --config webpack.config.js  &&  mocha \"./test/**/*.js\"",
-    "trun": "webpack --config webpack.config.js  &&  mocha \"./test/**/*.js\" -g"
+    "dist": "webpack --config wpk-dist.js",
+    "buildall":  "webpack --config wpk-dist.js  && webpack --config wpk-test.js",
+    "test": "webpack --config wpk-test.js  &&  mocha \"./test/**/*.js\"",
+    "trun": "webpack --config wpk-test.js  &&  mocha \"./test/**/*.js\" -g",
+
+    "//": "https://stackoverflow.com/questions/38858718/npm-script-copy-package-json-to-dist-when-bundling?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa"
   },
   "devDependencies": {
     "babel-loader": "^7.1.4",

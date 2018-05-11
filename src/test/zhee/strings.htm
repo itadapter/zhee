@@ -1,0 +1,21 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Zhee Strings Fixture</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/5.1.1/mocha.css" rel="stylesheet" />
+</head>
+<body>
+<div id="mocha"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/5.1.1/mocha.js"></script>
+<script>mocha.setup('bdd');</script>
+
+<script src="out/zhee.js"></script>
+<script src="strings.js"></script>
+
+<script>
+    mocha.checkLeaks();
+    mocha.run();
+</script>
+</body>
+</html>
