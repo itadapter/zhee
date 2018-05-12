@@ -904,4 +904,47 @@ describe("Types", function() {
   });
 
 
+  describe("#asInt()", function() {
+    it("()",   function() { aver.areEqual( 0, sut.asInt() );});
+    it("undefined",   function() { aver.areEqual( 0, sut.asInt(undefined) );});
+    it("undefined canUndef",   function() { aver.areEqual( undefined, sut.asInt(undefined, true) );});
+    it("null",   function() { aver.areEqual( 0, sut.asInt(null) );});
+
+    it("true = 1 ",   function() { aver.areEqual( 1, sut.asInt(true) );});
+    it("false = 0 ",   function() { aver.areEqual( 0, sut.asInt(false) );});
+
+    it("1",   function() { aver.areEqual( 1, sut.asInt(1) );});
+    it("0",   function() { aver.areEqual( 0, sut.asInt(0) );});
+    it("-7",   function() { aver.areEqual( -7, sut.asInt(-7) );});
+
+    it("'1'",   function() { aver.areEqual( 1, sut.asInt("1") );});
+    it("'0'",   function() { aver.areEqual( 0, sut.asInt("0") );});
+    it("'-7'",   function() { aver.areEqual( -7, sut.asInt("-7") );});
+
+    it("1.23 = 1",   function() { aver.areEqual( 1, sut.asInt(1.23) );});
+    it("0.99 = 0",   function() { aver.areEqual( 0, sut.asInt(0.99) );});
+    it("-7.97 = -7",   function() { aver.areEqual( -7, sut.asInt(-7.97) );});
+
+    it("'1.23' = 1",   function() { aver.areEqual( 1, sut.asInt("1.23") );});
+    it("'0.99' = 0",   function() { aver.areEqual( 0, sut.asInt("0.99") );});
+    it("'-7.97' = -7",   function() { aver.areEqual( -7, sut.asInt("-7.97") );});
+
+    it("Date(123)",   function() { aver.areEqual( 123, sut.asInt(new Date(123)) );});
+
+    function Custom(state){
+      this.state = state;
+      this[sut.AS_INTEGER_FUN] = function(){ return state; };
+    }
+
+    it("Custom(12)",   function() { aver.areEqual( 12, sut.asInt(new Custom(12)) );});
+    it("Custom(-800)",   function() { aver.areEqual( -800, sut.asInt(new Custom(-800)) );});
+
+    it("Custom('12')",   function() { aver.areEqual( 12, sut.asInt(new Custom("12")) );});
+    it("Custom('-800')",   function() { aver.areEqual( -800, sut.asInt(new Custom("-800.999")) );});
+    it("Custom(undefined)",   function() { aver.areEqual( 0, sut.asInt(new Custom(undefined)) );});
+    it("Custom(undefined) canUndef",   function() { aver.areEqual( undefined, sut.asInt(new Custom(undefined), true) );});
+    
+  });
+
+
 });
