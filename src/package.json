@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "dist": "webpack --config wpk-dist.js",
-    "buildall":  "webpack --config wpk-dist.js  && webpack --config wpk-test.js",
+    "buildall":  "webpack --config wpk-dist.js  &&  webpack --config wpk-test.js",
     "test": "webpack --config wpk-test.js  &&  mocha \"./test/**/*.js\"",
     "trun": "webpack --config wpk-test.js  &&  mocha \"./test/**/*.js\" -g",
 
