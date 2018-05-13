@@ -395,7 +395,7 @@ export function asTriBool(v){
 export const AS_INTEGER_FUN = Symbol("asInt");
 
 /**
- * Converts primitives into and integer.
+ * Converts value to and integer number
  * Uses AS_INTEGER_FUN on objects, respecting undefined value.
  * @param {*} v value to convert.
  * @param {boolean} [canUndef=false] Whether undefined is allowed 
@@ -412,6 +412,31 @@ export function asInt(v, canUndef=false){
   }
 
   return v | 0;
+}
+
+/**
+ * Converts value to real number (contrast with toInt())
+ * @param {*} v value to convert.
+ * @param {boolean} [canUndef=false] Whether undefined is allowed 
+ */
+export function asReal(v, canUndef=false){
+  if (v===undefined) return canUndef ? undefined : 0;
+  if (v===null) return 0;
+  return 1.0 * v;
+}
+
+/** Multiplier used for money operations */
+export const MONEY_MULT = 10000;
+
+/**
+ * Converts value to 4-decimal point fixed number without rounding of 5th digit
+ * @param {*} v value to convert.
+ * @param {boolean} [canUndef=false] Whether undefined is allowed
+ */
+export function asMoney(v, canUndef=false){
+  v = asReal(v, canUndef);
+  if (v===undefined) return undefined;
+  return ((v * MONEY_MULT) | 0) / MONEY_MULT;
 }
 
 

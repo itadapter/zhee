@@ -946,5 +946,69 @@ describe("Types", function() {
     
   });
 
+  describe("#asReal()", function() {
+    it("()",   function() { aver.areEqual( 0, sut.asReal() );});
+    it("undefined",   function() { aver.areEqual( 0, sut.asReal(undefined) );});
+    it("undefined canUndef",   function() { aver.areEqual( undefined, sut.asReal(undefined, true) );});
+    it("null",   function() { aver.areEqual( 0, sut.asReal(null) );});
+
+    it("true = 1 ",   function() { aver.areEqual( 1, sut.asReal(true) );});
+    it("false = 0 ",   function() { aver.areEqual( 0, sut.asReal(false) );});
+
+    it("1",   function() { aver.areEqual( 1, sut.asReal(1) );});
+    it("0",   function() { aver.areEqual( 0, sut.asReal(0) );});
+    it("-7",   function() { aver.areEqual( -7, sut.asReal(-7) );});
+
+    it("'1'",   function() { aver.areEqual( 1, sut.asReal("1") );});
+    it("'0'",   function() { aver.areEqual( 0, sut.asReal("0") );});
+    it("'-7'",   function() { aver.areEqual( -7, sut.asReal("-7") );});
+
+    it("1.23 = 1.23",   function() { aver.areEqual( 1.23, sut.asReal(1.23) );});
+    it("0.99 = 0.99",   function() { aver.areEqual( 0.99, sut.asReal(0.99) );});
+    it("-7.97 = -7.97",   function() { aver.areEqual( -7.97, sut.asReal(-7.97) );});
+
+    it("'1.23' = 1.23",   function() { aver.areEqual( 1.23, sut.asReal("1.23") );});
+    it("'0.99' = 0.99",   function() { aver.areEqual( 0.99, sut.asReal("0.99") );});
+    it("'-7.97' = -7.97",   function() { aver.areEqual( -7.97, sut.asReal("-7.97") );});
+
+    it("Date(123)",   function() { aver.areEqual( 123, sut.asReal(new Date(123)) );});
+
+  });
+
+  describe("#asMoney()", function() {
+    it("()",   function() { aver.areEqual( 0, sut.asMoney() );});
+    it("undefined",   function() { aver.areEqual( 0, sut.asMoney(undefined) );});
+    it("undefined canUndef",   function() { aver.areEqual( undefined, sut.asMoney(undefined, true) );});
+    it("null",   function() { aver.areEqual( 0, sut.asMoney(null) );});
+
+    it("true = 1 ",   function() { aver.areEqual( 1, sut.asMoney(true) );});
+    it("false = 0 ",   function() { aver.areEqual( 0, sut.asMoney(false) );});
+
+    it("1",   function() { aver.areEqual( 1, sut.asMoney(1) );});
+    it("0",   function() { aver.areEqual( 0, sut.asMoney(0) );});
+    it("-7",   function() { aver.areEqual( -7, sut.asMoney(-7) );});
+
+    it("'1'",   function() { aver.areEqual( 1, sut.asMoney("1") );});
+    it("'0'",   function() { aver.areEqual( 0, sut.asMoney("0") );});
+    it("'-7'",   function() { aver.areEqual( -7, sut.asMoney("-7") );});
+
+    it("1.23 = 1.23",   function() { aver.areEqual( 1.23, sut.asMoney(1.23) );});
+    it("0.99 = 0.99",   function() { aver.areEqual( 0.99, sut.asMoney(0.99) );});
+    it("-7.97 = -7.97",   function() { aver.areEqual( -7.97, sut.asMoney(-7.97) );});
+
+    it("'1.23' = 1.23",   function() { aver.areEqual( 1.23, sut.asMoney("1.23") );});
+    it("'0.99' = 0.99",   function() { aver.areEqual( 0.99, sut.asMoney("0.99") );});
+    it("'-7.97' = -7.97",   function() { aver.areEqual( -7.97, sut.asMoney("-7.97") );});
+
+    it("Date(123)",   function() { aver.areEqual( 123, sut.asMoney(new Date(123)) );});
+
+    it("45/8.17 = 5.5079(55936...)",   function() { aver.areEqual( 5.5079, sut.asMoney(45/8.17) );});
+
+    it("10/3 = 3.3333(3333333...)",   function() { aver.areEqual( 3.3333, sut.asMoney(10/3) );});
+
+    it("10/2.876 = 3.4770(5146....)",   function() { aver.areEqual( 3.4770, sut.asMoney(10/2.876) );});
+
+  });
+
 
 });
