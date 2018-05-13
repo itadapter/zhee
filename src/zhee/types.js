@@ -439,6 +439,25 @@ export function asMoney(v, canUndef=false){
   return ((v * MONEY_MULT) | 0) / MONEY_MULT;
 }
 
+/**
+ * Converts value to Date
+ * @param {*} v value to convert.
+ * @param {boolean} [canUndef=false] Whether undefined is allowed
+ */
+export function asDate(v, canUndef=false){
+  if (v===undefined) return canUndef ? undefined : new Date(0);
+  if (v===null) return new Date(0);
+  if (isDate(v)) return v;
+  
+  if (isString(v)){
+    //try parse
+    //const p =Date.parse(v);
+    //if (isNaN(p)) // thorw?
+  }
+
+  return new Date(asInt(v));
+}
+
 
 /** Data Type Monikers */
 export const TYPE_MONIKER = {

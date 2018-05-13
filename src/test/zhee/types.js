@@ -926,6 +926,8 @@ describe("Types", function() {
     it("0",   function() { aver.areEqual( 0, sut.asInt(0) );});
     it("-7",   function() { aver.areEqual( -7, sut.asInt(-7) );});
 
+    it("'2gaga' = 0",   function() { aver.areEqual( 0, sut.asInt("2gaga") );});
+
     it("'1'",   function() { aver.areEqual( 1, sut.asInt("1") );});
     it("'0'",   function() { aver.areEqual( 0, sut.asInt("0") );});
     it("'-7'",   function() { aver.areEqual( -7, sut.asInt("-7") );});
@@ -967,6 +969,8 @@ describe("Types", function() {
     it("1",   function() { aver.areEqual( 1, sut.asReal(1) );});
     it("0",   function() { aver.areEqual( 0, sut.asReal(0) );});
     it("-7",   function() { aver.areEqual( -7, sut.asReal(-7) );});
+
+    it("'2gaga' isNaN",   function() { aver.isTrue( isNaN( sut.asReal("2gaga") ) );});
 
     it("'1'",   function() { aver.areEqual( 1, sut.asReal("1") );});
     it("'0'",   function() { aver.areEqual( 0, sut.asReal("0") );});
