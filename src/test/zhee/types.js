@@ -1112,9 +1112,49 @@ describe("Types", function() {
     });
 
     it("abrakadabra throws",   function() { aver.throws( function(){  sut.asDate("abrakadabra"); }, "Cast error");});
-
-   
   });
 
+
+  describe("#asObject()", function() {
+
+    it("()",   function() { aver.areEqualValues( null, sut.asObject() );});
+    it("undefined",   function() { aver.areEqualValues( null, sut.asObject(undefined) );});
+    it("undefined canUndef",   function() { aver.areEqualValues( undefined, sut.asObject(undefined, true) );});
+    it("null",   function() { aver.areEqualValues( null, sut.asObject(null) );});
+
+    it("true throws",   function() { aver.throws( function(){  sut.asObject(true); }, "Cast error");});
+    it("false throws",   function() { aver.throws( function(){  sut.asObject(false); }, "Cast error");});
+
+    it("1 throws",   function() { aver.throws( function(){  sut.asObject(1); }, "Cast error");});
+    it("'1' throws",   function() { aver.throws( function(){  sut.asObject("1"); }, "Cast error");});
+
+    it("[] throws",   function() { aver.throws( function(){  sut.asObject([]); }, "Cast error");});
+    it("'[]' throws",   function() { aver.throws( function(){  sut.asObject("[]"); }, "Cast error");});
+
+    it("{}",   function() { aver.isObject( sut.asObject({})  );});
+    it("'{}'",   function() { aver.isObject( sut.asObject("{}")  );});
+
+    it("{a: 1, b: 234, c: true, d: [7,8,9]}",   function() { 
+      const o = sut.asObject({a: 1, b: 234, c: true, d: [7,8,9]});
+      aver.isObject( o );
+      aver.areEqual(1, o.a);
+      aver.areEqual(234, o.b);
+      aver.areEqual(true, o.c);
+      aver.areArraysEquivalent([7,8,9], o.d);
+    });
+
+    it("'{a: 1, b: 234, c: true, d: [7,8,9]}'",   function() { 
+      const o = sut.asObject("{\"a\": 1, \"b\": 234, \"c\": true, \"d\": [7,8,9]}");
+      aver.isObject( o );
+      aver.areEqual(1, o.a);
+      aver.areEqual(234, o.b);
+      aver.areEqual(true, o.c);
+      aver.areArraysEquivalent([7,8,9], o.d);
+    });
+
+    it("'{a: 2...' throws",   function() { aver.throws( function(){  sut.asObject("{\"a\": 2..."); }, "Cast error");});
+
+    
+  });
 
 });
