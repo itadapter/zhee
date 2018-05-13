@@ -394,8 +394,15 @@ export function asTriBool(v){
 
 export const AS_INTEGER_FUN = Symbol("asInt");
 
+export const REXP_HEX = /^[0-9, a-f, A-F]+$/;
+export const REXP_BIN = /^[0-1]+$/;
+export const REXP_NUMBER = /^[-+]?(?:[0-9]{0,30}\.)?[0-9]{1,30}(?:[Ee][-+]?[1-2]?[0-9])?$/;
+
+
 /**
- * Converts value to and integer number
+ * Converts value to and integer number. Respects 0x and 0b prefixes for hex and binary.
+ * Unlike parseInt() does NOT allow trailing non-convertible characters.
+ * Throws if string conversion is not possible
  * Uses AS_INTEGER_FUN on objects, respecting undefined value.
  * @param {*} v value to convert.
  * @param {boolean} [canUndef=false] Whether undefined is allowed 
@@ -409,6 +416,21 @@ export function asInt(v, canUndef=false){
     if (r===undefined) return canUndef ? undefined : 0;
     if (r===null) return 0;
     return r | 0;
+  }
+
+  if (isString(v)){
+    const ov = v;
+    v = strings.trim(v);
+    if (v.startsWith("0x")){
+      v = v.substring(2);
+      v = (REXP_HEX.test(v)) ? parseInt(v, 16) : NaN;
+    } else if (v.startsWith("0b")){
+      v = v.substring(2);
+      v = (REXP_BIN.test(v)) ? parseInt(v, 2) : NaN;
+    } else {
+      v = (REXP_NUMBER.test(v)) ? parseFloat(v) : NaN;
+    }
+    if (isNaN(v)) throw Error(`Cast error: asInt("${strings.truncate(ov, 16)}")`);
   }
 
   return v | 0;
