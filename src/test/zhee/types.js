@@ -934,16 +934,22 @@ describe("Types", function() {
     it("0.99 = 0",   function() { aver.areEqual( 0, sut.asInt(0.99) );});
     it("-7.97 = -7",   function() { aver.areEqual( -7, sut.asInt(-7.97) );});
 
+    it("'1.23' = 1",   function() { aver.areEqual( 1, sut.asInt("1.23") );});
+    it("'0.99' = 0",   function() { aver.areEqual( 0, sut.asInt("0.99") );});
+    it("'-7.97' = -7",   function() { aver.areEqual( -7, sut.asInt("-7.97") );});
+
     it("'2gaga' throws",   function() { aver.throws( function(){  sut.asInt("2gaga"); }, "Cast error");});
 
     it("'0x2a' = 42",   function() { aver.areEqual( 42,  sut.asInt("0x2a") ); });
     it("' 0x2a ' = 42",   function() { aver.areEqual( 42,  sut.asInt(" 0x2a ") ); });
     it("' 0xFAcaCA ' = 16435914",   function() { aver.areEqual( 16435914,  sut.asInt(" 0xFAcaCA ") ); });
 
+    it("'0x' throws",   function() { aver.throws( function(){  sut.asInt("0x"); }, "Cast error");});
     it("'2a' throws",   function() { aver.throws( function(){  sut.asInt("2a"); }, "Cast error");});
     it("'0x2Z' throws",   function() { aver.throws( function(){  sut.asInt("0x2z"); }, "Cast error");});
     it("'0xZ2' throws",   function() { aver.throws( function(){  sut.asInt("0xZ2"); }, "Cast error");});
     
+    it("'0b' throws",   function() { aver.throws( function(){  sut.asInt("0b"); }, "Cast error");});
     it("'0b10' = 2",   function() { aver.areEqual( 2,  sut.asInt("0b10") ); });
     it("' 0b11 ' = 3",   function() { aver.areEqual( 3,  sut.asInt(" 0b11 ") ); });
     it("' 0b11110000 ' = 240",   function() { aver.areEqual( 240,  sut.asInt(" 0b11110000 ") ); });
@@ -952,9 +958,6 @@ describe("Types", function() {
     it("'0b1Z' throws",   function() { aver.throws( function(){  sut.asInt("0b1Z"); }, "Cast error");});
 
 
-    it("'1.23' = 1",   function() { aver.areEqual( 1, sut.asInt("1.23") );});
-    it("'0.99' = 0",   function() { aver.areEqual( 0, sut.asInt("0.99") );});
-    it("'-7.97' = -7",   function() { aver.areEqual( -7, sut.asInt("-7.97") );});
 
     it("'-7e3' = -7000",   function() { aver.areEqual( -7000, sut.asInt("-7e3") );});
     it("'-7e-3' = 0",   function() { aver.areEqual( 0, sut.asInt("-7e-3") );});
@@ -996,19 +999,34 @@ describe("Types", function() {
     it("0",   function() { aver.areEqual( 0, sut.asReal(0) );});
     it("-7",   function() { aver.areEqual( -7, sut.asReal(-7) );});
 
-    it("'2gaga' isNaN",   function() { aver.isTrue( isNaN( sut.asReal("2gaga") ) );});
-
     it("'1'",   function() { aver.areEqual( 1, sut.asReal("1") );});
     it("'0'",   function() { aver.areEqual( 0, sut.asReal("0") );});
     it("'-7'",   function() { aver.areEqual( -7, sut.asReal("-7") );});
-
+    
+    
     it("1.23 = 1.23",   function() { aver.areEqual( 1.23, sut.asReal(1.23) );});
     it("0.99 = 0.99",   function() { aver.areEqual( 0.99, sut.asReal(0.99) );});
     it("-7.97 = -7.97",   function() { aver.areEqual( -7.97, sut.asReal(-7.97) );});
-
+    
     it("'1.23' = 1.23",   function() { aver.areEqual( 1.23, sut.asReal("1.23") );});
     it("'0.99' = 0.99",   function() { aver.areEqual( 0.99, sut.asReal("0.99") );});
     it("'-7.97' = -7.97",   function() { aver.areEqual( -7.97, sut.asReal("-7.97") );});
+     
+    
+    it("'2gaga' throws",   function() { aver.throws( function(){  sut.asReal("2gaga"); }, "Cast error");});
+
+
+    it("'-7e3' = -7000",   function() { aver.areEqual( -7000, sut.asReal("-7e3") );});
+    it("'-7e-3' = -0.007",   function() { aver.areEqual( -0.007, sut.asReal("-7e-3") );});
+    it("'+7e-3' = 0.007",   function() { aver.areEqual( 0.007, sut.asReal("7e-3") );});
+    it("'-7e--3' throws",   function() { aver.throws( function(){  sut.asReal("-7e--3"); }, "Cast error");});
+
+    it("'+7e3' = 7000",   function() { aver.areEqual( 7000, sut.asReal("+7e3") );});
+    it("'++7e3' throws",   function() { aver.throws( function(){  sut.asReal("++7e3"); }, "Cast error");});
+
+    it("'2..3' throws",   function() { aver.throws( function(){  sut.asReal("2..3"); }, "Cast error");});
+    it("'2-3' throws",   function() { aver.throws( function(){  sut.asReal("2-3"); }, "Cast error");});
+
 
     it("Date(123)",   function() { aver.areEqual( 123, sut.asReal(new Date(123)) );});
 

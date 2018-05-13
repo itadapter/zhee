@@ -437,13 +437,20 @@ export function asInt(v, canUndef=false){
 }
 
 /**
- * Converts value to real number (contrast with toInt())
+ * Converts value to real number (contrast with asInt())
  * @param {*} v value to convert.
  * @param {boolean} [canUndef=false] Whether undefined is allowed 
  */
 export function asReal(v, canUndef=false){
   if (v===undefined) return canUndef ? undefined : 0;
   if (v===null) return 0;
+
+  if (isString(v)){
+    const ov = v;
+    v = strings.trim(v);
+    v = (REXP_NUMBER.test(v)) ? parseFloat(v) : NaN;
+    if (isNaN(v)) throw Error(`Cast error: asReal("${strings.truncate(ov, 16)}")`);
+  }
   return 1.0 * v;
 }
 
