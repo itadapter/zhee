@@ -1057,6 +1057,23 @@ describe("Types", function() {
     it("'0.99' = 0.99",   function() { aver.areEqual( 0.99, sut.asMoney("0.99") );});
     it("'-7.97' = -7.97",   function() { aver.areEqual( -7.97, sut.asMoney("-7.97") );});
 
+
+    it("'2gaga' throws",   function() { aver.throws( function(){  sut.asMoney("2gaga"); }, "Cast error");});
+
+
+    it("'-7e3' = -7000",   function() { aver.areEqual( -7000, sut.asMoney("-7e3") );});
+    it("'-12345e-5' = -0.1234",   function() { aver.areEqual( -0.1234, sut.asMoney("-12345e-5") );});
+    it("'+7e-3' = 0.007",   function() { aver.areEqual( 0.007, sut.asMoney("7e-3") );});
+    it("'+7e-5' = 0",   function() { aver.areEqual( 0, sut.asMoney("7e-5") );});
+    it("'-7e--3' throws",   function() { aver.throws( function(){  sut.asMoney("-7e--3"); }, "Cast error");});
+
+    it("'+7e3' = 7000",   function() { aver.areEqual( 7000, sut.asMoney("+7e3") );});
+    it("'++7e3' throws",   function() { aver.throws( function(){  sut.asMoney("++7e3"); }, "Cast error");});
+
+    it("'2..3' throws",   function() { aver.throws( function(){  sut.asMoney("2..3"); }, "Cast error");});
+    it("'2-3' throws",   function() { aver.throws( function(){  sut.asMoney("2-3"); }, "Cast error");});
+
+
     it("Date(123)",   function() { aver.areEqual( 123, sut.asMoney(new Date(123)) );});
 
     it("45/8.17 = 5.5079(55936...)",   function() { aver.areEqual( 5.5079, sut.asMoney(45/8.17) );});
@@ -1064,6 +1081,39 @@ describe("Types", function() {
     it("10/3 = 3.3333(3333333...)",   function() { aver.areEqual( 3.3333, sut.asMoney(10/3) );});
 
     it("10/2.876 = 3.4770(5146....)",   function() { aver.areEqual( 3.4770, sut.asMoney(10/2.876) );});
+  });
+
+
+  describe("#asDate()", function() {
+
+    const ZERO = new Date(0);
+
+    it("()",   function() { aver.areEqualValues( ZERO, sut.asDate() );});
+    it("undefined",   function() { aver.areEqualValues( ZERO, sut.asDate(undefined) );});
+    it("undefined canUndef",   function() { aver.areEqualValues( undefined, sut.asDate(undefined, true) );});
+    it("null",   function() { aver.areEqualValues( ZERO, sut.asDate(null) );});
+
+    it("true throws",   function() { aver.throws( function(){  sut.asDate(true); }, "Cast error");});
+    it("false throws",   function() { aver.throws( function(){  sut.asDate(false); }, "Cast error");});
+
+    it("1",   function() { aver.areEqualValues( new Date(1), sut.asDate(1) );});
+    it("0",   function() { aver.areEqualValues( ZERO, sut.asDate(0) );});
+    it("-7",   function() { aver.areEqualValues( new Date(-7), sut.asDate(-7) );});
+
+    it("'1'",   function() { aver.areEqualValues( new Date(1), sut.asDate("1") );});
+    it("'0'",   function() { aver.areEqualValues( ZERO, sut.asDate("0") );});
+    it("'-7'",   function() { aver.areEqualValues( new Date(-7), sut.asDate("-7") );});
+
+    it("April 12, 2012",   function() { 
+      const d = sut.asDate(" April 12, 2012");
+      aver.areEqual( 3, d.getMonth() );
+      aver.areEqual( 12, d.getDate() );
+      aver.areEqual( 2012, d.getFullYear() );
+    });
+
+    it("abrakadabra throws",   function() { aver.throws( function(){  sut.asDate("abrakadabra"); }, "Cast error");});
+
+   
   });
 
 

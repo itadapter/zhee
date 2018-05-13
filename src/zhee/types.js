@@ -398,6 +398,7 @@ export const REXP_HEX = /^[0-9, a-f, A-F]+$/;
 export const REXP_BIN = /^[0-1]+$/;
 export const REXP_NUMBER = /^[-+]?(?:[0-9]{0,30}\.)?[0-9]{1,30}(?:[Ee][-+]?[1-2]?[0-9])?$/;
 
+const CAST_ERROR = "Cast error: ";
 
 /**
  * Converts value to and integer number. Respects 0x and 0b prefixes for hex and binary.
@@ -430,7 +431,7 @@ export function asInt(v, canUndef=false){
     } else {
       v = (REXP_NUMBER.test(v)) ? parseFloat(v) : NaN;
     }
-    if (isNaN(v)) throw Error(`Cast error: asInt("${strings.truncate(ov, 16)}")`);
+    if (isNaN(v)) throw Error(CAST_ERROR+`asInt("${strings.describe(ov)}")`);
   }
 
   return v | 0;
@@ -449,7 +450,7 @@ export function asReal(v, canUndef=false){
     const ov = v;
     v = strings.trim(v);
     v = (REXP_NUMBER.test(v)) ? parseFloat(v) : NaN;
-    if (isNaN(v)) throw Error(`Cast error: asReal("${strings.truncate(ov, 16)}")`);
+    if (isNaN(v)) throw Error(CAST_ERROR+`asReal("${strings.describe(ov)}")`);
   }
   return 1.0 * v;
 }
@@ -458,7 +459,7 @@ export function asReal(v, canUndef=false){
 export const MONEY_MULT = 10000;
 
 /**
- * Converts value to 4-decimal point fixed number without rounding of 5th digit
+ * Converts value to 4-decimal point fixed number without rounding of the 5th digit
  * @param {*} v value to convert.
  * @param {boolean} [canUndef=false] Whether undefined is allowed
  */
@@ -478,13 +479,53 @@ export function asDate(v, canUndef=false){
   if (v===null) return new Date(0);
   if (isDate(v)) return v;
   
+  if (isIntValue(v)) return new Date(asInt(v));
+
   if (isString(v)){
-    //try parse
-    //const p =Date.parse(v);
-    //if (isNaN(p)) // thorw?
+    const ts = Date.parse(v);
+    if (!isNaN(ts)) return new Date(ts);
   }
 
-  return new Date(asInt(v));
+  throw Error(CAST_ERROR+`asDate("${strings.describe(v)}")`);
+}
+
+/**
+ * Converts value to object/map (not array). The value has to be an object or object content in JSON format
+ * @param {*} v value to convert.
+ * @param {boolean} [canUndef=false] Whether undefined is allowed
+ */
+export function asObject(v, canUndef=false){
+  if (v===undefined) return canUndef ? undefined : null;
+  if (v===null) return null;
+  if (isObject(v)) return v;
+
+  try{
+    let obj = JSON.parse(asString(v));
+    if (!isObject(obj)) throw Error(CAST_ERROR+`asObject("${strings.describe(v)}") -> not object`);
+    return obj;
+  }catch(e){
+    throw Error(CAST_ERROR+`asObject("${strings.describe(v)}") -> ${e.message}`);
+  }
+}
+
+/**
+ * Converts value to array (not object map). The value has to be an array, iterable object, or array content in JSON format
+ * @param {*} v value to convert.
+ * @param {boolean} [canUndef=false] Whether undefined is allowed
+ */
+export function asArray(v, canUndef=false){
+  if (v===undefined) return canUndef ? undefined : null;
+  if (v===null) return null;
+  if (isArray(v)) return v;
+  if (isIterable(v)) return [...v];
+
+  try{
+    let arr = JSON.parse(asString(v));
+    if (!isArray(arr)) throw Error(CAST_ERROR+`asArray("${strings.describe(v)}") -> not array`);
+    return arr;
+  }catch(e){
+    throw Error(CAST_ERROR+`asArray("${strings.describe(v)}") -> ${e.message}`);
+  }
 }
 
 

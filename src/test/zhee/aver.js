@@ -290,6 +290,9 @@ describe("Aver", function() {
   describe("#areEqual()", function() {
     it("TRUE", function(){
       sut.areEqual(1, 1);
+
+      sut.areEqual("abc", "abc");//may have used areEqualValues() as strings get special treatment
+
       sut.areEqual(null, null);
       sut.areEqual(undefined, undefined); 
     });
@@ -306,6 +309,10 @@ describe("Aver", function() {
       sut.areNotEqual(1, "1");
       sut.areNotEqual(0, null);
       sut.areNotEqual(undefined, null);
+
+      //note: Date is ref type, hence two instances are different. 
+      //Use areEqualValues() for object equality check based on valueOf()
+      sut.areNotEqual(new Date(123), new Date(123));
     });
 
     it("FALSE", function(){
@@ -314,6 +321,32 @@ describe("Aver", function() {
       sut.throws( function(){ sut.areNotEqual(undefined, undefined); } );
     });
   });
+
+
+  describe("#areEqualValues()", function() {
+    it("TRUE", function(){
+      sut.areEqualValues(1, 1);
+
+      sut.areEqualValues("abc", "abc");//may have used areEqual() as strings get special treatment
+
+      sut.areEqualValues(null, null);
+      sut.areEqualValues(undefined, undefined); 
+
+      sut.areEqualValues(new Date(123), new Date(123)); 
+    });
+
+    it("FALSE", function(){
+      sut.throws( function(){ sut.areEqual(1, "1"); } );
+      sut.throws( function(){ sut.areEqual(0, null); } );
+      sut.throws( function(){ sut.areEqual(undefined, null); } );
+
+      sut.throws( function(){ sut.areEqualValues(new Date(124), new Date(1));  });
+      sut.throws( function(){ sut.areEqualValues(1, true);  });
+      sut.throws( function(){ sut.areEqualValues(1, "1");  });
+    });
+  });
+
+
 
   describe("#isOf()", function() {
     it("TRUE", function(){

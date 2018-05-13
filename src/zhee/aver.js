@@ -167,7 +167,9 @@ export function isTrue(a){
 }
 
 /**
- * Performs strict equality check using ===
+ * Performs strict equality check using ===.
+ * Contrast with areEqualValues() which is based on valueOf(); i.e. new Date(0) !== new Date(0) 
+ *  because those are different references.
  * @param {*} a 
  * @param {*} b 
  */
@@ -184,6 +186,23 @@ export function areEqual(a, b){
 export function areNotEqual(a, b){
   if (a!==b) return;
   throw AVERMENT_FAILURE(`areNotEqual(${dv(a)}, ${dv(b)})`);
+}
+
+/**
+ * Performs strict equality check on arguments using valueOf().
+ * Do not confuse with areEqual() which is based on ===; i.e. new Date(0) !== new Date(0)
+ *   because those are different references, so date values must be equated using areEqualValues(), not
+ *  areEquals() which would equate object references instead. Note: strings are handled as special case,
+ * and may be equated using either of the methods.
+ * @param {*} a 
+ * @param {*} b 
+ */
+export function areEqualValues(a, b){
+  if (a===b) return;
+  if (types.isAssigned(a) && types.isAssigned(b))
+    if (a.valueOf()===b.valueOf()) return;
+    
+  throw AVERMENT_FAILURE(`areEqualValues(${dv(a)}, ${dv(b)})`);
 }
 
 
