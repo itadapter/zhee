@@ -398,7 +398,7 @@ export const AS_INTEGER_FUN = Symbol("asInt");
  * Converts primitives into and integer.
  * Uses AS_INTEGER_FUN on objects, respecting undefined value.
  * @param {*} v value to convert.
- * @param {*} [canUndef=false] Whether undefined is allowed 
+ * @param {boolean} [canUndef=false] Whether undefined is allowed 
  */
 export function asInt(v, canUndef=false){
   if (v===undefined) return canUndef ? undefined : 0;
@@ -412,4 +412,52 @@ export function asInt(v, canUndef=false){
   }
 
   return v | 0;
+}
+
+
+/** Data Type Monikers */
+export const TYPE_MONIKER = {
+  STRING:   "str",
+  INT:      "int",
+  REAL:     "real",
+  MONEY:    "money",
+  BOOL:     "bool",
+  DATE:     "date",
+  OBJECT:   "object",
+  ARRAY:    "array"
+};
+const ALL_TYPE_MONIKERS = allObjectValues(TYPE_MONIKER);
+
+/**
+ * Converts value into a valid TYPE_MONIKER member
+ * @param {*} v string moniker
+ * @returns {TYPE_MONIKER} .STRING as default
+ */
+export function asTypeMoniker(v){
+  v = strings.asString(v).toLowerCase();
+  if (strings.isOneOf(v, ALL_TYPE_MONIKERS, true)) return v;
+  return TYPE_MONIKER.STRING;
+}
+
+/**
+ * Performs value type cast per type moniker
+ * @param {*} v Value to cast
+ * @param {TYPE_MONIKER} tmon type moniker
+ * @param {boolean} [canUndef] true to allow undefined values
+ */
+export function cast(v, tmon, canUndef=false){
+  if (arguments.length<2) throw Error("cast(v, tmon) missing 2 req args");
+  tmon = asTypeMoniker(tmon);
+  
+  switch(tmon){
+    case TYPE_MONIKER.STRING:   return asString(v, canUndef);
+    case TYPE_MONIKER.INT:      return asInt(v, canUndef);
+    case TYPE_MONIKER.REAL:     return asReal(v, canUndef);
+    case TYPE_MONIKER.MONEY:    return asMoney(v, canUndef);
+    case TYPE_MONIKER.BOOL:     return canUndef ? asTriBool(v) : asBool(v);
+    case TYPE_MONIKER.DATE:     return asDate(v, canUndef);
+    case TYPE_MONIKER.OBJECT:   return asObject(v, canUndef);
+    case TYPE_MONIKER.ARRAY:    return asArray(v, canUndef);
+    default: return asString(v);
+  }
 }

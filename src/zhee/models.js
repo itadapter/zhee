@@ -338,7 +338,7 @@ export class Field extends Base{
   get value( ){ return this.m_value; }
   set value(v){ this.m_value = v; } //nado proverit na change, takje preformat value from gui gde budet (phone, dates etc?)
 
-  onValueChange(event){ this.m_model.emitter.emit(event); }
+  onValueChange(event){ this.m_model.emitter.emit(event); } //delete this - get rid of events altogether
 
 
   /** Paceholder text
