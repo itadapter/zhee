@@ -904,6 +904,15 @@ describe("Types", function() {
   });
 
 
+  describe("#asTypeMoniker", function() {
+    it("()",      () =>  aver.areEqual(sut.TYPE_MONIKER.STRING,  sut.asTypeMoniker())  );
+    it("(undef)", () =>  aver.areEqual(sut.TYPE_MONIKER.STRING,  sut.asTypeMoniker(undefined)) );
+    it("(null)",  () =>  aver.areEqual(sut.TYPE_MONIKER.STRING,  sut.asTypeMoniker(null)) );
+    it("(int)", () =>  aver.areEqual(sut.TYPE_MONIKER.INT, sut.asTypeMoniker("iNT")) );
+    it("(object)", () =>  aver.areEqual(sut.TYPE_MONIKER.OBJECT, sut.asTypeMoniker("ObjECT")) );
+  });
+
+
   describe("#asInt()", function() {
     it("()",   function() { aver.areEqual( 0, sut.asInt() );});
     it("undefined",   function() { aver.areEqual( 0, sut.asInt(undefined) );});
@@ -1007,7 +1016,6 @@ describe("Types", function() {
     it("10/3 = 3.3333(3333333...)",   function() { aver.areEqual( 3.3333, sut.asMoney(10/3) );});
 
     it("10/2.876 = 3.4770(5146....)",   function() { aver.areEqual( 3.4770, sut.asMoney(10/2.876) );});
-
   });
 
 
