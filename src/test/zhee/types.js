@@ -300,6 +300,14 @@ describe("Types", function() {
 
     it("false for function{}",        function() { aver.isFalse( sut.isObjectOrArray(function(){}) );});
     
+    it("true for new Date(1)",        function() { aver.isTrue( sut.isObjectOrArray(new Date(1)) );});
+    it("true for new Boolean(true)",  function() { aver.isTrue( sut.isObjectOrArray(new Boolean(true)) );});
+    it("true for new Number(1)",      function() { aver.isTrue( sut.isObjectOrArray(new Number(1)) );});
+
+    //String is "primitive"
+    it("false for 'aaa'",      function() { aver.isFalse( sut.isObjectOrArray("aaa") );});
+
+
     it("true for []",        function() { aver.isTrue( sut.isObjectOrArray([]) );});
     it("true for {}",        function() { aver.isTrue( sut.isObjectOrArray({})  );});
     it("true for {a:1...}",  function() { aver.isTrue( sut.isObjectOrArray({a: 2, b: 3}) );});
@@ -320,6 +328,13 @@ describe("Types", function() {
     it("false for string",    function() { aver.isFalse( sut.isObjectOrFunction("zaza")    );});
     it("false for []",        function() { aver.isFalse( sut.isObjectOrFunction([]) );});
 
+    it("true for new Date(1)",        function() { aver.isTrue( sut.isObjectOrFunction(new Date(1)) );});
+    it("true for new Boolean(true)",  function() { aver.isTrue( sut.isObjectOrFunction(new Boolean(true)) );});
+    it("true for new Number(1)",      function() { aver.isTrue( sut.isObjectOrFunction(new Number(1)) );});
+
+    //String is "primitive"
+    it("false for 'aaa'",      function() { aver.isFalse( sut.isObjectOrFunction("aaa") );});
+
     it("true for {}",        function() { aver.isTrue( sut.isObjectOrFunction({})  );});
     it("true for {a:1...}",  function() { aver.isTrue( sut.isObjectOrFunction({a: 2, b: 3}) );});
 
@@ -339,6 +354,8 @@ describe("Types", function() {
     it("false for empty()",   function() { aver.isFalse( sut.isIterable()          );});
     it("false for undefined", function() { aver.isFalse( sut.isIterable(undefined) );});
     it("false for null",      function() { aver.isFalse( sut.isIterable(null)      );});
+    it("false for true",       function() { aver.isFalse( sut.isIterable(true)          );});
+    it("false for new Date(1)",  function() { aver.isFalse( sut.isIterable(new Date(1)) );});
     it("false for 3",       function() { aver.isFalse( sut.isIterable(3)      );});
     it("false for {}",      function() { aver.isFalse( sut.isIterable({ })       );});
 
