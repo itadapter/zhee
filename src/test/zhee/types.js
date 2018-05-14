@@ -1153,8 +1153,56 @@ describe("Types", function() {
     });
 
     it("'{a: 2...' throws",   function() { aver.throws( function(){  sut.asObject("{\"a\": 2..."); }, "Cast error");});
+  });
 
-    
+  describe("#asArray()", function() {
+
+    it("()",   function() { aver.areEqualValues( null, sut.asArray() );});
+    it("undefined",   function() { aver.areEqualValues( null, sut.asArray(undefined) );});
+    it("undefined canUndef",   function() { aver.areEqualValues( undefined, sut.asArray(undefined, true) );});
+    it("null",   function() { aver.areEqualValues( null, sut.asArray(null) );});
+
+    it("true throws",   function() { aver.throws( function(){  sut.asArray(true); }, "Cast error");});
+    it("false throws",   function() { aver.throws( function(){  sut.asArray(false); }, "Cast error");});
+
+    it("1 throws",   function() { aver.throws( function(){  sut.asArray(1); }, "Cast error");});
+    it("'1' throws",   function() { aver.throws( function(){  sut.asArray("1"); }, "Cast error");});
+
+    it("{} throws",   function() { aver.throws( function(){  sut.asArray({}); }, "Cast error");});
+    it("'{}' throws",   function() { aver.throws( function(){  sut.asArray("{}"); }, "Cast error");});
+
+    it("[]",   function() { aver.areArraysEquivalent([], sut.asArray([])  );});
+    it("'[]'",   function() { aver.areArraysEquivalent([], sut.asArray("[]")  );});
+
+    it("[1, -2, 3, true, 'abc']",   function() { 
+      const a = sut.asArray([1, -2, 3, true, "abc"]);
+      aver.isArray( a );
+      aver.areArraysEquivalent([1,-2,3,true,"abc"], a);
+    });
+
+    it("'[1, -2, 3, true, \"abc\"]'",   function() { 
+      const a = sut.asArray("[1, -2, 3, true, \"abc\"]");
+      aver.isArray( a );
+      aver.areArraysEquivalent([1,-2,3,true,"abc"], a);
+    });
+
+    it("'[1, 2...' throws",   function() { aver.throws( function(){  sut.asArray("{1, 2..."); }, "Cast error");});
+
+    function Custom(){
+      this[Symbol.iterator] =  function*(){
+        yield 1;
+        yield -2;
+        yield 99;
+      };
+    }
+
+    it("Custom Iterator",   function() { 
+      const src = new Custom();
+      const a = sut.asArray( src );
+      aver.isArray( a );
+      aver.areArraysEquivalent([1, -2, 99], a);
+    });
+
   });
 
 });

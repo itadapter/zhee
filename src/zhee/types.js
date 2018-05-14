@@ -517,7 +517,7 @@ export function asArray(v, canUndef=false){
   if (v===undefined) return canUndef ? undefined : null;
   if (v===null) return null;
   if (isArray(v)) return v;
-  if (isIterable(v)) return [...v];
+  if (isIterable(v) && !isString(v)) return [...v];
 
   try{
     let arr = JSON.parse(asString(v));
