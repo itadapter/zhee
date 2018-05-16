@@ -1222,4 +1222,45 @@ describe("Types", function() {
 
   });
 
+
+  describe("#cast()", function() {
+
+    it("()",   function() { aver.throws( function(){  sut.cast(); }, "missing 2");});
+
+    it("(undefined, string, false)",   function() { aver.areEqual("", sut.cast(undefined, sut.TYPE_MONIKER.STRING) );});
+    it("(undefined, string, true)",   function() { aver.areEqual(undefined, sut.cast(undefined, sut.TYPE_MONIKER.STRING, true) );});
+
+    it("(3, string)",   function() { aver.areEqual("3", sut.cast(3, sut.TYPE_MONIKER.STRING) );});
+    it("(true, string)",   function() { aver.areEqual("true", sut.cast(true, sut.TYPE_MONIKER.STRING) );});
+
+    it("(true, bool)",   function() { aver.areEqual(true, sut.cast("true", sut.TYPE_MONIKER.BOOL) );});
+    it("(undefined, bool, false)",   function() { aver.areEqual(false, sut.cast(undefined, sut.TYPE_MONIKER.BOOL) );});
+    it("(undefined, bool, true)",   function() { aver.areEqual(undefined, sut.cast(undefined, sut.TYPE_MONIKER.BOOL, true) );});
+
+
+    it("(-7, int)",   function() { aver.areEqual(-7, sut.cast("-7", sut.TYPE_MONIKER.INT) );});
+
+    it("(-7.89, real)",   function() { aver.areEqual(-7.89, sut.cast("-7.89", sut.TYPE_MONIKER.REAL) );});
+
+    it("(-7.7899, money)",   function() { aver.areEqual(-7.7899, sut.cast("-7.78999999999", sut.TYPE_MONIKER.MONEY) );});
+
+    it("(Jan 1 1980, date)",   function() { aver.areEqual(1980, sut.cast("Jan 1 1980", sut.TYPE_MONIKER.DATE).getFullYear() );});
+
+    it("([1,2,3], array)",   function() { aver.areArraysEquivalent([1,2,3], sut.cast("[1,2,3]", sut.TYPE_MONIKER.ARRAY) );});
+
+
+    it("(set, array)",   function() { 
+      let s = new Set();
+      s.add(100);
+      s.add(-10);
+      s.add(true);
+      aver.areArraysEquivalent([100,-10,true], sut.cast(s, sut.TYPE_MONIKER.ARRAY) );
+    });
+
+
+    it("({a: 1, b:2}, array)",   function() { aver.areEqual(2, sut.cast("{\"a\": 1, \"b\": 2}", sut.TYPE_MONIKER.OBJECT).b );});
+  });
+
+
+
 });
