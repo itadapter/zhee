@@ -456,7 +456,6 @@ export class Field extends Base{
   //...
   //todo 
   // lookup prop
-  // asInt
   //  fact* properties doljni propuskat UNDEFINED cherez asString()
 
 }

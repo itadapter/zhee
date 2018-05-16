@@ -572,6 +572,6 @@ export function cast(v, tmon, canUndef=false){
     case TYPE_MONIKER.DATE:     return asDate(v, canUndef);
     case TYPE_MONIKER.OBJECT:   return asObject(v, canUndef);
     case TYPE_MONIKER.ARRAY:    return asArray(v, canUndef);
-    default: return asString(v);
+    default: return asString(v, canUndef);
   }
 }

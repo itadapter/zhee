@@ -235,12 +235,5 @@ export class $LINQ{
     return new $LINQ(it);
   }
 
-
- 
-  // test first.firstOrDefault
-  //group by???
-  //   aggregate(seed, f)
-  //test performance in browser
-  //test types asInt()
 }
 

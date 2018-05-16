@@ -4,6 +4,11 @@
 ## to Test
 - events
 
+ // test first.firstOrDefault
+  //group by???
+  //   aggregate(seed, f)
+  //test performance in browser
+
 ## zhee core
 
 - Strings - screenname ischar etc...
