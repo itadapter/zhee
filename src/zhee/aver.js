@@ -50,6 +50,15 @@ export function isNotNull(a){
 }
 
 /**
+ * Performs strict test for a non-empty string value
+ * @param {*} a 
+ */
+export function isNonEmptyString(a){
+  if (types.isNonEmptyString(a)) return;
+  throw AVERMENT_FAILURE(`isNonEmptyString(${dv(a)})`);
+}
+
+/**
  * Performs strict test for object (not a primitive, array or function)
  * @param {*} a 
  */

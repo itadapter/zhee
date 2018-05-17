@@ -905,6 +905,18 @@ describe("Types", function() {
     it("Set(123)", function() { aver.isFalse( sut.isEmptyIterable(new Set([1,2,3])) );});
   });
 
+  describe("#isNonEmptyString()", function() {
+    it("()",    function()  { aver.isFalse( sut.isNonEmptyString() );});
+    it("null",  function()  { aver.isFalse( sut.isNonEmptyString(null) );});
+    it("undef", function()  { aver.isFalse(  sut.isNonEmptyString(undefined) );});
+    it("123",   function()  { aver.isFalse( sut.isNonEmptyString(123) );});
+    it("bool",  function()  { aver.isFalse( sut.isNonEmptyString(true) );});
+
+    it("'          '",  function()  { aver.isFalse( sut.isNonEmptyString("          ") );});
+    it("'  \\r \\n '",  function()  { aver.isFalse( sut.isNonEmptyString("  \r  \n  ") );});
+    it("'aaa'",    function() { aver.isTrue( sut.isNonEmptyString("aaaa") );});
+  });
+
 
   describe("#asCharCase", function() {
     it("()",      function()  { aver.areEqual(sut.CHAR_CASE.ASIS,  sut.asCharCase() );});

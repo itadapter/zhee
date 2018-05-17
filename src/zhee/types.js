@@ -22,6 +22,7 @@ export function hown(obj, prop){
  * Returns all object values as an array. Empty array for undefined or null.
  * Does NOT return values from prototype, only values on this object itself
  * Note: object.values() is not widely supported yet
+ * @returns {[*]} Array of all object values
  */
 export function allObjectValues(o){
   if (!isAssigned(o)) return [];
@@ -216,7 +217,6 @@ export function parentOfClass(cls){
   return result.name === "" ? null : result;
 }
 
-
 /**
  * Mixes in an extension's own keys into an object, conditionally keeping existing keys even if null
  * @param {Object} obj An object to mix into
@@ -294,6 +294,7 @@ export function nav(obj, path, org){
 
 /**
  * Returns false only if an iterable was supplied and it yields at least one value, true in all other cases
+ * @param {*} iterable Iterable object
  */
 export function isEmptyIterable(iterable){
   if (!isIterable(iterable)) return true;
@@ -308,6 +309,16 @@ export function isEmptyIterable(iterable){
  * @param {boolean} canUndef True to preserve undefined
  */
 export function asString(v, canUndef = false){ return strings.asString(v, canUndef); }
+
+
+/**
+ * Returns true if the argument is a non-empty value of a string type
+ * @param {*} v value
+ */
+export function isNonEmptyString(v){
+  if (!isString(v)) return false;
+  return !strings.isEmpty(v);
+}
 
 
 /** Character cases */
