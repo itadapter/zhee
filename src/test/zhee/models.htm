@@ -1,0 +1,38 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Zhee Strings Fixture</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/5.1.1/mocha.css" rel="stylesheet" />
+</head>
+<body>
+<div id="mocha"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/5.1.1/mocha.js"></script>
+<script>mocha.setup('bdd');</script>
+
+<script src="out/zhee.js"></script>
+<script src="models.js"></script>
+
+<script>
+    mocha.checkLeaks();
+    mocha.run();
+</script>
+
+<script>
+ class Person extends sut.Model{
+      constructor(){
+        super(null, "Person");
+        new sut.Field(this, "fname");
+        new sut.Field(this, "lname");
+        new sut.Field(this, "age");
+      }
+}
+
+
+  var person = new Person();
+
+</script>
+
+
+</body>
+</html>

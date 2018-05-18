@@ -4,6 +4,7 @@ const common  = require('./wpk-common');
 
 var cfgZhee = {
   ...common.CFG_BASE,
+  mode: "production",
   entry: {
     zhee: "./zhee/index.js"
   },

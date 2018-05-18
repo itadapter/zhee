@@ -16,6 +16,9 @@ export const ISO_LANG_ESP = "esp";
 export const ANY_SCHEMA = "ANY-SCHEMA--";
 export const ANY_FIELD  = "ANY-FIELD--";
 
+export const SCHEMA_MODEL_VALIDATION = "Model-Validation";
+export const FIELD_ERROR  = "Field-Error";
+
 export const FIELD_DAY   = "day";
 export const FIELD_MONTH = "month";
 

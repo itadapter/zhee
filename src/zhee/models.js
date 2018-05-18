@@ -1,6 +1,8 @@
 import * as types from "./types";
+import * as strings from "./strings";
 import * as aver from "./aver";
 import * as linq from "./linq";
+import * as lcl from "./localization";
 
 
 /**
@@ -284,7 +286,7 @@ export class Model extends Base{
 
   /** Returns all fields */
   get fields(){ return types.allObjectValues(this.m_fields); }
-  [Symbol.iterator](){ return this.fields[Symbol.iterator]; }
+  [Symbol.iterator](){ return this.fields[Symbol.iterator](); }
 
 
   /** Internal method that registers a field with this model */
@@ -294,6 +296,18 @@ export class Model extends Base{
     if (types.hown(this.m_fields, nm)) throw Error(`Model '${this.name}' already has field '${nm}'`);
     this.m_fields[nm] = field;
     this.touch();
+  }
+
+  /** Internal method that deletes/unregisters a field with this model */
+  __dropField(field){
+    if (field.parent!==this) throw Error(`Wrong field parent for model '${this.name}'`);
+    const nm = field.name;
+    if (types.hown(this.m_fields, nm)){
+      delete this.m_fields[nm];
+      this.touch();
+      return true;
+    }
+    return false;
   }
 
   /** Returns true if this model has the specified named field */
@@ -335,7 +349,7 @@ export class Model extends Base{
   get data(){
     let result = {};
     for(let fld of this){
-      const fd = fld.data();
+      const fd = fld.data;
       result[fld.name] = fd;
     }
     return result;
@@ -373,6 +387,12 @@ export class Field extends Base{
     parent.__addField(this);
   }
 
+  /**
+   * Removes the field from parent Model; return true if found and removed
+   */
+  drop(){
+    return this.parent.__dropField(this);
+  }
 
   /**
    * Returns this field value suitable for JSON serialization, that is: if this object value is Model
@@ -384,7 +404,7 @@ export class Field extends Base{
     function map(v){
       if (v===undefined) return null;
       if (v instanceof Model){
-        v = v.data();
+        v = v.data;
       } else if (types.isArray(v)){
         v = linq.$(v).select(e => map(e)).toArray();
       }
@@ -523,4 +543,27 @@ export class Field extends Base{
   //  fact* properties doljni propuskat UNDEFINED cherez asString()
 
   // validate field data per required etc...
+
+  /** Cascades validation on child fields. Override to perform model-wide cross-field validation.
+   *  Throw ValidationError
+   */
+  async _doValidate(target, force){
+
+    const error = (msg, args) => {
+      msg = lcl.currentLocalizer().localizeString(msg, this.parent.isoLang, lcl.FIELD_ERROR, lcl.SCHEMA_MODEL_VALIDATION);
+      msg = strings.args(msg, args);
+      return new ValidationError(msg, this);
+    };
+
+    const val = this.m_value;
+
+    if (this.factRequired){
+      if (val===undefined || val===null || (types.isString(val) && strings.isEmpty(val)))
+        throw error("Field '@f@' must have a value", {f: this.about});
+    }
+    // field.about
+    // strings.args()
+    // Model.isoLang
+    
+  }
 }
