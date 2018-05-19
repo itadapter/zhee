@@ -162,7 +162,11 @@ export function format(v, args, localizer = null){
       fmt = token.substr(i+2);
       const j = fmt.indexOf("{");
       if (j>1){
-        fmta = JSON.parse( fmt.substr(j) );//handle error
+        try{
+          fmta = JSON.parse( fmt.substr(j) );
+        }catch(e){
+          throw new Error(`.format('.. ${fmt} ..') Error parsing token format fragment: ${e.message}`);
+        }
         fmt = fmt.substr(0, j);
       }
     }

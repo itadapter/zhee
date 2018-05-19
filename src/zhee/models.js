@@ -569,7 +569,7 @@ export class Field extends Base{
 
     const error = (msg, args) => {
       msg = lcl.currentLocalizer().localizeString(msg, this.parent.isoLang, lcl.FIELD_ERROR, lcl.SCHEMA_MODEL_VALIDATION);
-      msg = strings.args(msg, args);
+      msg = strings.format(msg, args);
       return new ValidationError(msg, this);
     };
 

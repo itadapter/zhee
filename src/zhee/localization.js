@@ -39,10 +39,10 @@ export const DATE_FORMAT = {
 };
 
 export const TIME_DETAILS = {
-  NONE: 0,  // time is off
-  HM:   1, // hours:minutes
-  HMS:  2, // hours:minutes:seconds
-  HMSM: 3  // hours:minutes:seconds:millis
+  NONE: "NONE", // time is off
+  HM:   "HM",   // hours:minutes
+  HMS:  "HMS",  // hours:minutes:seconds
+  HMSM: "HMSM"  // hours:minutes:seconds:millis
 };
 
 

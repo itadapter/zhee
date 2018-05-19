@@ -247,6 +247,8 @@ describe("Strings", function() {
 
   describe("#string-format()", function() {
 
+      
+    
     it("without sub format 1 level nav",   function() {
       aver.areEqual("a = -2, b = true", sut.format("a = <<a>>, b = <<b>>", {a: -2, b: true}));
     });
@@ -272,6 +274,43 @@ describe("Strings", function() {
     it("date-2",   function() {
       aver.areEqual("DOB: 2 January 1980", sut.format("DOB: <<dob::ld{\"dtFormat\": \"LongDate\"}>>", {dob: new Date(1980, 0, 2)}));
     });
+
+    it("money-1",   function() {
+      aver.areEqual("Balance: $2,315,678.89", sut.format("Balance: <<amt::lm{\"iso\": \"usd\"}>>", {amt: 2315678.8999}));
+    });
+
+    it("money-2",   function() {
+      aver.areEqual("Balance: $2,315,678.89", sut.format("Balance: <<amt::lm{\"iso\": \"@iso\"}>>", {amt: 2315678.8999, iso: "usd"}));
+    });
+
+    it("bad json",   function() {
+      aver.throws( () => sut.format("a = <<a::ld{'a': }>>, b = <<b>>", {}), "Error parsing token format");
+    });
+
+
+    it("full example",   function() {
+      const data ={
+        title: "Mr.",
+        lname: "Solomon",
+        fname: "Satya",
+        dob: new Date(1980,0,2,13,44,12),
+        balance: 5123456.89,
+        balance_iso: "usd",
+        hobbies: [{id: "run", name: "Running"},{id: "wld", name: "Welding"}]
+      };
+
+      const msg = 
+       `Dear <<title>> <<lname>>! You were born on <<dob::ld{"dtFormat": "LongDate", "tmDetails": "HMS"}>> and
+       saved <<balance::lm{"iso": "@balance_iso", "precision": 0}>>. We appreciate that you like <<hobbies.1.name>>! Thanks <<fname>>!`;
+
+      const expect= 
+       `Dear Mr. Solomon! You were born on 2 January 1980 13:44:12 and
+       saved $5,123,456. We appreciate that you like Welding! Thanks Satya!`;
+
+
+      aver.areEqual(expect, sut.format(msg, data));
+    });
+
 
   });
 
