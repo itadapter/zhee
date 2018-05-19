@@ -271,6 +271,18 @@ export class Base{
    * @returns {boolean} Never returns undefined
    */
   get factReadOnly( ) { return this.m_readOnly!==undefined ? this.m_readOnly : this.m_parent ? this.m_parent.factReadOnly() : false; }
+
+  /** Returns name/title/description (if available) */
+  get about(){
+    let result = this.name;
+    if (!strings.isEmpty(this.factTitle))
+      result += ` '${this.factTitle}'`;
+
+    if (!strings.isEmpty(this.factDescription))
+      result += ("  " + this.factDescription);
+
+    return result;
+  }
 }
 
 
@@ -283,6 +295,9 @@ export class Model extends Base{
     super(parent, name);
     this.m_fields = {};
   }
+
+  /** Represents model as string */
+  toString(){ return `Model('${this.name}', ${this.fields.length} fields)`; }
 
   /** Returns all fields */
   get fields(){ return types.allObjectValues(this.m_fields); }
@@ -386,6 +401,9 @@ export class Field extends Base{
 
     parent.__addField(this);
   }
+
+  /** Represents field as string */
+  toString(){ return `Field('${this.name}': ${this.type}) = ${strings.describe(this.value, 18)}`; }
 
   /**
    * Removes the field from parent Model; return true if found and removed
@@ -561,9 +579,11 @@ export class Field extends Base{
       if (val===undefined || val===null || (types.isString(val) && strings.isEmpty(val)))
         throw error("Field '@f@' must have a value", {f: this.about});
     }
-    // field.about
+    
     // strings.args()
     // Model.isoLang
     
   }
+
+  
 }

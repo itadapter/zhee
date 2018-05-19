@@ -135,3 +135,67 @@ export function describe(v, maxLen = 64){
   d = truncate(d, maxLen, CC.ELLIPSIS);
   return `(${t}${subs})${d}`;
 }
+
+/** Regular expression that parses out <<format tokens>> */
+export const REXP_FORMAT = /<<(.*?)>>/g;
+
+/**
+ * Expands formatting arguments
+ * @param {*} v A format string with tokens: <<name[::format[{format-args-json}]>>
+ * @param {*} args Arguments object: 
+ * @example 
+ *  format(`DOB is: <<dob::ld{"dtFormat": "'ShortDate"}>> Salary: <<salary::lm{"iso": "?salary_iso"}>>`, {dob: new Date(1980, 1, 1), salary: 120000, salary_iso: "usd"})
+ *  returns "DOB is: 01/01/1980 Salary: $120,000.00"
+ */
+export function format(v, args, localizer = null){
+  v = asString(v);
+  if (!types.isObjectOrArray(args)) 
+    throw new Error(".format(args) must be object or array"); 
+
+  const fmap = (s, token) => {
+    let key = token;
+    let fmt = "";
+    let fmta = null;
+    const i =token.indexOf("::");
+    if (i>0){
+      key = token.substr(0, i);
+      fmt = token.substr(i+2);
+      const j = fmt.indexOf("{");
+      if (j>1){
+        fmta = JSON.parse( fmt.substr(j) );//handle error
+        fmt = fmt.substr(0, j);
+      }
+    }
+
+    const get = (path) => types.nav(args, path).result;
+
+
+    let tv = get(key);
+
+    switch(fmt){
+      case "ld": { //localized date-time
+        if (!localizer) localizer = lcl.currentLocalizer();
+        if (fmta===null) fmta={}; 
+        fmta.dt = tv; 
+        return localizer.formatDateTime(fmta);
+      }
+      case "lm": { //localized money
+        if (!localizer) localizer = lcl.currentLocalizer();
+        if (fmta===null) fmta={}; 
+        fmta.amt = tv; 
+        if (isEmpty(fmta.iso)) throw new Error(".format() is missing currency iso arg: lm{iso: 'currency-code' | '?key'}"); 
+        if (fmta.iso.startsWith("?")){
+          fmta.iso = asString( get(fmta.iso.substr(1)) );
+        }
+        return localizer.formatCurrency(fmta);
+      }
+      case "tc": { //type cast
+        if (fmta===null) throw new Error(".format() is missing typecast arg: tc{tm: 'type-moniker'}"); 
+        tv = types.cast(tv, fmta.tm);
+      }
+    }
+    return asString(tv);
+  };
+
+  return v.replace(REXP_FORMAT, fmap);
+}

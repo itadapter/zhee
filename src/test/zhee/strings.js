@@ -244,4 +244,36 @@ describe("Strings", function() {
   }); 
 
 
+
+  describe("#string-format()", function() {
+
+    it("without sub format 1 level nav",   function() {
+      aver.areEqual("a = -2, b = true", sut.format("a = <<a>>, b = <<b>>", {a: -2, b: true}));
+    });
+
+    it("without sub format 2 level nav",   function() {
+      aver.areEqual("a = -2, b = true and dogma is bad, not good", sut.format("a = <<a>>, b = <<b>> and dogma is <<c.dogma>>", {a: -2, b: true, c: {dogma: "bad, not good"}}));
+    });
+
+    it("without sub format 2 level+array nav",   function() {
+      const data = {a: -2, b: true, c: {dogma: ["bad, not good", "OK sometimes"]}};
+      aver.areEqual("a = -2, b = true and dogma is bad, not good", sut.format("a = <<a>>, b = <<b>> and dogma is <<c.dogma.0>>", data));
+      aver.areEqual("a = -2, b = true and dogma is OK sometimes", sut.format("a = <<a>>, b = <<b>> and dogma is <<c.dogma.1>>", data));
+    });
+
+    it("type cast",   function() {
+      aver.areEqual("a = -2", sut.format("a = <<realA::tc{\"tm\": \"int\"}>>", {realA: -2.082932}));
+    });
+
+    it("date-1",   function() {
+      aver.areEqual("DOB: 01/02/1980", sut.format("DOB: <<dob::ld>>", {dob: new Date(1980, 0, 2)}));
+    });
+
+    it("date-2",   function() {
+      aver.areEqual("DOB: 2 January 1980", sut.format("DOB: <<dob::ld{\"dtFormat\": \"LongDate\"}>>", {dob: new Date(1980, 0, 2)}));
+    });
+
+  });
+
+
 });
