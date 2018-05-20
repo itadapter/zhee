@@ -177,7 +177,7 @@ export class Base{
    *  the parent chain will be consulted
    * @returns {string} Never returns undefined
    */
-  get factTitle( ) { return this.m_title!==undefined ? this.m_title : this.m_parent ? this.m_parent.factTitle() : ""; }
+  get factTitle( ) { return this.m_title!==undefined ? this.m_title : this.m_parent ? this.m_parent.factTitle : ""; }
 
 
 
@@ -197,7 +197,7 @@ export class Base{
    *  the parent chain will be consulted
    * @returns {string} Never returns undefined
    */
-  get factDescription( ) { return this.m_description!==undefined ? this.m_description : this.m_parent ? this.m_parent.factDescription() : ""; }
+  get factDescription( ) { return this.m_description!==undefined ? this.m_description : this.m_parent ? this.m_parent.factDescription : ""; }
 
 
   /** Returns enabled for this entity
@@ -217,7 +217,7 @@ export class Base{
    * @returns {boolean} Never returns undefined
    */
   get factEnabled( ) { 
-    return this.m_enabled!==undefined ? this.m_enabled : this.m_parent ? this.m_parent.factEnabled() : true;
+    return this.m_enabled!==undefined ? this.m_enabled : this.m_parent ? this.m_parent.factEnabled : true;
   }
 
 
@@ -237,7 +237,7 @@ export class Base{
    *  the parent chain will be consulted
    * @returns {boolean} Never returns undefined
    */
-  get factVisible( ) { return this.m_visible!==undefined ? this.m_visible : this.m_parent ? this.m_parent.factVisible() : true; }
+  get factVisible( ) { return this.m_visible!==undefined ? this.m_visible : this.m_parent ? this.m_parent.factVisible : true; }
 
   /** Returns required for this entity
    * @returns {boolean|undefined} Undefined is returned if parameter is not set on this level
@@ -255,7 +255,7 @@ export class Base{
    *  the parent chain will be consulted
    * @returns {boolean} Never returns undefined
    */
-  get factRequired( ) { return this.m_required!==undefined ? this.m_required : this.m_parent ? this.m_parent.factRequired() : false; }
+  get factRequired( ) { return this.m_required!==undefined ? this.m_required : this.m_parent ? this.m_parent.factRequired : false; }
 
 
   /** Returns readOnly for this entity
@@ -274,7 +274,7 @@ export class Base{
    *  the parent chain will be consulted
    * @returns {boolean} Never returns undefined
    */
-  get factReadOnly( ) { return this.m_readOnly!==undefined ? this.m_readOnly : this.m_parent ? this.m_parent.factReadOnly() : false; }
+  get factReadOnly( ) { return this.m_readOnly!==undefined ? this.m_readOnly : this.m_parent ? this.m_parent.factReadOnly : false; }
 
   /** Returns title (if available) or name */
   get about(){
@@ -310,6 +310,7 @@ export class Model extends Base{
     const nm = field.name;
     if (types.hown(this.m_fields, nm)) throw Error(`Model '${this.name}' already has field '${nm}'`);
     this.m_fields[nm] = field;
+    this["$"+nm] = field;
     this.touch();
   }
 
@@ -319,6 +320,7 @@ export class Model extends Base{
     const nm = field.name;
     if (types.hown(this.m_fields, nm)){
       delete this.m_fields[nm];
+      delete this["$"+nm];
       this.touch();
       return true;
     }
@@ -594,7 +596,7 @@ export class Field extends Base{
     msg = strings.format(msg, args);
     return new ValidationError(msg, this);
   }
-  
+
   /** Performs basic field validations such as: required, min/max length, lookup value
    *  Throw ValidationError
    */
