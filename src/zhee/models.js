@@ -21,6 +21,10 @@ export class ValidationError extends Error{
 
   /** Detail errors, such as fields that generated errors */
   get details (){ return this.m_details; }
+
+  toString(){
+    return `Validation error of ${this.model.about}: ${this.message}`;
+  }
 }
 
 /**
@@ -135,7 +139,7 @@ export class Base{
    */
   async update(target, force = false){
     if (this.m_updated && !force) return;
-    await _doUpdate(target, force);
+    await this._doUpdate(target, force);
     this.m_updated = true;
   }
 
@@ -272,16 +276,9 @@ export class Base{
    */
   get factReadOnly( ) { return this.m_readOnly!==undefined ? this.m_readOnly : this.m_parent ? this.m_parent.factReadOnly() : false; }
 
-  /** Returns name/title/description (if available) */
+  /** Returns title (if available) or name */
   get about(){
-    let result = this.name;
-    if (!strings.isEmpty(this.factTitle))
-      result += ` '${this.factTitle}'`;
-
-    if (!strings.isEmpty(this.factDescription))
-      result += ("  " + this.factDescription);
-
-    return result;
+    return strings.isEmpty(this.factTitle) ? this.name : this.factTitle;
   }
 }
 
@@ -298,6 +295,9 @@ export class Model extends Base{
 
   /** Represents model as string */
   toString(){ return `Model('${this.name}', ${this.fields.length} fields)`; }
+
+  /** Returns title (if available) or name */
+  get about(){ return `Model '${super.about}'`; }
 
   /** Returns all fields */
   get fields(){ return types.allObjectValues(this.m_fields); }
@@ -395,6 +395,8 @@ export class Field extends Base{
     this.m_password = false;
     this.m_minSize = 0;
     this.m_maxSize = 0;
+    this.m_minValue = undefined;
+    this.m_maxValue = undefined;
     this.m_ctlType = "auto";
 
     this.m_lookup = null;
@@ -404,6 +406,9 @@ export class Field extends Base{
 
   /** Represents field as string */
   toString(){ return `Field('${this.name}': ${this.type}) = ${strings.describe(this.value, 18)}`; }
+
+  /** Returns title (if available) or name */
+  get about(){ return `Field '${super.about}'`; }
 
   /**
    * Removes the field from parent Model; return true if found and removed
@@ -544,6 +549,26 @@ export class Field extends Base{
     this.touch();
   }
 
+  /** Imposes a minimum value constraint
+   * @returns {*}
+   */
+  get minValue( ){ return this.m_minValue;}
+  set minValue(v){
+    if (v===this.m_minValue) return;
+    this.m_minValue = v;
+    this.touch();
+  }
+
+  /** Imposes a maximum value constraint
+   * @returns {*}
+   */
+  get maxValue( ){ return this.m_maxValue;}
+  set maxValue(v){
+    if (v===this.m_maxValue) return;
+    this.m_maxValue = v;
+    this.touch();
+  }
+
   /** Suggests a type of a view control that should be used
    * @returns {string}
    */
@@ -555,35 +580,96 @@ export class Field extends Base{
     this.touch();
   }
 
-  //...
-  //todo 
-  // lookup prop
-  //  fact* properties doljni propuskat UNDEFINED cherez asString()
+  /**
+   * Protected. Override to make and return errorInstance. Default makes ValidationError()
+   * @param {string} msg Message template used with string.format()
+   * @param {object|array} args template args
+   */
+  _makeError(msg, args){
+    msg = lcl.currentLocalizer().localizeString(msg, 
+      this.parent.isoLang, 
+      lcl.FIELD_ERROR, 
+      lcl.SCHEMA_MODEL_VALIDATION);
 
-  // validate field data per required etc...
-
-  /** Cascades validation on child fields. Override to perform model-wide cross-field validation.
+    msg = strings.format(msg, args);
+    return new ValidationError(msg, this);
+  }
+  
+  /** Performs basic field validations such as: required, min/max length, lookup value
    *  Throw ValidationError
    */
+  /*eslint-disable no-unused-vars*/
   async _doValidate(target, force){
-
-    const error = (msg, args) => {
-      msg = lcl.currentLocalizer().localizeString(msg, this.parent.isoLang, lcl.FIELD_ERROR, lcl.SCHEMA_MODEL_VALIDATION);
-      msg = strings.format(msg, args);
-      return new ValidationError(msg, this);
-    };
-
-    const val = this.m_value;
-
-    if (this.factRequired){
-      if (val===undefined || val===null || (types.isString(val) && strings.isEmpty(val)))
-        throw error("Field '@f@' must have a value", {f: this.about});
+  /*eslint-enable no-unused-vars*/
+    await this._validateRequired();
+    await this._validateMinMaxValue();
+    
+    if (types.isString(this.value)){
+      await this._validateMinMaxSize();
+      await this._validateDataKind();
     }
-    
-    // strings.args()
-    // Model.isoLang
-    
+
+    await this._validateLookup();
   }
 
-  
+  /** Override to perform required value validation */
+  async _validateRequired(){
+    if (this.factRequired){
+      const val = this.value;
+      if (val===undefined || val===null || (types.isString(val) && strings.isEmpty(val)))
+        throw this._makeError("must be filled");
+    }
+  }
+
+  /** Override to perform min/max value validation */
+  async _validateMinMaxValue(){
+    if (types.isAssigned(this.minValue)){
+      try{
+        if (this.value<this.minValue) throw 1;
+      }catch(e){
+        throw this._makeError("value can not be less than <<m>>", {m: this.minValue});
+      }
+    }
+
+    if (types.isAssigned(this.maxValue)){
+      try{
+        if (this.value>this.maxValue) throw 1;
+      }catch(e){
+        throw this._makeError("value can not be greater than <<m>>", {m: this.maxValue});
+      }
+    }
+  }
+
+  /** Override to perform min/max string size value validation */
+  async _validateMinMaxSize(){
+    if (this.minSize>0 && this.value.length<this.minSize)
+      throw this._makeError("can not be shorter than <<c>> characters", {c: this.minSize});
+
+    if (this.maxSize>0 && this.value.length>this.maxSize)
+      throw this._makeError("can not be longer than <<c>> characters", {c: this.maxSize});
+  }
+
+  /** Override to perform string data kind (e.g. email etc...) validation */
+  async _validateDataKind(){
+    if (this.kind===types.DATA_KIND.EMAIL && !strings.isValidEMail(this.value))
+      throw this._makeError("contains an invalid e-mail address");
+
+    if (this.kind===types.DATA_KIND.SCREENNAME && !strings.isValidScreenName(this.value))
+      throw this._makeError("must start with a letter and contain only letters or digits separated by single '.' or '-' or '_'");
+  }
+
+  /** Override to perform lookup validation */
+  async _validateLookup(){
+    //todo  FINISH!!!
+  }
+
+
+
+
+
+
+  // Model.isoLang
+  // isValidEmail
+  // isValidScreenName
+  // lookup dict
 }

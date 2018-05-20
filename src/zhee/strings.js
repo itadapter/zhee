@@ -141,16 +141,17 @@ export const REXP_FORMAT = /<<(.*?)>>/g;
 
 /**
  * Expands formatting arguments
- * @param {*} v A format string with tokens: <<name[::format[{format-args-json}]>>
- * @param {*} args Arguments object: 
+ * @param {*} v A format string with tokens: <<path[::format[{format-args-json}]>>. Path is the same as used in types.nav() to address sub/properties of the args object
+ * @param {*} args Arguments object: either a map or array
  * @example 
  *  format(`DOB is: <<dob::ld{"dtFormat": "'ShortDate"}>> Salary: <<salary::lm{"iso": "?salary_iso"}>>`, {dob: new Date(1980, 1, 1), salary: 120000, salary_iso: "usd"})
  *  returns "DOB is: 01/01/1980 Salary: $120,000.00"
  */
 export function format(v, args, localizer = null){
   v = asString(v);
+  if (!args) return v;
   if (!types.isObjectOrArray(args)) 
-    throw new Error(".format(args) must be object or array"); 
+    throw new Error(".format(args) must be null, object or array"); 
 
   const fmap = (s, token) => {
     let key = token;
