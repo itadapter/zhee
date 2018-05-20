@@ -246,8 +246,6 @@ describe("Strings", function() {
 
 
   describe("#string-format()", function() {
-
-      
     
     it("without sub format 1 level nav",   function() {
       aver.areEqual("a = -2, b = true", sut.format("a = <<a>>, b = <<b>>", {a: -2, b: true}));
@@ -314,5 +312,50 @@ describe("Strings", function() {
 
   });
 
+
+  describe("#isValidEMail()", function() {
+    
+    it("()",   function() {     aver.isFalse( sut.isValidEMail() );    });
+    it("(undefined)",   function() {     aver.isFalse( sut.isValidEMail(undefined) );    });
+    it("(null)",   function() {     aver.isFalse( sut.isValidEMail(null) );    });
+    it("(true)",   function() {     aver.isFalse( sut.isValidEMail(true) );    });
+    it("(7)",   function() {     aver.isFalse( sut.isValidEMail(7) );    });
+
+    it("person@domain.com",   function() {     aver.isTrue( sut.isValidEMail("person@domain.com") );    });
+    it("person-a-b-c@domain.com",   function() {     aver.isTrue( sut.isValidEMail("person-a-b-c@domain.com") );    });
+    it("person.a.b.c@domain.com",   function() {     aver.isTrue( sut.isValidEMail("person.a.b.c@domain.com") );    });
+    it("person.a.b.c@domain.another.com",   function() {     aver.isTrue( sut.isValidEMail("person.a.b.c@domain.another.com") );    });
+
+    it("@domain.com", function() {     aver.isFalse( sut.isValidEMail("@domain.com") );    });
+    it("aaa@d",       function() {     aver.isFalse( sut.isValidEMail("aaa@d") );    });
+
+    it("aaa@do",         function() {     aver.isFalse( sut.isValidEMail("aaa@do") );    });
+    it("aaa@do@abc.com", function() {     aver.isFalse( sut.isValidEMail("aaa@do@abc.com") );    });
+    it("aaa@do.d",       function() {     aver.isTrue( sut.isValidEMail("aaa@do.d") );    });
+    it("aaa@do.do",      function() {     aver.isTrue( sut.isValidEMail("aaa@do.do") );    });
+
+    it("aaa@aaa...bbb",  function() {     aver.isFalse( sut.isValidEMail("aaa@aaa...bbb") );    });
+  });
+
+  describe("#isValidScreenName()", function() {
+    
+    it("()",   function() {     aver.isFalse( sut.isValidScreenName() );    });
+    it("(undefined)",   function() {     aver.isFalse( sut.isValidScreenName(undefined) );    });
+    it("(null)",   function() {     aver.isFalse( sut.isValidScreenName(null) );    });
+    it("(7)",   function() {     aver.isFalse( sut.isValidScreenName(7) );    });
+    
+    it("(true)",   function() {     aver.isTrue( sut.isValidScreenName(true) );    });
+    it("my-name",   function() {     aver.isTrue( sut.isValidScreenName("my-name") );    });
+    it("my.name",   function() {     aver.isTrue( sut.isValidScreenName("my.name") );    });
+    it("my.name1980",   function() {     aver.isTrue( sut.isValidScreenName("my.name1980") );    });
+    it("my.name-1980.ok",   function() {     aver.isTrue( sut.isValidScreenName("my.name-1980.ok") );    });
+
+    it("1my-name",          function() {     aver.isFalse( sut.isValidScreenName("1my-name") );    });
+    it("my name",          function()  {     aver.isFalse( sut.isValidScreenName("my name") );    });
+    it("-my.name",          function() {     aver.isFalse( sut.isValidScreenName("-my.name") );    });
+    it("my.name1980.",      function() {     aver.isFalse( sut.isValidScreenName("my.name1980.") );    });
+    it("my..name-1980.ok",  function() {     aver.isFalse( sut.isValidScreenName("my..name-1980.ok") );    });
+    it("my.-name",          function() {     aver.isFalse( sut.isValidScreenName("my.-name") );    });
+  });
 
 });

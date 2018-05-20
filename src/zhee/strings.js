@@ -204,3 +204,97 @@ export function format(v, args, localizer = null){
 
   return v.replace(REXP_FORMAT, fmap);
 }
+
+/**
+ * Returns true if the value represents a valid email address.
+ * 2014 Note: for now we only accept latin, diacritics, greek and cyryllic chars for emails.
+ * @param {*} v Email Address
+ */
+export function isValidEMail(v){
+  v = asString(v);
+  if (isEmpty(v)) return false;
+  const iat=v.indexOf("@");
+  if (iat<1 || iat===v.length-1) return false;
+
+  if (v.indexOf("@", iat+1)>=0) return false;//duplicate @
+
+  const ldot=v.lastIndexOf(".");
+  const pass =  (ldot>iat+2) && (ldot+2<=v.length);
+  if (!pass) return false;
+
+  let wasDot = false;
+  for(let i=0; i<v.length; i++){
+    const c = v[i];
+    if (c==="."){
+      if (wasDot) return false;
+      wasDot = true;
+      continue;
+    } else wasDot = false;
+
+    if (c==="@"||c==="-"||c==="_") continue;
+    if (!isValidScreenNameLetterOrDigit(c)) return false;
+  }
+
+  return true;
+}
+
+const SCREEN_NAME_EXTRA =
+  "ёЁÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥ";
+
+function isValidScreenNameLetter(c){
+  return ((c>="A" && c<="Z") ||
+          (c>="a" && c<="z") ||
+          (c>="Α" && c<="Ω") ||
+          (c>="α" && c<="ω") ||
+          (c>="А" && c<="Я") ||
+          (c>="а" && c<="я") ||
+          (SCREEN_NAME_EXTRA.indexOf(c)>=0));
+}
+
+function isValidScreenNameLetterOrDigit(c){
+  return isValidScreenNameLetter(c) || (c>="0" && c<="9"); 
+}
+
+function isValidScreenNameSeparator(c){
+  return c==="." || c==="-" || c==="_";
+}
+
+/**
+ * Returns true if the string contains a valid Screen Name.
+ * Screen names are used for making primary actor (user/room/group etc...) IDS(names)
+ * which are always visible (hence the name "screen/stage name of a person") and can be used for emails, 
+ * for example "my-name" => "my-name@domain.com". 
+ * Screen names are defined as strings starting from a letter, then followed by letters or digints separated by a single
+ * hyphen, dot or underscore
+ * @param {*} v A string value representing a s Screen Name
+ * @example 
+ *  Valid names: "my-name", "name1980", "my.name", "alex-bobby-1980" 
+ *  Invalid names: "-my-name", "1980name", "my-.name", "name."
+ */
+export function isValidScreenName(v){
+  v = asString(v);
+  if (isEmpty(v)) return false;
+  v = trim(v);
+  if (v.length===0) return false;
+  var wasSeparator = false;
+  for(let i=0; i<v.length; i++)
+  {
+    const c = v[i];
+    if (i===0){
+      if (!isValidScreenNameLetter(c)) return false;
+      continue;
+    }
+
+    if (isValidScreenNameSeparator(c)){
+      if (wasSeparator) return false;
+      wasSeparator = true;
+      continue;
+    }
+    if (!isValidScreenNameLetterOrDigit(c)) return false;
+    wasSeparator = false;
+  }
+  return !wasSeparator;
+}
+
+
+
