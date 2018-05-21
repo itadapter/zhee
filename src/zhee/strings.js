@@ -68,6 +68,24 @@ export function trimRight(str){
 }
 
 /**
+ * Returns true if the string starts with the specified segment
+ * @param {*} str string that starts with segment
+ * @param {string} seg Segment that string should start with
+ * @param {boolean} [scase=false] Sense case
+ * @param {int} [idx=0] search start index
+ */
+export function startsWith(str, seg, scase = false, idx = 0){
+  str = asString(str);
+  seg = asString(seg);
+  if (!scase){
+    str = str.toLowerCase();
+    seg = seg.toLowerCase();
+  }
+  return str.startsWith(seg, idx);
+}
+
+
+/**
  * Returns true if the string equals one of the strings in the list of values supplied either as an array or '|' or ';' separated string
  * @param {string} str string to test. other types are coerced to string
  * @param {string[]|string} values array of values to test against, or a '|' or ';' delimited string of values
@@ -296,5 +314,95 @@ export function isValidScreenName(v){
   return !wasSeparator;
 }
 
+
+/**
+ * Parses and formats the supplied string per US telephone number standard: (999) 999-9999x9999
+ * The numbers starting with +(international) returned as-is
+ * @param {*} v 
+ */
+export function normalizeUSPhone(v){
+  v = trim(asString(v));
+  if (isEmpty(v)) return "";
+
+  if (v.startsWith("+")) return v; //international phone, just return as-is
+
+  let isArea = false;
+  let isExt = false;
+  let area = "";
+  let number = "";
+  let ext = "";
+
+  for (var i = 0; i < v.length; i++)
+  {
+    const chr = v[i];
+
+    if (!isArea && chr === "(" && area.length === 0){
+      isArea = true;
+      continue;
+    }
+
+    if (isArea && chr === ")"){
+      isArea = false;
+      continue;
+    }
+
+    if (isArea && area.length === 3)
+      isArea = false;
+
+
+    if (number.length > 0 && !isExt){ //check extention
+      if (chr === "x" || chr === "X" || (chr === "." && number.length>6)){
+        isExt = true;
+        continue;
+      }
+
+      let trailer = v.substring(i).toUpperCase();
+
+      if (startsWith(trailer, "EXT") && number.length >= 7){
+        isExt = true;
+        i += 2;
+        continue;
+      }
+     
+      if (startsWith(trailer,"EXT.") && number.length >= 7){
+        isExt = true;
+        i += 3;
+        continue;
+      }
+    }
+
+    if (!charIsAZLetterOrDigit(chr)) continue;
+
+    if (isArea) area += chr;
+    else{
+      if (isExt)
+        ext += chr;
+      else
+        number += chr;
+    }
+  }//for
+
+  while (number.length < 7)  number += "?";
+
+  if (area.length === 0){
+    if (number.length >= 10){
+      area = number.substring(0, 3);
+      number = number.substring(3);
+    }
+    else
+      area = "???";
+  }
+
+  if (number.length > 7 && ext.length === 0){
+    ext = number.substring(7);
+    number = number.substring(0, 7);
+  }
+
+  number = number.substring(0, 3) + "-" + number.substring(3);
+
+  if (ext.length > 0) ext = "x" + ext;
+
+  return "("+area+") " + number + ext;
+}
 
 

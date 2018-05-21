@@ -80,6 +80,18 @@ describe("Strings", function() {
     it("case 5",    function() { aver.areEqual("\n a\n\n   bc", sut.trimRight("\n a\n\n   bc\r ") );});
   });
 
+  describe("#startsWith()", function() {
+    it("'' ()",      function() { aver.isTrue( sut.startsWith() );});//because "" starts with ""
+
+    it("case 0 coerce",      function() { aver.isTrue( sut.startsWith("567abcdef", 567) );});
+
+    it("case 1",      function() { aver.isTrue( sut.startsWith("abcdef", "ABc") );});
+    it("case 2",      function() { aver.isFalse( sut.startsWith(" abcdef", "ABc") );});
+    it("case 3",      function() { aver.isTrue( sut.startsWith(" abcdef", "ABc", false, 1) );});
+    it("case 4",      function() { aver.isFalse( sut.startsWith(" abcdef", "ABc", true, 1) );});
+
+  });
+
 
   describe("#dflt()", function() {
     it("()",     function()    { aver.areEqual("", sut.dflt() );});
